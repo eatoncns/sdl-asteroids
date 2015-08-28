@@ -18,19 +18,27 @@ struct TestGame : public Game
     bool updated;
 };
 
-TEST(GameLoopTest, DoesNothingWhenGameIsStopped)
+
+class GameLoopTest : public ::testing::Test
 {
-    TestGame game;
-    GameLoop gameLoop(game);
+    protected:
+        GameLoopTest()
+            : gameLoop(game)
+        {}
+
+        TestGame game;
+        GameLoop gameLoop;
+};
+
+TEST_F(GameLoopTest, DoesNothingWhenGameIsStopped)
+{
     gameLoop.run();
     EXPECT_FALSE(game.updated);
 }
 
-TEST(GameLoopTest, RunsUpdateOnceBeforeGameIsStopped)
+TEST_F(GameLoopTest, RunsUpdateOnceBeforeGameIsStopped)
 {
-    TestGame game;
     game.running = true;
-    GameLoop gameLoop(game);
     gameLoop.run();
     EXPECT_TRUE(game.updated);
 }
