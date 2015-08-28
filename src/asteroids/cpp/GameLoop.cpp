@@ -13,6 +13,7 @@ namespace pjm
         while (_game.isRunning())
         {
             _game.update();
+            _game.draw();
         }
     }
 }
