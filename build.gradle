@@ -1,0 +1,46 @@
+apply plugin: "cpp"
+apply plugin: "google-test"
+
+// BUILD / TEST
+
+model {
+    platforms {
+        x86 {
+            architecture "x86"
+        }
+    }
+    repositories {
+        libs(PrebuiltLibraries) {
+            googleMock {
+                headers.srcDir "$System.env.GMOCK_INCLUDE"
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile =
+                        file("${System.env.GMOCK_LIB}/libgmock.a")
+                }
+            }
+            boost {
+                headers.srcDir "$System.env.BOOST_INCLUDE"
+            }
+        }
+    }
+    components {
+        asteroids(NativeLibrarySpec) {
+            targetPlatform "x86"
+        }
+    }
+}
+binaries.all {
+    lib library: "boost", linkage: "api"
+}
+binaries.withType(GoogleTestTestSuiteBinarySpec) {
+    lib library: "googleMock", linkage: "static"
+
+    if (targetPlatform.operatingSystem.linux) {
+        cppCompiler.args '-pthread'
+        linker.args '-pthread'
+    }
+}
+
+tasks.withType(RunTestExecutable) {
+    args "--gtest_output=xml:test_detail.xml"
+}
