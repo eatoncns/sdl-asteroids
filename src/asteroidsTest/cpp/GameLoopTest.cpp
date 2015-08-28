@@ -20,6 +20,11 @@ struct TestGame : public Game
         return (iterations-- > 0);
     }
 
+    void initialise()
+    {
+        calls.push_back("init");
+    }
+
     void update()
     {
         calls.push_back("update");
@@ -66,8 +71,15 @@ TEST_F(GameLoopTest, UpdatesUntilGameIsStopped)
     EXPECT_THAT(game.updateCount, Eq(2));
 }
 
-TEST_F(GameLoopTest, CallsDrawAfterUpdate)
+TEST_F(GameLoopTest, CallsInitialiseOnce)
+{
+    runIterations(3);
+    int initCount = std::count(game.calls.begin(), game.calls.end(), "init");
+    EXPECT_THAT(initCount, Eq(1));
+}
+
+TEST_F(GameLoopTest, CallsGameFunctionsInExpectedOrder)
 {
     runIterations(1);
-    EXPECT_THAT(game.calls, ElementsAre("update", "draw"));
+    EXPECT_THAT(game.calls, ElementsAre("init", "update", "draw"));
 }
