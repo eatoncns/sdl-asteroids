@@ -8,17 +8,18 @@ namespace pjm
     {}
 
 
-    void GameLoop::run()
+    bool GameLoop::run()
     {
         if (!_game.initialise())
         {
-            return;
+            return false;
         }
         while (_game.isRunning())
         {
             _game.update();
             _game.draw();
         }
+        return true;
     }
 }
 

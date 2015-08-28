@@ -10,7 +10,7 @@ namespace pjm
         public:
             explicit GameLoop(Game& iGame);
 
-            void run();
+            bool run();
 
         private:
             Game& _game;

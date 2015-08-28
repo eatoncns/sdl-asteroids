@@ -49,10 +49,10 @@ class GameLoopTest : public ::testing::Test
             : gameLoop(game)
         {}
 
-        void runIterations(const unsigned int iIterations)
+        bool runIterations(const unsigned int iIterations)
         {
             game.iterations = iIterations;
-            gameLoop.run();
+            return gameLoop.run();
         }
 
         int callCount(const std::string& iFunction)
@@ -64,7 +64,7 @@ class GameLoopTest : public ::testing::Test
         GameLoop gameLoop;
 };
 
-TEST_F(GameLoopTest, DoesNothingWhenGameIsStopped)
+TEST_F(GameLoopTest, DoesNoUpdatesWhenGameIsStopped)
 {
     runIterations(0);
     EXPECT_THAT(callCount("update"), Eq(0));
@@ -94,9 +94,15 @@ TEST_F(GameLoopTest, CallsGameFunctionsInExpectedOrder)
     EXPECT_THAT(game.calls, ElementsAre("init", "update", "draw"));
 }
 
-TEST_F(GameLoopTest, DoesNothingWhenInitialisationFails)
+TEST_F(GameLoopTest, DoesNoUpdatesWhenInitialisationFails)
 {
     game.passInitialisation = false;
     runIterations(1);
     EXPECT_THAT(callCount("update"), Eq(0));
+}
+
+TEST_F(GameLoopTest, IndicatesIntialisationFailure)
+{
+    game.passInitialisation = false;
+    EXPECT_FALSE(runIterations(1)); 
 }
