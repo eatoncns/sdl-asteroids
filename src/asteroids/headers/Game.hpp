@@ -6,7 +6,7 @@ namespace pjm
     struct Game
     {
         virtual bool isRunning() = 0;
-        virtual void initialise() = 0;
+        virtual bool initialise() = 0;
         virtual void update() = 0;
         virtual void draw() = 0;
     };

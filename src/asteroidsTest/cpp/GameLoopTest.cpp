@@ -11,7 +11,8 @@ using ::testing::ElementsAre;
 struct TestGame : public Game
 {
     TestGame()
-        : iterations(0),
+        : passInitialisation(true),
+          iterations(0),
           updateCount(0)
     {}
 
@@ -20,9 +21,10 @@ struct TestGame : public Game
         return (iterations-- > 0);
     }
 
-    void initialise()
+    bool initialise()
     {
         calls.push_back("init");
+        return passInitialisation;
     }
 
     void update()
@@ -36,6 +38,7 @@ struct TestGame : public Game
         calls.push_back("draw");
     }
 
+    bool passInitialisation;
     unsigned int iterations;
     unsigned int updateCount;
     std::list<std::string> calls;
@@ -59,7 +62,7 @@ class GameLoopTest : public ::testing::Test
         GameLoop gameLoop;
 };
 
-TEST_F(GameLoopTest, DoesNothingWhenGameIsStopped)
+TEST_F(GameLoopTest, DoesNoUpdateWhenGameIsStopped)
 {
     runIterations(0);
     EXPECT_THAT(game.updateCount, Eq(0));
@@ -82,4 +85,11 @@ TEST_F(GameLoopTest, CallsGameFunctionsInExpectedOrder)
 {
     runIterations(1);
     EXPECT_THAT(game.calls, ElementsAre("init", "update", "draw"));
+}
+
+TEST_F(GameLoopTest, DoesNothingWhenInitialisationFails)
+{
+    game.passInitialisation = false;
+    runIterations(1);
+    EXPECT_THAT(game.updateCount, Eq(0));
 }
