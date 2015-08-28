@@ -38,16 +38,9 @@ TEST_F(GameLoopTest, DoesNothingWhenGameIsStopped)
     EXPECT_THAT(game.updateCount, Eq(0));
 }
 
-TEST_F(GameLoopTest, RunsUpdateOnceBeforeGameIsStopped)
+TEST_F(GameLoopTest, UpdatesUntilGameIsStopped)
 {
-    game.iterations = 1;
+    game.iterations = 2;
     gameLoop.run();
-    EXPECT_THAT(game.updateCount, Eq(1));
+    EXPECT_THAT(game.updateCount, Eq(2));
 }
-
-//TEST_F(GameLoopTest, UpdatesUntilGameIsStopped)
-//{
-//    game.iterations = 2;
-//    gameLoop.run();
-//    EXPECT_THAT(game.updateCount, Eq(2));
-//}

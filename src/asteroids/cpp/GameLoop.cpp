@@ -10,7 +10,7 @@ namespace pjm
 
     void GameLoop::run()
     {
-        if (_game.isRunning())
+        while (_game.isRunning())
         {
             _game.update();
         }
