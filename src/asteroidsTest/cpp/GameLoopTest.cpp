@@ -12,8 +12,7 @@ struct TestGame : public Game
 {
     TestGame()
         : passInitialisation(true),
-          iterations(0),
-          updateCount(0)
+          iterations(0)
     {}
 
     bool isRunning()
@@ -30,7 +29,6 @@ struct TestGame : public Game
     void update()
     {
         calls.push_back("update");
-        ++updateCount;
     }
 
     void draw()
@@ -40,7 +38,6 @@ struct TestGame : public Game
 
     bool passInitialisation;
     unsigned int iterations;
-    unsigned int updateCount;
     std::list<std::string> calls;
 };
 
@@ -58,27 +55,37 @@ class GameLoopTest : public ::testing::Test
             gameLoop.run();
         }
 
+        int callCount(const std::string& iFunction)
+        {
+            return std::count(game.calls.begin(), game.calls.end(), iFunction);
+        }
+
         TestGame game;
         GameLoop gameLoop;
 };
 
-TEST_F(GameLoopTest, DoesNoUpdateWhenGameIsStopped)
+TEST_F(GameLoopTest, DoesNothingWhenGameIsStopped)
 {
     runIterations(0);
-    EXPECT_THAT(game.updateCount, Eq(0));
+    EXPECT_THAT(callCount("update"), Eq(0));
 }
 
 TEST_F(GameLoopTest, UpdatesUntilGameIsStopped)
 {
     runIterations(2);
-    EXPECT_THAT(game.updateCount, Eq(2));
+    EXPECT_THAT(callCount("update"), Eq(2));
+}
+
+TEST_F(GameLoopTest, DrawsUntilGameIsStopped)
+{
+    runIterations(2);
+    EXPECT_THAT(callCount("draw"), Eq(2));
 }
 
 TEST_F(GameLoopTest, CallsInitialiseOnce)
 {
     runIterations(3);
-    int initCount = std::count(game.calls.begin(), game.calls.end(), "init");
-    EXPECT_THAT(initCount, Eq(1));
+    EXPECT_THAT(callCount("init"), Eq(1));
 }
 
 TEST_F(GameLoopTest, CallsGameFunctionsInExpectedOrder)
@@ -91,5 +98,5 @@ TEST_F(GameLoopTest, DoesNothingWhenInitialisationFails)
 {
     game.passInitialisation = false;
     runIterations(1);
-    EXPECT_THAT(game.updateCount, Eq(0));
+    EXPECT_THAT(callCount("update"), Eq(0));
 }
