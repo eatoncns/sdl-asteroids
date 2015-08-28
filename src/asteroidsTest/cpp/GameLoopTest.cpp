@@ -3,19 +3,21 @@
 #include <Game.hpp>
 
 using namespace pjm;
+using ::testing::Eq;
 
 struct TestGame : public Game
 {
     TestGame()
-        : running(false),
-          updated(false)
+        : iterations(0),
+          updateCount(0)
     {}
 
-    bool isRunning() { return running; }
-    void update() { updated = true; }
+    bool isRunning() { return (iterations-- > 0); }
 
-    bool running;
-    bool updated;
+    void update() { ++updateCount; }
+
+    unsigned int iterations;
+    unsigned int updateCount;
 };
 
 
@@ -33,12 +35,19 @@ class GameLoopTest : public ::testing::Test
 TEST_F(GameLoopTest, DoesNothingWhenGameIsStopped)
 {
     gameLoop.run();
-    EXPECT_FALSE(game.updated);
+    EXPECT_THAT(game.updateCount, Eq(0));
 }
 
 TEST_F(GameLoopTest, RunsUpdateOnceBeforeGameIsStopped)
 {
-    game.running = true;
+    game.iterations = 1;
     gameLoop.run();
-    EXPECT_TRUE(game.updated);
+    EXPECT_THAT(game.updateCount, Eq(1));
 }
+
+//TEST_F(GameLoopTest, UpdatesUntilGameIsStopped)
+//{
+//    game.iterations = 2;
+//    gameLoop.run();
+//    EXPECT_THAT(game.updateCount, Eq(2));
+//}
