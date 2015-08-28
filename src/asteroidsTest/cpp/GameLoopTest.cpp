@@ -44,26 +44,30 @@ class GameLoopTest : public ::testing::Test
             : gameLoop(game)
         {}
 
+        void runIterations(const unsigned int iIterations)
+        {
+            game.iterations = iIterations;
+            gameLoop.run();
+        }
+
         TestGame game;
         GameLoop gameLoop;
 };
 
 TEST_F(GameLoopTest, DoesNothingWhenGameIsStopped)
 {
-    gameLoop.run();
+    runIterations(0);
     EXPECT_THAT(game.updateCount, Eq(0));
 }
 
 TEST_F(GameLoopTest, UpdatesUntilGameIsStopped)
 {
-    game.iterations = 2;
-    gameLoop.run();
+    runIterations(2);
     EXPECT_THAT(game.updateCount, Eq(2));
 }
 
 TEST_F(GameLoopTest, CallsDrawAfterUpdate)
 {
-    game.iterations = 1;
-    gameLoop.run();
+    runIterations(1);
     EXPECT_THAT(game.calls, ElementsAre("update", "draw"));
 }
