@@ -71,3 +71,9 @@ project(":main") {
         linker.args '-lSDL2'
     }
 }
+
+task run(type:Exec) {
+    description 'Runs game binary'
+    workingDir 'main/build/binaries/mainExecutable'
+    commandLine './main'
+}
