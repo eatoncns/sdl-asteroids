@@ -17,7 +17,7 @@ struct TestRenderable : public Renderable
     std::list<Coordinate> renderCalls;
 };
 
-TEST(ShipTest, InterfaceCompiles)
+TEST(ShipTest, RendersImageAtCurrentLocation)
 {
     Coordinate initialLocation(5,5);
     TestRenderable shipImage;
