@@ -1,21 +1,11 @@
 #include <gmock/gmock.h>
 #include <Ship.hpp>
-#include <Renderable.hpp>
 #include <Coordinate.hpp>
-#include <list>
+#include <TestRenderable.hpp>
 
 using namespace pjm;
 using ::testing::ElementsAre;
 
-struct TestRenderable : public Renderable
-{
-    void render(Coordinate iLocation)
-    {
-        renderCalls.push_back(iLocation);
-    }
-
-    std::list<Coordinate> renderCalls;
-};
 
 TEST(ShipTest, RendersImageAtCurrentLocation)
 {
