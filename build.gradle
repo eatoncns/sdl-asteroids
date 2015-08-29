@@ -1,46 +1,73 @@
-apply plugin: "cpp"
-apply plugin: "google-test"
+project(":asteroids") {
 
-// BUILD / TEST
+    apply plugin: "cpp"
+    apply plugin: "google-test"
 
-model {
-    platforms {
-        x86 {
-            architecture "x86"
+    model {
+        platforms {
+            x86 {
+                architecture "x86"
+            }
         }
-    }
-    repositories {
-        libs(PrebuiltLibraries) {
-            googleMock {
-                headers.srcDir "$System.env.GMOCK_INCLUDE"
-                binaries.withType(StaticLibraryBinary) {
-                    staticLibraryFile =
-                        file("${System.env.GMOCK_LIB}/libgmock.a")
+        repositories {
+            libs(PrebuiltLibraries) {
+                googleMock {
+                    headers.srcDir "$System.env.GMOCK_INCLUDE"
+                    binaries.withType(StaticLibraryBinary) {
+                        staticLibraryFile =
+                            file("${System.env.GMOCK_LIB}/libgmock.a")
+                    }
+                }
+                boost {
+                    headers.srcDir "$System.env.BOOST_INCLUDE"
                 }
             }
-            boost {
-                headers.srcDir "$System.env.BOOST_INCLUDE"
+        }
+        components {
+            game(NativeLibrarySpec) {
+                targetPlatform "x86"
             }
         }
     }
-    components {
-        asteroids(NativeLibrarySpec) {
-            targetPlatform "x86"
+    binaries.all {
+        lib library: "boost", linkage: "api"
+        linker.args '-lSDL2'
+    }
+    binaries.withType(GoogleTestTestSuiteBinarySpec) {
+        lib library: "googleMock", linkage: "static"
+
+        if (targetPlatform.operatingSystem.linux) {
+            cppCompiler.args '-pthread'
+            linker.args '-pthread'
         }
     }
-}
-binaries.all {
-    lib library: "boost", linkage: "api"
-}
-binaries.withType(GoogleTestTestSuiteBinarySpec) {
-    lib library: "googleMock", linkage: "static"
 
-    if (targetPlatform.operatingSystem.linux) {
-        cppCompiler.args '-pthread'
-        linker.args '-pthread'
+    tasks.withType(RunTestExecutable) {
+        args "--gtest_output=xml:test_detail.xml"
     }
 }
 
-tasks.withType(RunTestExecutable) {
-    args "--gtest_output=xml:test_detail.xml"
+project(":main") {
+    apply plugin: "cpp"
+
+    model {
+        platforms {
+            x86 {
+                architecture "x86"
+            }
+        }
+        components {
+            main(NativeExecutableSpec) {
+                targetPlatform "x86"
+                sources {
+                    cpp {
+                        lib project: ':asteroids', library: 'game', linkage: 'static'
+                    }
+                }
+            }
+        }
+    }
+    binaries.all {
+        linker.args '-lSDL2'
+    }
 }
