@@ -6,7 +6,7 @@
 using namespace pjm;
 
 struct VoidRenderable : public Renderable
-{ void render(Coordinate iCoordinate) {} };
+{ void render(const Coordinate& iCoordinate) {} };
 
 class TestImageLoader : public ImageLoader
 {

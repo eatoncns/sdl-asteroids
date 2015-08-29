@@ -7,7 +7,7 @@
 
 struct TestRenderable : public pjm::Renderable
 {
-    void render(pjm::Coordinate iLocation)
+    void render(const pjm::Coordinate& iLocation)
     {
         renderCalls.push_back(iLocation);
     }

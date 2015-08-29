@@ -7,7 +7,7 @@ namespace pjm
 {
     struct Renderable
     {
-        virtual void render(Coordinate iLocation) = 0;
+        virtual void render(const Coordinate& iLocation) = 0;
         virtual ~Renderable() {}
     };
 }
