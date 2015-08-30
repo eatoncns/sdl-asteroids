@@ -2,6 +2,7 @@
 #define _PJM_IMAGELOADER_HPP_
 
 #include <Renderable.hpp>
+#include <string>
 
 namespace pjm
 {

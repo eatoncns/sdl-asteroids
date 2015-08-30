@@ -61,5 +61,5 @@ TEST_F(GameElementsTest, InitialisesShipInCentreOfScreen)
 {
     _gameElements.initialise();
     _gameElements.render();
-    EXPECT_THAT(_shipImage.renderCalls, ElementsAre(Coordinate(320, 240)));
+    EXPECT_THAT(_shipImage.renderCalls, ElementsAre(Vector(320, 240)));
 }

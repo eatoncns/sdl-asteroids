@@ -2,12 +2,12 @@
 #define _PJM_TESTRENDERABLE_HPP_
 
 #include <Renderable.hpp>
-#include <Coordinate.hpp>
+#include <Vector.hpp>
 #include <list>
 
 struct TestRenderable : public pjm::Renderable
 {
-    void render(const pjm::Coordinate& iLocation)
+    void render(const pjm::Vector& iLocation)
     {
         renderCalls.push_back(iLocation);
     }
@@ -23,7 +23,7 @@ struct TestRenderable : public pjm::Renderable
         return 0;
     }
 
-    std::list<pjm::Coordinate> renderCalls;
+    std::list<pjm::Vector> renderCalls;
 };
 
 #endif

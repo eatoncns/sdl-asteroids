@@ -3,7 +3,7 @@
 
 namespace pjm
 {
-    Ship::Ship(Coordinate iInitialLocation, Renderable& iImage)
+    Ship::Ship(const Vector& iInitialLocation, Renderable& iImage)
       : _location(iInitialLocation),
         _image(iImage)
     {}
@@ -13,9 +13,9 @@ namespace pjm
     {
         static int widthOffset = _image.width() / 2;
         static int heightOffset = _image.height() / 2;
-        int renderX = _location.x - widthOffset;
-        int renderY = _location.y - heightOffset;
-        Coordinate renderLocation(renderX, renderY);
+        float renderX = _location.x - widthOffset;
+        float renderY = _location.y - heightOffset;
+        Vector renderLocation(renderX, renderY);
         _image.render(renderLocation);
     }
 }

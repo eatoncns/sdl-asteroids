@@ -1,7 +1,7 @@
 #ifndef _PJM_SHIP_HPP_
 #define _PJM_SHIP_HPP_
 
-#include <Coordinate.hpp>
+#include <Vector.hpp>
 
 namespace pjm
 {
@@ -10,12 +10,12 @@ namespace pjm
     class Ship
     {
         public:
-            Ship(Coordinate iInitialLocation, Renderable& iImage);
+            Ship(const Vector& iInitialLocation, Renderable& iImage);
 
             void render();
 
         private:
-            Coordinate _location;
+            Vector _location;
             Renderable& _image;
     };
 }

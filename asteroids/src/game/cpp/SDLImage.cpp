@@ -1,5 +1,9 @@
 #include <SDLImage.hpp>
 #include <SDL2/SDL.h>
+#include <Vector.hpp>
+#include <boost/math/special_functions/round.hpp>
+
+using boost::math::iround;
 
 namespace pjm
 {
@@ -17,9 +21,10 @@ namespace pjm
     }
 
 
-    void SDLImage::render(const Coordinate& iLocation)
+    void SDLImage::render(const Vector& iLocation)
     {
-        SDL_Rect renderQuad = {iLocation.x, iLocation.y, _width, _height};
+        SDL_Rect renderQuad = {iround(iLocation.x), iround(iLocation.y), 
+                               _width, _height};
         SDL_RenderCopy(_renderer, _texture, NULL, &renderQuad);
     }
 

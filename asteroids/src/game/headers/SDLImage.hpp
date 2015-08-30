@@ -8,7 +8,7 @@ class SDL_Renderer;
 
 namespace pjm
 {
-    struct Coordinate;
+    struct Vector;
 
     class SDLImage : public Renderable
     {
@@ -22,7 +22,7 @@ namespace pjm
 
             ~SDLImage();
 
-            void render(const Coordinate& iLocation);
+            void render(const Vector& iLocation);
 
             int width();
             int height();
