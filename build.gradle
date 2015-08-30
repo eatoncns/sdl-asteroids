@@ -82,17 +82,11 @@ project(":main") {
 task copyResources(type:Copy) {
     description 'Copies resources into release install directory'
     from 'resources'
-    into 'main/build/binaries/mainExecutable/release/resources'
+    into 'main/build/binaries/mainExecutable/resources'
 }
 
 task run(type:Exec, dependsOn: copyResources) {
     description 'Runs game binary'
-    workingDir 'main/build/binaries/mainExecutable/release'
+    workingDir 'main/build/binaries/mainExecutable'
     commandLine './main'
-}
-
-task copyDebugResources(type:Copy) {
-    description 'Copies resources into debug install directory'
-    from 'resources'
-    into 'main/build/binaries/mainExecutable/debug/resources'
 }
