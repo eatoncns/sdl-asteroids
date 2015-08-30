@@ -8,8 +8,12 @@
 using namespace pjm;
 using ::testing::ElementsAre;
 
+
 struct VoidRenderable : public Renderable
-{ void render(const Coordinate& iCoordinate) {} };
+{
+    void render(const Coordinate& iCoordinate) {} 
+};
+
 
 struct TestImageLoader : public ImageLoader
 {
@@ -31,26 +35,34 @@ struct TestImageLoader : public ImageLoader
     Renderable* renderable;
 };
 
-TEST(GameElementsTest, ReturnsFalseWhenImageLoadFails)
+
+class GameElementsTest : public ::testing::Test
+{
+    protected:
+        GameElementsTest()
+            : _screenInfo("test", 640, 480),
+              _gameElements(_imageLoader, _screenInfo)
+        {}
+
+        TestImageLoader _imageLoader;
+        ScreenInfo _screenInfo;
+        GameElements _gameElements;
+};
+
+TEST_F(GameElementsTest, ReturnsFalseWhenImageLoadFails)
 {
     VoidRenderable voidRenderable;
-    TestImageLoader imageLoader;
-    imageLoader.loadSuccess = false;
-    imageLoader.renderable = &voidRenderable;
-    ScreenInfo screenInfo("test", 640, 480);
-    GameElements gameElements(imageLoader, screenInfo);
-    EXPECT_FALSE(gameElements.initialise());
+    _imageLoader.loadSuccess = false;
+    _imageLoader.renderable = &voidRenderable;
+    EXPECT_FALSE(_gameElements.initialise());
 }
 
-TEST(GameElementsTest, InitialisesShipInCentreOfScreen)
+TEST_F(GameElementsTest, InitialisesShipInCentreOfScreen)
 {
     TestRenderable shipImage;
-    TestImageLoader imageLoader;
-    imageLoader.renderable = &shipImage;
-    ScreenInfo screenInfo("test", 640, 480);
-    GameElements gameElements(imageLoader, screenInfo);
-    gameElements.initialise();
-    gameElements.render();
+    _imageLoader.renderable = &shipImage;
+    _gameElements.initialise();
+    _gameElements.render();
     EXPECT_THAT(shipImage.renderCalls, ElementsAre(Coordinate(320, 240)));
 
 }
