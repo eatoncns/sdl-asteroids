@@ -6,7 +6,7 @@ using namespace pjm;
 
 int main()
 {
-    ScreenInfo screenInfo("Asteroids", 640, 480);
+    ScreenInfo screenInfo("Asteroids", 720, 540);
     SDLGame game(screenInfo);
     GameLoop gameLoop(game);
     if (gameLoop.run())
