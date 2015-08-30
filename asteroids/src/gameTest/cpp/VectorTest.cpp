@@ -31,11 +31,50 @@ TEST(VectorTest, PrettyPrints)
     EXPECT_EQ("(5.2,7.9)", ss.str());
 }
 
-TEST(VectorTest, ImplementsCompoundAssignment)
+TEST(VectorTest, ImplementsAdditionAssignment)
 {
     Vector v1(3.2f, 4.4f);
     Vector v2(2.3f, 1.2f);
     v1 += v2;
     EXPECT_EQ(Vector(5.5f, 5.6f), v1);
     EXPECT_EQ(Vector(2.3f, 1.2f), v2);
+}
+
+TEST(VectorTest, ImplementsSubtractionAssignment)
+{
+    Vector v1(3.2f, 4.4f);
+    Vector v2(2.3f, 1.2f);
+    v1 -= v2;
+    EXPECT_EQ(Vector(0.9f, 3.2f), v1);
+    EXPECT_EQ(Vector(2.3f, 1.2f), v2);
+}
+
+TEST(VectorTest, ImplementsScalarMultiplicationAssignment)
+{
+    Vector v1(3.2f, 4.4f);
+    v1 *= 3;
+    EXPECT_EQ(Vector(9.6f, 13.2f), v1);
+}
+
+TEST(VectorTest, ImplementsAddition)
+{
+    Vector v1(3.2f, 4.4f);
+    Vector v2(2.3f, 1.2f);
+    Vector v3 = v1 + v2; 
+    EXPECT_EQ(Vector(5.5f, 5.6f), v3);
+}
+
+TEST(VectorTest, ImplementsSubtraction)
+{
+    Vector v1(3.2f, 4.4f);
+    Vector v2(2.3f, 1.2f);
+    Vector v3 = v1 - v2; 
+    EXPECT_EQ(Vector(0.9f, 3.2f), v3);
+}
+
+TEST(VectorTest, ImplementsScalarMultiplication)
+{
+    Vector v1(3.2f, 4.4f);
+    Vector v3 = v1*3;
+    EXPECT_EQ(Vector(9.6f, 13.2f), v3);
 }

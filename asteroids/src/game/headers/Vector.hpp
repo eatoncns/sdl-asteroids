@@ -32,6 +32,35 @@ namespace pjm
             return *this;
         }
         
+        Vector& operator-=(const Vector& iRhs)
+        {
+            x -= iRhs.x;
+            y -= iRhs.y;
+            return *this;
+        }
+
+        Vector& operator*=(const int& iScalar)
+        {
+            x *= iScalar;
+            y *= iScalar;
+            return *this;
+        }
+
+        const Vector operator+(const Vector& iOther) const
+        {
+            return Vector(*this) += iOther;
+        }
+        
+        const Vector operator-(const Vector& iOther) const
+        {
+            return Vector(*this) -= iOther;
+        }
+        
+        const Vector operator*(const int& iScalar) const
+        {
+            return Vector(*this) *= iScalar;
+        }
+        
         friend std::ostream& operator<<(std::ostream& iOS, 
                                         const Vector& iVector)
         {
