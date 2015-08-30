@@ -2,7 +2,6 @@
 #define _PJM_SHIP_HPP_
 
 #include <Coordinate.hpp>
-#include <Renderable.hpp> // TODO: fwd declare when defs in cpp
 
 namespace pjm
 {
@@ -11,16 +10,9 @@ namespace pjm
     class Ship
     {
         public:
-            Ship(Coordinate iInitialLocation,
-                 Renderable& iImage)
-                : _location(iInitialLocation),
-                  _image(iImage)
-            {}
+            Ship(Coordinate iInitialLocation, Renderable& iImage);
 
-            void render()
-            {
-                _image.render(_location);
-            }
+            void render();
 
         private:
             Coordinate _location;
