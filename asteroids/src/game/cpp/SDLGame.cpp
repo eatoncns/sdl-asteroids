@@ -3,12 +3,8 @@
 
 namespace pjm
 {
-    SDLGame::SDLGame(const std::string& iGameName,
-                     int iScreenWidth,
-                     int iScreenHeight)
-        : _gameName(iGameName),
-          _screenWidth(iScreenWidth),
-          _screenHeight(iScreenHeight),
+    SDLGame::SDLGame(const ScreenInfo& iScreenInfo)
+        : _screenInfo(iScreenInfo),
           _window(NULL),
           _renderer(NULL),
           _running(false)
@@ -63,8 +59,8 @@ namespace pjm
     
     bool SDLGame::initWindow()
     {
-        _window = SDL_CreateWindow(_gameName.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                                   _screenWidth, _screenHeight, SDL_WINDOW_SHOWN);
+        _window = SDL_CreateWindow(_screenInfo.title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                                   _screenInfo.width, _screenInfo.height, SDL_WINDOW_SHOWN);
         if (_window == NULL)
         {
             printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );

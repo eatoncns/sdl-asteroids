@@ -2,6 +2,7 @@
 #define _PJM_SDLGAME_HPP_
 
 #include <Game.hpp>
+#include <ScreenInfo.hpp>
 #include <string>
 
 class SDL_Window;
@@ -12,9 +13,7 @@ namespace pjm
     class SDLGame : public Game
     {
         public:
-            SDLGame(const std::string& iGameName,
-                    int iScreenWidth,
-                    int iScreenHeight);
+            SDLGame(const ScreenInfo& iScreenInfo);
             ~SDLGame();
 
             bool initialise();
@@ -29,9 +28,7 @@ namespace pjm
             bool initRenderer();
             void startGame();
 
-            std::string _gameName;
-            int _screenWidth;
-            int _screenHeight;
+            ScreenInfo _screenInfo;
             SDL_Window* _window;
             SDL_Renderer* _renderer;
             bool _running;
