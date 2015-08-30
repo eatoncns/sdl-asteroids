@@ -9,12 +9,6 @@ using namespace pjm;
 using ::testing::ElementsAre;
 
 
-struct VoidRenderable : public Renderable
-{
-    void render(const Coordinate& iCoordinate) {} 
-};
-
-
 struct TestImageLoader : public ImageLoader
 {
     TestImageLoader()
