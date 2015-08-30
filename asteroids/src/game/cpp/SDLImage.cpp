@@ -22,4 +22,16 @@ namespace pjm
         SDL_Rect renderQuad = {iLocation.x, iLocation.y, _width, _height};
         SDL_RenderCopy(_renderer, _texture, NULL, &renderQuad);
     }
+
+
+    int SDLImage::width()
+    {
+        return _width;
+    }
+
+
+    int SDLImage::height()
+    {
+        return _height;
+    }
 }

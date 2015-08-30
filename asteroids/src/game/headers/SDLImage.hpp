@@ -24,6 +24,9 @@ namespace pjm
 
             void render(const Coordinate& iLocation);
 
+            int width();
+            int height();
+
         private:
             SDL_Renderer* _renderer;
             SDL_Texture* _texture;

@@ -12,6 +12,17 @@ struct TestRenderable : public pjm::Renderable
         renderCalls.push_back(iLocation);
     }
 
+
+    int width()
+    {
+        return 0;
+    }
+
+    int height()
+    {
+        return 0;
+    }
+
     std::list<pjm::Coordinate> renderCalls;
 };
 

@@ -8,6 +8,9 @@ namespace pjm
     struct Renderable
     {
         virtual void render(const Coordinate& iLocation) = 0;
+        virtual int width() = 0;
+        virtual int height() = 0;
+
         virtual ~Renderable() {}
     };
 }

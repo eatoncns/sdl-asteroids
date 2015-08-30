@@ -42,33 +42,30 @@ class GameElementsTest : public ::testing::Test
         GameElementsTest()
             : _screenInfo("test", 640, 480),
               _gameElements(_imageLoader, _screenInfo)
-        {}
+        {
+            _imageLoader.renderable = &_shipImage;
+        }
 
         TestImageLoader _imageLoader;
         ScreenInfo _screenInfo;
         GameElements _gameElements;
+        TestRenderable _shipImage;
 };
 
 TEST_F(GameElementsTest, ReturnsFalseWhenImageLoadFails)
 {
-    VoidRenderable voidRenderable;
     _imageLoader.loadSuccess = false;
-    _imageLoader.renderable = &voidRenderable;
     EXPECT_FALSE(_gameElements.initialise());
 }
 
 TEST_F(GameElementsTest, ReturnsTrueWhenInitialisationSucceeds)
 {
-    VoidRenderable voidRenderable;
-    _imageLoader.renderable = &voidRenderable;
     EXPECT_TRUE(_gameElements.initialise());
 }
 
 TEST_F(GameElementsTest, InitialisesShipInCentreOfScreen)
 {
-    TestRenderable shipImage;
-    _imageLoader.renderable = &shipImage;
     _gameElements.initialise();
     _gameElements.render();
-    EXPECT_THAT(shipImage.renderCalls, ElementsAre(Coordinate(320, 240)));
+    EXPECT_THAT(_shipImage.renderCalls, ElementsAre(Coordinate(320, 240)));
 }

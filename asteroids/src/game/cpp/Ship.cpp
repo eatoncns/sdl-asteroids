@@ -11,6 +11,11 @@ namespace pjm
     
     void Ship::render()
     {
-        _image.render(_location);
+        static int widthOffset = _image.width() / 2;
+        static int heightOffset = _image.height() / 2;
+        int renderX = _location.x - widthOffset;
+        int renderY = _location.y - heightOffset;
+        Coordinate renderLocation(renderX, renderY);
+        _image.render(renderLocation);
     }
 }

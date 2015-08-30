@@ -7,10 +7,6 @@ allprojects {
                 architecture "x86"
             }
         }
-        buildTypes {
-            debug
-            release
-        }
         repositories {
             libs(PrebuiltLibraries) {
                 boost {
@@ -21,9 +17,7 @@ allprojects {
     }
     
     binaries.all {
-        if (buildType == buildTypes.debug) {
-            cppCompiler.args '-g'
-        }
+        cppCompiler.args '-g'
         lib library: "boost", linkage: "api"
         linker.args '-lSDL2', '-lSDL2_image'
     }
