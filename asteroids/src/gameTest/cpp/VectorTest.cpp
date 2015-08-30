@@ -30,3 +30,12 @@ TEST(VectorTest, PrettyPrints)
     ss << v;
     EXPECT_EQ("(5.2,7.9)", ss.str());
 }
+
+TEST(VectorTest, ImplementsCompoundAssignment)
+{
+    Vector v1(3.2f, 4.4f);
+    Vector v2(2.3f, 1.2f);
+    v1 += v2;
+    EXPECT_EQ(Vector(5.5f, 5.6f), v1);
+    EXPECT_EQ(Vector(2.3f, 1.2f), v2);
+}

@@ -2,6 +2,9 @@
 #define _PJM_VECTOR_HPP_
 
 #include <iostream>
+#include <cmath> 
+
+static const float TOL = 10E-6;
 
 namespace pjm
 {
@@ -13,7 +16,20 @@ namespace pjm
 
         bool operator==(const Vector& iOther) const
         {
-            return (x == iOther.x && y == iOther.y);
+            return (fabs(x-iOther.x) < TOL && 
+                    fabs(y-iOther.y) < TOL);
+        }
+
+        bool operator!=(const Vector& iOther) const
+        {
+            return !(*this == iOther);
+        }
+
+        Vector& operator+=(const Vector& iRhs)
+        {
+            x += iRhs.x;
+            y += iRhs.y;
+            return *this;
         }
         
         friend std::ostream& operator<<(std::ostream& iOS, 
