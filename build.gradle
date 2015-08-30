@@ -7,6 +7,10 @@ allprojects {
                 architecture "x86"
             }
         }
+        buildTypes {
+            debug
+            release
+        }
         repositories {
             libs(PrebuiltLibraries) {
                 boost {
@@ -17,6 +21,9 @@ allprojects {
     }
     
     binaries.all {
+        if (buildType == buildTypes.debug) {
+            cppCompiler.args '-g'
+        }
         lib library: "boost", linkage: "api"
         linker.args '-lSDL2', '-lSDL2_image'
     }
@@ -79,13 +86,19 @@ project(":main") {
 }
 
 task copyResources(type:Copy) {
-    description 'Copies resources into install directory'
+    description 'Copies resources into release install directory'
     from 'resources'
-    into 'main/build/binaries/mainExecutable/resources'
+    into 'main/build/binaries/mainExecutable/release/resources'
 }
 
 task run(type:Exec, dependsOn: copyResources) {
     description 'Runs game binary'
-    workingDir 'main/build/binaries/mainExecutable'
+    workingDir 'main/build/binaries/mainExecutable/release'
     commandLine './main'
+}
+
+task copyDebugResources(type:Copy) {
+    description 'Copies resources into debug install directory'
+    from 'resources'
+    into 'main/build/binaries/mainExecutable/debug/resources'
 }
