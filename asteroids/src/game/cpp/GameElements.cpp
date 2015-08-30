@@ -19,6 +19,7 @@ namespace pjm
         }
         Coordinate initialShipLocation(_screenInfo.width/2, _screenInfo.height/2);
         _ship.reset(new Ship(initialShipLocation, *shipImage));
+        return true;
     }
 
     

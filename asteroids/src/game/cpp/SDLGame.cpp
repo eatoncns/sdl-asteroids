@@ -1,5 +1,7 @@
 #include <SDLGame.hpp>
 #include <SDL2/SDL.h>
+#include <GameElements.hpp>
+#include <SDLImageLoader.hpp>
 
 namespace pjm
 {
@@ -7,7 +9,9 @@ namespace pjm
         : _screenInfo(iScreenInfo),
           _window(NULL),
           _renderer(NULL),
-          _running(false)
+          _running(false),
+          _imageLoader(NULL),
+          _gameElements(NULL)
     {}
 
     
@@ -17,6 +21,14 @@ namespace pjm
         {
             if (_renderer != NULL)
             {
+                if (_gameElements != NULL)
+                {
+                    delete _gameElements;
+                }
+                if (_imageLoader != NULL)
+                {
+                    delete _imageLoader;
+                }
                 SDL_DestroyRenderer(_renderer);
                 _renderer = NULL;
             }
@@ -38,6 +50,10 @@ namespace pjm
             return false;
         }
         if (!initRenderer())
+        {
+            return false;
+        }
+        if (!initGameElements())
         {
             return false;
         }
@@ -82,6 +98,14 @@ namespace pjm
         return true;
     }
 
+
+    bool SDLGame::initGameElements()
+    {
+        _imageLoader = new SDLImageLoader(_renderer);
+        _gameElements = new GameElements(*_imageLoader, _screenInfo);
+        return _gameElements->initialise();
+    }
+
     
     void SDLGame::startGame()
     {
@@ -110,6 +134,7 @@ namespace pjm
 
     void SDLGame::draw()
     {
+        _gameElements->render();
         SDL_RenderPresent(_renderer);
     }
 

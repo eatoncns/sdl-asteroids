@@ -10,6 +10,9 @@ class SDL_Renderer;
 
 namespace pjm
 {
+    class SDLImageLoader;
+    class GameElements;
+
     class SDLGame : public Game
     {
         public:
@@ -26,12 +29,15 @@ namespace pjm
             bool initSDL();
             bool initWindow();
             bool initRenderer();
+            bool initGameElements();
             void startGame();
 
             ScreenInfo _screenInfo;
             SDL_Window* _window;
             SDL_Renderer* _renderer;
             bool _running;
+            SDLImageLoader* _imageLoader;
+            GameElements* _gameElements;
     };
 }
 

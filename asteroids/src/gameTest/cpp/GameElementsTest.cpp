@@ -57,6 +57,13 @@ TEST_F(GameElementsTest, ReturnsFalseWhenImageLoadFails)
     EXPECT_FALSE(_gameElements.initialise());
 }
 
+TEST_F(GameElementsTest, ReturnsTrueWhenInitialisationSucceeds)
+{
+    VoidRenderable voidRenderable;
+    _imageLoader.renderable = &voidRenderable;
+    EXPECT_TRUE(_gameElements.initialise());
+}
+
 TEST_F(GameElementsTest, InitialisesShipInCentreOfScreen)
 {
     TestRenderable shipImage;
@@ -64,5 +71,4 @@ TEST_F(GameElementsTest, InitialisesShipInCentreOfScreen)
     _gameElements.initialise();
     _gameElements.render();
     EXPECT_THAT(shipImage.renderCalls, ElementsAre(Coordinate(320, 240)));
-
 }

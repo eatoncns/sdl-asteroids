@@ -7,7 +7,7 @@ namespace pjm
 {
     struct ImageLoader
     {
-        virtual Renderable* loadFromFile(const std::string& iFileName) = 0;
+        virtual Renderable* loadFromFile(const std::string& iFilePath) = 0;
 
         virtual ~ImageLoader() {}
     };
