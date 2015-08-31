@@ -14,9 +14,10 @@ namespace pjm
             
             enum Action {NONE, ACCELERATE};
 
-            void update(const Action iAction, unsigned int iTimeElapsed);
-            void render();
+            virtual void update(const Action iAction, unsigned int iTimeElapsed);
+            virtual void render();
 
+            virtual ~Ship() {}
 
             static const float ACC_FACTOR = 0.001;
 

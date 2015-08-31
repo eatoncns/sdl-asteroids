@@ -1,5 +1,6 @@
 #include <GameElements.hpp>
 #include <ImageLoader.hpp>
+#include <Ship.hpp>
 
 namespace pjm
 {
@@ -31,6 +32,15 @@ namespace pjm
         Vector initialShipLocation(_screenInfo.width/2, _screenInfo.height/2);
         _ship = new Ship(initialShipLocation, *shipImage);
         return true;
+    }
+
+
+    void GameElements::update(keyboard::KeyPress iKeyPress, unsigned int iTimeElapsed)
+    {
+        if (iKeyPress == keyboard::UP)
+        {
+            _ship->update(Ship::ACCELERATE, iTimeElapsed);
+        }
     }
 
     

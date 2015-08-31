@@ -2,11 +2,12 @@
 #define _PJM_GAMEELEMENTS_HPP_
 
 #include <ScreenInfo.hpp>
-#include <Ship.hpp>
+#include <KeyPress.hpp>
 
 namespace pjm
 {
     struct ImageLoader;
+    class Ship;
 
     class GameElements
     {
@@ -18,14 +19,15 @@ namespace pjm
 
             bool initialise();
 
+            void update(keyboard::KeyPress iKeyPress, unsigned int iTimeElapsed);
+
             void render();
             
-
+            Ship* _ship;
 
         private:
             ImageLoader& _imageLoader;
             ScreenInfo _screenInfo;
-            Ship* _ship;
     };
 }
 
