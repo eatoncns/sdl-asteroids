@@ -5,9 +5,9 @@ namespace pjm
 {
     GameElements::GameElements(ImageLoader& iImageLoader,
                                const ScreenInfo& iScreenInfo)
-        : _ship(NULL),
-          _imageLoader(iImageLoader),
-          _screenInfo(iScreenInfo)
+        : _imageLoader(iImageLoader),
+          _screenInfo(iScreenInfo),
+          _ship(NULL)
     {}
 
 

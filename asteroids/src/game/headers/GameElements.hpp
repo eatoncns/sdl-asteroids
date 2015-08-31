@@ -20,11 +20,12 @@ namespace pjm
 
             void render();
             
-            Ship* _ship; // public for test purposes
+
 
         private:
             ImageLoader& _imageLoader;
             ScreenInfo _screenInfo;
+            Ship* _ship;
     };
 }
 
