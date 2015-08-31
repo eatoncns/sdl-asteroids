@@ -46,13 +46,13 @@ class GameElementsTest : public ::testing::Test
         TestRenderable _shipImage;
 };
 
-TEST_F(GameElementsTest, ReturnsFalseWhenImageLoadFails)
+TEST_F(GameElementsTest, InitReturnsFalseWhenImageLoadFails)
 {
     _imageLoader.loadSuccess = false;
     EXPECT_FALSE(_gameElements.initialise());
 }
 
-TEST_F(GameElementsTest, ReturnsTrueWhenInitialisationSucceeds)
+TEST_F(GameElementsTest, InitReturnsTrueWhenInitialisationSucceeds)
 {
     EXPECT_TRUE(_gameElements.initialise());
 }
