@@ -4,16 +4,18 @@
 namespace pjm
 {
     class Game;
+    class Timer;
 
     class GameLoop
     {
         public:
-            explicit GameLoop(Game& iGame);
+            GameLoop(Game& iGame, Timer& iTimer);
 
             bool run();
 
         private:
             Game& _game;
+            Timer& _timer;
     };
 }
 

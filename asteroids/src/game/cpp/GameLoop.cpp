@@ -3,8 +3,8 @@
 
 namespace pjm
 {
-    GameLoop::GameLoop(Game& iGame)
-        : _game(iGame)
+    GameLoop::GameLoop(Game& iGame, Timer& iTimer)
+        : _game(iGame), _timer(iTimer)
     {}
 
 
