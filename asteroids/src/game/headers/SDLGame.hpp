@@ -21,7 +21,7 @@ namespace pjm
 
             bool initialise();
             bool isRunning();
-            void update();
+            void update(unsigned int iTimeElapsed);
             void draw();
 
         private:

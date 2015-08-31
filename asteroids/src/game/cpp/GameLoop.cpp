@@ -1,5 +1,6 @@
 #include <GameLoop.hpp>
 #include <Game.hpp>
+#include <Timer.hpp>
 
 namespace pjm
 {
@@ -14,10 +15,13 @@ namespace pjm
         {
             return false;
         }
+        unsigned int previousTime = _timer.getTime();
         while (_game.isRunning())
         {
-            _game.update();
+            unsigned int currentTime = _timer.getTime();
+            _game.update(currentTime - previousTime);
             _game.draw();
+            previousTime = currentTime;
         }
         return true;
     }

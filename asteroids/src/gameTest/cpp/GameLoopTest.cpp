@@ -30,9 +30,10 @@ struct TestGame : public Game
         return passInitialisation;
     }
 
-    void update()
+    void update(unsigned int iTimeElapsed)
     {
         calls.push_back("update");
+        times.push_back(iTimeElapsed);
     }
 
     void draw()
@@ -43,6 +44,7 @@ struct TestGame : public Game
     bool passInitialisation;
     unsigned int iterations;
     std::list<std::string> calls;
+    std::list<unsigned int> times;
 };
 
 
@@ -129,4 +131,6 @@ TEST_F(GameLoopTest, IndicatesIntialisationFailure)
 
 TEST_F(GameLoopTest, PassesElapsedTimeToUpdate)
 {
+    runIterations(3);
+    EXPECT_THAT(game.times, ElementsAre(3, 4, 5));
 }

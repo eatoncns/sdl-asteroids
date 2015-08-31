@@ -119,7 +119,7 @@ namespace pjm
     }
 
 
-    void SDLGame::update()
+    void SDLGame::update(unsigned int iTimeElapsed)
     {
         SDL_Event e;
         while (SDL_PollEvent(&e) != 0)
