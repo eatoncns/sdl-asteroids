@@ -5,7 +5,7 @@ namespace pjm
 {
     namespace keyboard
     {
-        enum KeyPress {UP};
+        enum KeyPress {NONE, UP};
     }
 }
 

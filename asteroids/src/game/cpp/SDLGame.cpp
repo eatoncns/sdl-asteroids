@@ -2,6 +2,7 @@
 #include <SDL2/SDL.h>
 #include <GameElements.hpp>
 #include <SDLImageLoader.hpp>
+#include <KeyPress.hpp>
 
 namespace pjm
 {
@@ -94,7 +95,6 @@ namespace pjm
             printf( "Renderer could not be created! SDL_Error: %s\n", SDL_GetError() );
             return false;
         }
-        SDL_SetRenderDrawColor(_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
         return true;
     }
 
@@ -127,13 +127,23 @@ namespace pjm
             if (e.type == SDL_QUIT)
             {
                 _running = false;
+                return;
             }
         }
+        const Uint8 *state = SDL_GetKeyboardState(NULL);
+        if (state[SDL_SCANCODE_UP])
+        {
+            _gameElements->update(keyboard::UP, iTimeElapsed);
+            return;
+        }
+        _gameElements->update(keyboard::NONE, iTimeElapsed);
     }
 
 
     void SDLGame::draw()
     {
+        SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 0);
+        SDL_RenderClear(_renderer);
         _gameElements->render();
         SDL_RenderPresent(_renderer);
     }

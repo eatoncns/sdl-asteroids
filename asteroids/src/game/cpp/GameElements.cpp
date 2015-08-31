@@ -41,6 +41,10 @@ namespace pjm
         {
             _ship->update(Ship::ACCELERATE, iTimeElapsed);
         }
+        if (iKeyPress == keyboard::NONE)
+        {
+            _ship->update(Ship::NONE, iTimeElapsed);
+        }
     }
 
     

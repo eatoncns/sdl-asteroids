@@ -107,3 +107,11 @@ TEST_F(GameElementsTest, ConvertsUpKeyToShipAccelerate)
     _gameElements._ship = NULL;
     EXPECT_THAT(_ship.updateCalls, ElementsAre(std::make_pair(Ship::ACCELERATE, 5)));
 }
+
+TEST_F(GameElementsTest, ConvertsNoneKeyToShipNone)
+{
+    _gameElements._ship = &_ship;
+    _gameElements.update(keyboard::NONE, 5);
+    _gameElements._ship = NULL;
+    EXPECT_THAT(_ship.updateCalls, ElementsAre(std::make_pair(Ship::NONE, 5)));
+}
