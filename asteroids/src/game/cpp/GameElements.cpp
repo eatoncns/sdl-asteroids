@@ -1,6 +1,10 @@
 #include <GameElements.hpp>
 #include <ImageLoader.hpp>
 #include <Ship.hpp>
+#include <boost/assign/list_of.hpp>
+#include <map>
+
+using namespace boost::assign;
 
 namespace pjm
 {
@@ -34,16 +38,16 @@ namespace pjm
         return true;
     }
 
+    typedef std::map<keyboard::KeyPress, Ship::Action> key_map_t;
+    static const key_map_t key_to_action = map_list_of(keyboard::UP,   Ship::ACCELERATE)
+                                                                                             (keyboard::NONE, Ship::NONE);
 
     void GameElements::update(keyboard::KeyPress iKeyPress, unsigned int iTimeElapsed)
     {
-        if (iKeyPress == keyboard::UP)
+        key_map_t::const_iterator it = key_to_action.find(iKeyPress);
+        if (it != key_to_action.end())
         {
-            _ship->update(Ship::ACCELERATE, iTimeElapsed);
-        }
-        if (iKeyPress == keyboard::NONE)
-        {
-            _ship->update(Ship::NONE, iTimeElapsed);
+            _ship->update(it->second, iTimeElapsed);
         }
     }
 
