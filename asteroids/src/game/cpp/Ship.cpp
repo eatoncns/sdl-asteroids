@@ -22,7 +22,7 @@ namespace pjm
     }
 
 
-    void Ship::update(const Action iAction, int iTimeElapsed)
+    void Ship::update(const Action iAction, unsigned int iTimeElapsed)
     {
          if(iAction == ACCELERATE)
          {

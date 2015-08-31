@@ -14,18 +14,18 @@ class ShipTest : public ::testing::Test
               _ship(_initialLocation, _shipImage)
         {}
 
-        void update(Ship::Action iAction, int iTime)
+        void update(Ship::Action iAction, unsigned int iTime)
         {
             _ship.update(iAction, iTime);
             _ship.render(); 
         }
 
-        void accelerateFor(int iTime)
+        void accelerateFor(unsigned int iTime)
         {
             update(Ship::ACCELERATE, iTime);
         }
 
-        void doNothingFor(int iTime)
+        void doNothingFor(unsigned int iTime)
         {
             update(Ship::NONE, iTime);
         }

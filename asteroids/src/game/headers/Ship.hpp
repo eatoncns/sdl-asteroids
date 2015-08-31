@@ -14,7 +14,7 @@ namespace pjm
             
             enum Action {NONE, ACCELERATE};
 
-            void update(const Action iAction, int iTimeElapsed);
+            void update(const Action iAction, unsigned int iTimeElapsed);
             void render();
 
 
