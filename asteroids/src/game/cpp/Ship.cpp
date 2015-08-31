@@ -24,7 +24,14 @@ namespace pjm
 
     void Ship::update(const Action iAction, int iTimeElapsed)
     {
-         _acceleration.y += ACC_FACTOR;
+         if(iAction == ACCELERATE)
+         {
+             _acceleration.y += ACC_FACTOR;
+         }
+         else
+         {
+            _acceleration.y -= ACC_FACTOR;
+         }
          Vector currentLocation(_location);
          _location = currentLocation*2 - _previousLocation - 
                      _acceleration*iTimeElapsed*iTimeElapsed;

@@ -12,7 +12,7 @@ namespace pjm
         public:
             Ship(const Vector& iInitialLocation, Renderable& iImage);
             
-            enum Action {ACCELERATE};
+            enum Action {NONE, ACCELERATE};
 
             void update(const Action iAction, int iTimeElapsed);
             void render();

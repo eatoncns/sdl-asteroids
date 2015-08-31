@@ -14,10 +14,20 @@ class ShipTest : public ::testing::Test
               _ship(_initialLocation, _shipImage)
         {}
 
+        void update(Ship::Action iAction, int iTime)
+        {
+            _ship.update(iAction, iTime);
+            _ship.render(); 
+        }
+
         void accelerateFor(int iTime)
         {
-            _ship.update(Ship::ACCELERATE, iTime);
-            _ship.render(); 
+            update(Ship::ACCELERATE, iTime);
+        }
+
+        void doNothingFor(int iTime)
+        {
+            update(Ship::NONE, iTime);
         }
 
         Vector _initialLocation;
@@ -41,4 +51,15 @@ TEST_F(ShipTest, DoesVerletAcceleration)
     EXPECT_THAT(_shipImage.renderCalls, ElementsAre(
                   Vector(_initialLocation.x, firstYPos),
                   Vector(_initialLocation.x, secondYPos))); 
+}
+
+TEST_F(ShipTest, ReducesAccelerationWhenNoActionTaken)
+{
+    accelerateFor(5);
+    doNothingFor(5);
+    float firstYPos = _initialLocation.y - 25*Ship::ACC_FACTOR;
+    float secondYPos = firstYPos + (firstYPos - _initialLocation.y);
+    EXPECT_THAT(_shipImage.renderCalls, ElementsAre(
+                  Vector(_initialLocation.x, firstYPos),
+                  Vector(_initialLocation.x, secondYPos)));
 }
