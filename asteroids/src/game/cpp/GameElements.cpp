@@ -5,9 +5,20 @@ namespace pjm
 {
     GameElements::GameElements(ImageLoader& iImageLoader,
                                const ScreenInfo& iScreenInfo)
-        : _imageLoader(iImageLoader),
+        : _ship(NULL),
+          _imageLoader(iImageLoader),
           _screenInfo(iScreenInfo)
     {}
+
+
+    GameElements::~GameElements()
+    {
+        if (_ship != NULL)
+        {
+            delete _ship;
+            _ship = NULL;
+        }
+    }
 
     
     bool GameElements::initialise()
@@ -18,7 +29,7 @@ namespace pjm
             return false;
         }
         Vector initialShipLocation(_screenInfo.width/2, _screenInfo.height/2);
-        _ship.reset(new Ship(initialShipLocation, *shipImage));
+        _ship = new Ship(initialShipLocation, *shipImage);
         return true;
     }
 

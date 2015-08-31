@@ -3,7 +3,6 @@
 
 #include <ScreenInfo.hpp>
 #include <Ship.hpp>
-#include <boost/scoped_ptr.hpp>
 
 namespace pjm
 {
@@ -15,14 +14,17 @@ namespace pjm
             GameElements(ImageLoader& iImageLoader,
                          const ScreenInfo& iScreenInfo);
 
+            ~GameElements();
+
             bool initialise();
 
             void render();
+            
+            Ship* _ship; // public for test purposes
 
         private:
             ImageLoader& _imageLoader;
             ScreenInfo _screenInfo;
-            boost::scoped_ptr<Ship> _ship;
     };
 }
 
