@@ -1,8 +1,7 @@
 #include <gmock/gmock.h>
 #include <GameElements.hpp>
-#include <ImageLoader.hpp>
-#include <Renderable.hpp>
 #include <ScreenInfo.hpp>
+#include <TestImageLoader.hpp>
 #include <TestRenderable.hpp>
 #include <Ship.hpp>
 #include <KeyPress.hpp>
@@ -11,28 +10,6 @@
 using namespace pjm;
 using ::testing::ElementsAre;
 using ::testing::Eq;
-
-
-struct TestImageLoader : public ImageLoader
-{
-    TestImageLoader()
-        : loadSuccess(true),
-          renderable(NULL)
-    {}
-
-    Renderable* loadFromFile(const std::string& iFilePath)
-    {
-        if (loadSuccess)
-        {
-            return renderable;
-        }
-        return NULL;
-    }
-
-    bool loadSuccess;
-    Renderable* renderable;
-};
-
 
 struct TestShip : public Ship
 {
