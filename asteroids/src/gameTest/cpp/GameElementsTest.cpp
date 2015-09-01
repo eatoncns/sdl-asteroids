@@ -66,7 +66,7 @@ class GameElementsTest : public ::testing::Test
         TestShip* _ship;
 };
 
-TEST_F(GameElementsTest, InitReturnsFalseWhenImageLoadFails)
+TEST_F(GameElementsTest, InitReturnsFalseWhenShipInitFails)
 {
     _ship->initialiseSuccess = false;
     EXPECT_FALSE(_gameElements.initialise());
