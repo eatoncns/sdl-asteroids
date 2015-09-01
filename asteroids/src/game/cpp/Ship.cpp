@@ -20,30 +20,39 @@ namespace pjm
         _image = _imageLoader.loadFromFile("resources/Ship.gif");
         return (_image != NULL);
     }
-    
+   
+
     void Ship::update(const Action iAction, unsigned int iTimeElapsed)
     {
-         if(iAction == ACCELERATE)
-         {
-             _acceleration.y += ACC_FACTOR;
-         }
-         else
-         {
-             if (_acceleration.y > ACC_FACTOR)
-             {
-                _acceleration.y -= ACC_FACTOR;
-             }
-             else
-             {
-                _acceleration.y = 0;
-             }
-         }
-         Vector currentLocation(_location);
-         // Minus accelration as we consider origin to be at
-         // top left of screen
-         _location = currentLocation*2 - _previousLocation - 
-                     _acceleration*iTimeElapsed*iTimeElapsed;
-         _previousLocation = currentLocation;
+        updateAcceleration(iAction);
+        updateLocation(iTimeElapsed);
+    }
+
+
+    void Ship::updateAcceleration(const Action iAction)
+    {
+        if(iAction == ACCELERATE)
+        {
+            _acceleration.y += ACC_FACTOR;
+            return;
+        }
+        if (_acceleration.y > ACC_FACTOR)
+        {
+           _acceleration.y -= ACC_FACTOR;
+           return;
+        }
+        _acceleration.y = 0;
+    }
+
+
+    void Ship::updateLocation(unsigned int iTimeElapsed)
+    {
+        Vector currentLocation(_location);
+        // Minus accelration as we consider origin to be at
+        // top left of screen
+        _location = currentLocation*2 - _previousLocation - 
+                    _acceleration*iTimeElapsed*iTimeElapsed;
+        _previousLocation = currentLocation;
     }
     
     
