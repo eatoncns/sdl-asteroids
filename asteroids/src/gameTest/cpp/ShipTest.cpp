@@ -63,3 +63,9 @@ TEST_F(ShipTest, ReducesAccelerationWhenNoActionTaken)
                   Vector(_initialLocation.x, firstYPos),
                   Vector(_initialLocation.x, secondYPos)));
 }
+
+TEST_F(ShipTest, DoesNotReduceAccelerationBelowZeroWhenNoActionTaken)
+{
+    doNothingFor(5);
+    EXPECT_THAT(_shipImage.renderCalls, ElementsAre(_initialLocation)); 
+}

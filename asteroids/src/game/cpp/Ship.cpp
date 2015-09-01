@@ -30,9 +30,18 @@ namespace pjm
          }
          else
          {
-            _acceleration.y -= ACC_FACTOR;
+             if (_acceleration.y > ACC_FACTOR)
+             {
+                _acceleration.y -= ACC_FACTOR;
+             }
+             else
+             {
+                _acceleration.y = 0;
+             }
          }
          Vector currentLocation(_location);
+         // Minus accelration as we consider origin to be at
+         // top left of screen
          _location = currentLocation*2 - _previousLocation - 
                      _acceleration*iTimeElapsed*iTimeElapsed;
          _previousLocation = currentLocation;

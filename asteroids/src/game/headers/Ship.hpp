@@ -19,7 +19,7 @@ namespace pjm
 
             virtual ~Ship() {}
 
-            static const float ACC_FACTOR = 0.001;
+            static const float ACC_FACTOR = 0.000001;
 
         private:
             Vector _location;
