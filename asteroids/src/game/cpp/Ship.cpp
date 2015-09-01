@@ -48,7 +48,7 @@ namespace pjm
     void Ship::updateLocation(unsigned int iTimeElapsed)
     {
         Vector currentLocation(_location);
-        // Minus accelration as we consider origin to be at
+        // Minus acceleration as we consider origin to be at
         // top left of screen
         _location = currentLocation*2 - _previousLocation - 
                     _acceleration*iTimeElapsed*iTimeElapsed;
