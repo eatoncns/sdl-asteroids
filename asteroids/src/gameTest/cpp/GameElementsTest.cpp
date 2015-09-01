@@ -6,6 +6,8 @@
 #include <Ship.hpp>
 #include <KeyPress.hpp>
 #include <utility>
+#include <boost/bind.hpp>
+#include <boost/mem_fn.hpp>
 
 using namespace pjm;
 using ::testing::ElementsAre;
@@ -13,10 +15,17 @@ using ::testing::Eq;
 
 struct TestShip : public Ship
 {
-    TestShip()
-        : Ship(Vector(0,0), renderable),
-          renderCalls(0)
+    TestShip(ImageLoader& iImageLoader)
+        : Ship(iImageLoader),
+          renderCalls(0),
+          initialiseSuccess(true)
     {}
+
+    bool initialise(const Vector& iInitialLocation)
+    {
+        initialiseCalls.push_back(iInitialLocation);
+        return initialiseSuccess;
+    }
 
     void update(const Action iAction, unsigned int iTimeElapsed)
     {
@@ -30,7 +39,8 @@ struct TestShip : public Ship
 
     int renderCalls;
     std::list<std::pair<Action, unsigned int> > updateCalls;
-    TestRenderable renderable;
+    std::list<Vector> initialiseCalls;
+    bool initialiseSuccess;
 };
 
 
@@ -39,21 +49,26 @@ class GameElementsTest : public ::testing::Test
     protected:
         GameElementsTest()
             : _screenInfo("test", 640, 480),
-              _gameElements(_imageLoader, _screenInfo)
+              _gameElements(_imageLoader, _screenInfo),
+              _ship(new TestShip(_imageLoader)) // deleted by gameElements
         {
-            _imageLoader.renderable = &_shipImage;
+            _gameElements._shipCreator = boost::bind(&GameElementsTest::getShip, this, _1);
         }
 
-        TestImageLoader _imageLoader;
+        Ship* getShip(ImageLoader&)
+        {
+            return _ship;
+        }
+
         ScreenInfo _screenInfo;
+        TestImageLoader _imageLoader;
         GameElements _gameElements;
-        TestRenderable _shipImage;
-        TestShip _ship;
+        TestShip* _ship;
 };
 
 TEST_F(GameElementsTest, InitReturnsFalseWhenImageLoadFails)
 {
-    _imageLoader.loadSuccess = false;
+    _ship->initialiseSuccess = false;
     EXPECT_FALSE(_gameElements.initialise());
 }
 
@@ -65,30 +80,26 @@ TEST_F(GameElementsTest, InitReturnsTrueWhenInitialisationSucceeds)
 TEST_F(GameElementsTest, InitialisesShipInCentreOfScreen)
 {
     _gameElements.initialise();
-    _gameElements.render();
-    EXPECT_THAT(_shipImage.renderCalls, ElementsAre(Vector(320, 240)));
+    EXPECT_THAT(_ship->initialiseCalls, ElementsAre(Vector(320, 240)));
 }
 
 TEST_F(GameElementsTest, CascadesRenderToShip)
 {
-    _gameElements._ship = &_ship;
+    _gameElements.initialise();
     _gameElements.render();
-    _gameElements._ship = NULL;
-    EXPECT_THAT(_ship.renderCalls, Eq(1));
+    EXPECT_THAT(_ship->renderCalls, Eq(1));
 }
 
 TEST_F(GameElementsTest, ConvertsUpKeyToShipAccelerate)
 {
-    _gameElements._ship = &_ship;
+    _gameElements.initialise();
     _gameElements.update(keyboard::UP, 5);
-    _gameElements._ship = NULL;
-    EXPECT_THAT(_ship.updateCalls, ElementsAre(std::make_pair(Ship::ACCELERATE, 5)));
+    EXPECT_THAT(_ship->updateCalls, ElementsAre(std::make_pair(Ship::ACCELERATE, 5)));
 }
 
 TEST_F(GameElementsTest, ConvertsNoneKeyToShipNone)
 {
-    _gameElements._ship = &_ship;
+    _gameElements.initialise();
     _gameElements.update(keyboard::NONE, 5);
-    _gameElements._ship = NULL;
-    EXPECT_THAT(_ship.updateCalls, ElementsAre(std::make_pair(Ship::NONE, 5)));
+    EXPECT_THAT(_ship->updateCalls, ElementsAre(std::make_pair(Ship::NONE, 5)));
 }

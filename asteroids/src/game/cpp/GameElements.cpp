@@ -10,9 +10,10 @@ namespace pjm
 {
     GameElements::GameElements(ImageLoader& iImageLoader,
                                const ScreenInfo& iScreenInfo)
-        : _imageLoader(iImageLoader),
-          _screenInfo(iScreenInfo),
-          _ship(NULL)
+        : _shipCreator(&Ship::create),
+          _ship(NULL),
+          _imageLoader(iImageLoader),
+          _screenInfo(iScreenInfo)
     {}
 
 
@@ -28,19 +29,15 @@ namespace pjm
     
     bool GameElements::initialise()
     {
-        Renderable* shipImage = _imageLoader.loadFromFile("resources/Ship.gif");
-        if (shipImage == NULL)
-        {
-            return false;
-        }
+        _ship = _shipCreator(_imageLoader);
         Vector initialShipLocation(_screenInfo.width/2, _screenInfo.height/2);
-        _ship = new Ship(initialShipLocation, *shipImage);
-        return true;
+        return _ship->initialise(initialShipLocation);
     }
+
 
     typedef std::map<keyboard::KeyPress, Ship::Action> key_map_t;
     static const key_map_t key_to_action = map_list_of(keyboard::UP,   Ship::ACCELERATE)
-                                                                                             (keyboard::NONE, Ship::NONE);
+                                                      (keyboard::NONE, Ship::NONE);
 
     void GameElements::update(keyboard::KeyPress iKeyPress, unsigned int iTimeElapsed)
     {

@@ -3,6 +3,7 @@
 
 #include <ScreenInfo.hpp>
 #include <KeyPress.hpp>
+#include <boost/function.hpp>
 
 namespace pjm
 {
@@ -22,10 +23,12 @@ namespace pjm
             void update(keyboard::KeyPress iKeyPress, unsigned int iTimeElapsed);
 
             void render();
-            
-            Ship* _ship;
+             
+            typedef boost::function<Ship*(ImageLoader& iImage)> ship_creator;
+            ship_creator _shipCreator;
 
         private:
+            Ship* _ship;
             ImageLoader& _imageLoader;
             ScreenInfo _screenInfo;
     };

@@ -1,27 +1,26 @@
 #include <Ship.hpp>
 #include <Renderable.hpp>
+#include <ImageLoader.hpp>
 
 namespace pjm
 {
-    Ship::Ship(const Vector& iInitialLocation, Renderable& iImage)
-      : _location(iInitialLocation),
-        _previousLocation(iInitialLocation),
+    Ship::Ship(ImageLoader& iImageLoader)
+      : _location(0, 0),
+        _previousLocation(0, 0),
         _acceleration(0, 0),
-        _image(iImage)
+        _imageLoader(iImageLoader),
+        _image(NULL)
     {}
     
-    
-    void Ship::render()
+
+    bool Ship::initialise(const Vector& iInitialLocation)
     {
-        static int widthOffset = _image.width() / 2;
-        static int heightOffset = _image.height() / 2;
-        float renderX = _location.x - widthOffset;
-        float renderY = _location.y - heightOffset;
-        Vector renderLocation(renderX, renderY);
-        _image.render(renderLocation);
+        _location = iInitialLocation;
+        _previousLocation = iInitialLocation;
+        _image = _imageLoader.loadFromFile("resources/Ship.gif");
+        return (_image != NULL);
     }
-
-
+    
     void Ship::update(const Action iAction, unsigned int iTimeElapsed)
     {
          if(iAction == ACCELERATE)
@@ -45,5 +44,22 @@ namespace pjm
          _location = currentLocation*2 - _previousLocation - 
                      _acceleration*iTimeElapsed*iTimeElapsed;
          _previousLocation = currentLocation;
+    }
+    
+    
+    void Ship::render()
+    {
+        static int widthOffset = _image->width() / 2;
+        static int heightOffset = _image->height() / 2;
+        float renderX = _location.x - widthOffset;
+        float renderY = _location.y - heightOffset;
+        Vector renderLocation(renderX, renderY);
+        _image->render(renderLocation);
+    }
+
+    
+    Ship* Ship::create(ImageLoader& iImageLoader)
+    {
+        return new Ship(iImageLoader);
     }
 }

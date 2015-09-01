@@ -2,6 +2,7 @@
 #include <Ship.hpp>
 #include <Vector.hpp>
 #include <TestRenderable.hpp>
+#include <TestImageLoader.hpp>
 
 using namespace pjm;
 using ::testing::ElementsAre;
@@ -11,8 +12,11 @@ class ShipTest : public ::testing::Test
     protected:
         ShipTest()
             : _initialLocation(100, 100),
-              _ship(_initialLocation, _shipImage)
-        {}
+              _ship(_imageLoader)
+        {
+            _imageLoader.renderable = &_shipImage;
+            _ship.initialise(_initialLocation);
+        }
 
         void update(Ship::Action iAction, unsigned int iTime)
         {
@@ -31,6 +35,7 @@ class ShipTest : public ::testing::Test
         }
 
         Vector _initialLocation;
+        TestImageLoader _imageLoader;
         TestRenderable _shipImage;
         Ship _ship;
 };
