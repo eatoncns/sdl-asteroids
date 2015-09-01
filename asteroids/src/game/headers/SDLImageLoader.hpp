@@ -17,7 +17,7 @@ namespace pjm
 
             ~SDLImageLoader();
 
-            // N.b. ownership of the pointer returns remains with
+            // N.b. ownership of the pointer returned remains with
             //      the ImageLoader class
             Renderable* loadFromFile(const std::string& iFilePath);
 
