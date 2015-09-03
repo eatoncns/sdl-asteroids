@@ -77,10 +77,10 @@ TEST_F(ShipTest, DoesNotReduceAccelerationBelowZeroWhenNoActionTaken)
     EXPECT_THAT(_shipImage.renderCalls, ElementsAre(_initialLocation)); 
 }
 
-//TEST_F(ShipTest, WrapsToBottomOfScreenWhenExitingTop)
-//{
-//    _ship.initialise(Vector(0,0), _bounds);
-//    accelerateFor(20);
-//    float wrappedYPos = _bounds.y - 10000*Ship::ACC_FACTOR;
-//    EXPECT_THAT(_shipImage.renderCalls, ElementsAre(Vector(0, wrappedYPos)));
-//}
+TEST_F(ShipTest, WrapsToBottomOfScreenWhenExitingTop)
+{
+    _ship.initialise(Vector(0,0), _bounds);
+    accelerateFor(100);
+    float wrappedYPos = _bounds.y - 10000*Ship::ACC_FACTOR;
+    EXPECT_THAT(_shipImage.renderCalls, ElementsAre(Vector(0, wrappedYPos)));
+}

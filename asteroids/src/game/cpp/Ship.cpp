@@ -56,7 +56,15 @@ namespace pjm
     {
         // Minus velocity as we consider origin to be at
         // top left of screen
-        _location = _location - _velocity*iTimeElapsed; 
+        _location = _location - _velocity*iTimeElapsed;
+        if (_location.y < 0)
+        {
+            _location.y += _bounds.y;
+        }
+        else if (_location.y > _bounds.y)
+        {
+            _location.y -= _bounds.y;
+        }
     }
     
     
