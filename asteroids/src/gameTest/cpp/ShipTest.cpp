@@ -5,7 +5,20 @@
 #include <TestImageLoader.hpp>
 
 using namespace pjm;
+using ::testing::Eq;
 using ::testing::ElementsAre;
+
+struct ShipSpy : public Ship
+{
+    ShipSpy(ImageLoader& iImageLoader)
+        : Ship(iImageLoader)
+    {}
+
+    Vector getLocation()
+    {
+        return _location;
+    }
+};
 
 class ShipTest : public ::testing::Test
 {
@@ -39,7 +52,7 @@ class ShipTest : public ::testing::Test
         Vector _bounds;
         TestImageLoader _imageLoader;
         TestRenderable _shipImage;
-        Ship _ship;
+        ShipSpy _ship;
 };
 
 
@@ -52,29 +65,27 @@ TEST_F(ShipTest, RendersImageAtCurrentLocation)
 TEST_F(ShipTest, DoesEulerAcceleration)
 {
     accelerateFor(5);
-    accelerateFor(6);
     float firstYPos = _initialLocation.y - 25*Ship::ACC_FACTOR;
+    EXPECT_THAT(_ship.getLocation(), Eq(Vector(_initialLocation.x, firstYPos)));
+    accelerateFor(6);
     float secondYPos = firstYPos - 6*(5*Ship::ACC_FACTOR + 6*2*Ship::ACC_FACTOR);
-    EXPECT_THAT(_shipImage.renderCalls, ElementsAre(
-                  Vector(_initialLocation.x, firstYPos),
-                  Vector(_initialLocation.x, secondYPos))); 
+    EXPECT_THAT(_ship.getLocation(), Eq(Vector(_initialLocation.x, secondYPos))); 
 }
 
 TEST_F(ShipTest, ReducesAccelerationWhenNoActionTaken)
 {
     accelerateFor(5);
-    doNothingFor(5);
     float firstYPos = _initialLocation.y - 25*Ship::ACC_FACTOR;
+    EXPECT_THAT(_ship.getLocation(), Eq(Vector(_initialLocation.x, firstYPos)));
+    doNothingFor(5);
     float secondYPos = firstYPos + (firstYPos - _initialLocation.y);
-    EXPECT_THAT(_shipImage.renderCalls, ElementsAre(
-                  Vector(_initialLocation.x, firstYPos),
-                  Vector(_initialLocation.x, secondYPos)));
+    EXPECT_THAT(_ship.getLocation(), Eq(Vector(_initialLocation.x, secondYPos)));
 }
 
 TEST_F(ShipTest, DoesNotReduceAccelerationBelowZeroWhenNoActionTaken)
 {
     doNothingFor(5);
-    EXPECT_THAT(_shipImage.renderCalls, ElementsAre(_initialLocation)); 
+    EXPECT_THAT(_ship.getLocation(), Eq(_initialLocation));
 }
 
 TEST_F(ShipTest, WrapsToBottomOfScreenWhenExitingTop)
@@ -82,5 +93,11 @@ TEST_F(ShipTest, WrapsToBottomOfScreenWhenExitingTop)
     _ship.initialise(Vector(0,0), _bounds);
     accelerateFor(100);
     float wrappedYPos = _bounds.y - 10000*Ship::ACC_FACTOR;
-    EXPECT_THAT(_shipImage.renderCalls, ElementsAre(Vector(0, wrappedYPos)));
+    EXPECT_THAT(_ship.getLocation(), Eq(Vector(0, wrappedYPos)));
 }
+
+//TEST_F(ShipTest, HasMaximumVelocity)
+//{
+//    accelerateFor(;
+//    float yPos = _initialLocation.y - Ship::MAX_VELOCITY
+//}

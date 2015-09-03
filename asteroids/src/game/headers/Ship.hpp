@@ -25,7 +25,7 @@ namespace pjm
 
             static Ship* create(ImageLoader& iImageLoader);
 
-        private:
+        protected:
             void updateAcceleration(const Action iAction);
             void updateVelocity(unsigned int iTimeElapsed);
             void updateLocation(unsigned int iTimeElapsed);
