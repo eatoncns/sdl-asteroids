@@ -13,6 +13,8 @@ namespace pjm
 
             bool run();
 
+            static const unsigned int TICKS_PER_FRAME = 16;
+
         private:
             Game& _game;
             Timer& _timer;
