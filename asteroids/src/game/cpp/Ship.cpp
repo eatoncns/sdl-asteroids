@@ -6,17 +6,18 @@ namespace pjm
 {
     Ship::Ship(ImageLoader& iImageLoader)
       : _location(0, 0),
-        _previousLocation(0, 0),
+        _velocity(0, 0),
         _acceleration(0, 0),
+        _bounds(0,0),
         _imageLoader(iImageLoader),
         _image(NULL)
     {}
     
 
-    bool Ship::initialise(const Vector& iInitialLocation)
+    bool Ship::initialise(const Vector& iInitialLocation, const Vector& iBounds)
     {
         _location = iInitialLocation;
-        _previousLocation = iInitialLocation;
+        _bounds = iBounds;
         _image = _imageLoader.loadFromFile("resources/Ship.gif");
         return (_image != NULL);
     }
@@ -25,6 +26,7 @@ namespace pjm
     void Ship::update(const Action iAction, unsigned int iTimeElapsed)
     {
         updateAcceleration(iAction);
+        updateVelocity(iTimeElapsed);
         updateLocation(iTimeElapsed);
     }
 
@@ -45,14 +47,16 @@ namespace pjm
     }
 
 
+    void Ship::updateVelocity(unsigned int iTimeElapsed)
+    {
+        _velocity = _velocity + _acceleration*iTimeElapsed;
+    }
+
     void Ship::updateLocation(unsigned int iTimeElapsed)
     {
-        Vector currentLocation(_location);
-        // Minus acceleration as we consider origin to be at
+        // Minus velocity as we consider origin to be at
         // top left of screen
-        _location = currentLocation*2 - _previousLocation - 
-                    _acceleration*iTimeElapsed*iTimeElapsed;
-        _previousLocation = currentLocation;
+        _location = _location - _velocity*iTimeElapsed; 
     }
     
     

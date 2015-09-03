@@ -21,9 +21,9 @@ struct TestShip : public Ship
           initialiseSuccess(true)
     {}
 
-    bool initialise(const Vector& iInitialLocation)
+    bool initialise(const Vector& iInitialLocation, const Vector& iBounds)
     {
-        initialiseCalls.push_back(iInitialLocation);
+        initialiseCalls.push_back(std::make_pair(iInitialLocation, iBounds));
         return initialiseSuccess;
     }
 
@@ -39,7 +39,7 @@ struct TestShip : public Ship
 
     int renderCalls;
     std::list<std::pair<Action, unsigned int> > updateCalls;
-    std::list<Vector> initialiseCalls;
+    std::list<std::pair<Vector, Vector> > initialiseCalls;
     bool initialiseSuccess;
 };
 
@@ -80,7 +80,8 @@ TEST_F(GameElementsTest, InitReturnsTrueWhenInitialisationSucceeds)
 TEST_F(GameElementsTest, InitialisesShipInCentreOfScreen)
 {
     _gameElements.initialise();
-    EXPECT_THAT(_ship->initialiseCalls, ElementsAre(Vector(320, 240)));
+    EXPECT_THAT(_ship->initialiseCalls, 
+                ElementsAre(std::make_pair(Vector(320, 240),Vector(640, 480))));
 }
 
 TEST_F(GameElementsTest, CascadesRenderToShip)

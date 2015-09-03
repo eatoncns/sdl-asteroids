@@ -31,7 +31,8 @@ namespace pjm
     {
         _ship = _shipCreator(_imageLoader);
         Vector initialShipLocation(_screenInfo.width/2, _screenInfo.height/2);
-        return _ship->initialise(initialShipLocation);
+        Vector screenBounds(_screenInfo.width, _screenInfo.height);
+        return _ship->initialise(initialShipLocation, screenBounds);
     }
 
 

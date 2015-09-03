@@ -15,7 +15,7 @@ namespace pjm
             
             enum Action {NONE, ACCELERATE};
 
-            virtual bool initialise(const Vector& iInitialLocation);
+            virtual bool initialise(const Vector& iInitialLocation, const Vector& iBounds);
             virtual void update(const Action iAction, unsigned int iTimeElapsed);
             virtual void render();
 
@@ -27,11 +27,13 @@ namespace pjm
 
         private:
             void updateAcceleration(const Action iAction);
+            void updateVelocity(unsigned int iTimeElapsed);
             void updateLocation(unsigned int iTimeElapsed);
 
             Vector _location;
-            Vector _previousLocation;
+            Vector _velocity;
             Vector _acceleration;
+            Vector _bounds;
             ImageLoader& _imageLoader;
             Renderable* _image;
     };
