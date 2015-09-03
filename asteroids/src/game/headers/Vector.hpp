@@ -14,10 +14,14 @@ namespace pjm
             : x(iX), y(iY)
         {}
 
+        static bool eqValue(float iLhs, float iRhs)
+        {
+            return fabs(iLhs - iRhs) < TOL;
+        }
+
         bool operator==(const Vector& iOther) const
         {
-            return (fabs(x-iOther.x) < TOL && 
-                    fabs(y-iOther.y) < TOL);
+            return (eqValue(x, iOther.x) && eqValue(y, iOther.y));
         }
 
         bool operator!=(const Vector& iOther) const

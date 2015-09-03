@@ -14,9 +14,19 @@ struct ShipSpy : public Ship
         : Ship(iImageLoader)
     {}
 
-    Vector getLocation()
+    Vector getLocation() const
     {
         return _location;
+    }
+
+    Vector getVelocity() const
+    {
+        return _velocity;
+    }
+
+    Vector getAcceleration() const
+    {
+        return _acceleration;
     }
 };
 
@@ -35,7 +45,6 @@ class ShipTest : public ::testing::Test
         void update(Ship::Action iAction, unsigned int iTime)
         {
             _ship.update(iAction, iTime);
-            _ship.render(); 
         }
 
         void accelerateFor(unsigned int iTime)
@@ -96,8 +105,15 @@ TEST_F(ShipTest, WrapsToBottomOfScreenWhenExitingTop)
     EXPECT_THAT(_ship.getLocation(), Eq(Vector(0, wrappedYPos)));
 }
 
-//TEST_F(ShipTest, HasMaximumVelocity)
-//{
-//    accelerateFor(;
-//    float yPos = _initialLocation.y - Ship::MAX_VELOCITY
-//}
+TEST_F(ShipTest, DoesNotExceedMaximumVelocity)
+{
+    accelerateFor(10000000);
+    EXPECT_THAT(_ship.getVelocity().y, Eq(Ship::MAX_VELOCITY));
+}
+
+TEST_F(ShipTest, ResetsAccelerationAtMaximumVelocity)
+{
+    accelerateFor(10000000);
+    doNothingFor(1);
+    EXPECT_THAT(_ship.getAcceleration().y, Eq(0));
+}

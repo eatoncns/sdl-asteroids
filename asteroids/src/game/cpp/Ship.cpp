@@ -33,6 +33,11 @@ namespace pjm
 
     void Ship::updateAcceleration(const Action iAction)
     {
+        if (Vector::eqValue(_velocity.y, MAX_VELOCITY))
+        {
+            _acceleration.y = 0;
+            return;
+        }
         if(iAction == ACCELERATE)
         {
             _acceleration.y += ACC_FACTOR;
@@ -50,6 +55,10 @@ namespace pjm
     void Ship::updateVelocity(unsigned int iTimeElapsed)
     {
         _velocity = _velocity + _acceleration*iTimeElapsed;
+        if (_velocity.y > MAX_VELOCITY)
+        {
+            _velocity.y = MAX_VELOCITY;
+        }
     }
 
     void Ship::updateLocation(unsigned int iTimeElapsed)

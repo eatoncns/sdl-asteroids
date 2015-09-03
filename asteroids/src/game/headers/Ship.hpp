@@ -22,6 +22,7 @@ namespace pjm
             virtual ~Ship() {}
 
             static const float ACC_FACTOR = 0.000001;
+            static const float MAX_VELOCITY = 0.2;
 
             static Ship* create(ImageLoader& iImageLoader);
 
