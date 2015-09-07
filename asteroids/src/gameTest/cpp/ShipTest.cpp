@@ -28,6 +28,11 @@ struct ShipSpy : public Ship
     {
         return _acceleration;
     }
+
+    double getAngle() const
+    {
+        return _angle;
+    }
 };
 
 class ShipTest : public ::testing::Test
@@ -52,6 +57,16 @@ class ShipTest : public ::testing::Test
             update(Ship::ACCELERATE, iTime);
         }
 
+        void turnLeftFor(unsigned int iTime)
+        {
+            update(Ship::TURN_LEFT, iTime);
+        }
+        
+        void turnRightFor(unsigned int iTime)
+        {
+            update(Ship::TURN_RIGHT, iTime);
+        }
+
         void doNothingFor(unsigned int iTime)
         {
             update(Ship::NONE, iTime);
@@ -68,7 +83,7 @@ class ShipTest : public ::testing::Test
 TEST_F(ShipTest, RendersImageAtCurrentLocation)
 {
     _ship.render();
-    EXPECT_THAT(_shipImage.renderCalls, ElementsAre(_initialLocation));
+    EXPECT_THAT(_shipImage.renderCalls, ElementsAre(std::make_pair(_initialLocation, 0.0)));
 }
 
 TEST_F(ShipTest, DoesEulerAcceleration)
@@ -116,4 +131,16 @@ TEST_F(ShipTest, ResetsAccelerationAtMaximumVelocity)
     accelerateFor(10000000);
     doNothingFor(1);
     EXPECT_THAT(_ship.getAcceleration().y, Eq(0));
+}
+
+TEST_F(ShipTest, RotatesLeft)
+{
+    turnLeftFor(5);
+    EXPECT_THAT(_ship.getAngle(), Eq(-5*Ship::ROTATION_FACTOR));
+}
+
+TEST_F(ShipTest, RotatesRight)
+{
+    turnRightFor(5);
+    EXPECT_THAT(_ship.getAngle(), Eq(5*Ship::ROTATION_FACTOR));
 }

@@ -21,7 +21,8 @@ namespace pjm
     }
 
 
-    void SDLImage::render(const Vector& iLocation)
+    void SDLImage::render(const Vector& iLocation,
+                          const double iAngle)
     {
         SDL_Rect renderQuad = {iround(iLocation.x), iround(iLocation.y), 
                                _width, _height};

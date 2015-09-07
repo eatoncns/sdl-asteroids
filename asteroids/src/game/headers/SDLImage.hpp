@@ -22,7 +22,7 @@ namespace pjm
 
             ~SDLImage();
 
-            void render(const Vector& iLocation);
+            void render(const Vector& iLocation, const double iAngle);
 
             int width();
             int height();

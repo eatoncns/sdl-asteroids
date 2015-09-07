@@ -7,7 +7,8 @@ namespace pjm
 
     struct Renderable
     {
-        virtual void render(const Vector& iLocation) = 0;
+        virtual void render(const Vector& iLocation,
+                            const double iAngle) = 0;
         virtual int width() = 0;
         virtual int height() = 0;
 

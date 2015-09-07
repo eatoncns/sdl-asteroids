@@ -7,9 +7,9 @@
 
 struct TestRenderable : public pjm::Renderable
 {
-    void render(const pjm::Vector& iLocation)
+    void render(const pjm::Vector& iLocation, const double iAngle)
     {
-        renderCalls.push_back(iLocation);
+        renderCalls.push_back(std::make_pair(iLocation, iAngle));
     }
 
 
@@ -23,7 +23,7 @@ struct TestRenderable : public pjm::Renderable
         return 0;
     }
 
-    std::list<pjm::Vector> renderCalls;
+    std::list<std::pair<pjm::Vector, double> > renderCalls;
 };
 
 #endif

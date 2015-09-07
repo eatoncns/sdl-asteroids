@@ -8,6 +8,7 @@ namespace pjm
       : _location(0, 0),
         _velocity(0, 0),
         _acceleration(0, 0),
+        _angle(0.0),
         _bounds(0,0),
         _imageLoader(iImageLoader),
         _image(NULL)
@@ -25,9 +26,18 @@ namespace pjm
 
     void Ship::update(const Action iAction, unsigned int iTimeElapsed)
     {
+        updateAngle(iAction, iTimeElapsed);
         updateAcceleration(iAction);
         updateVelocity(iTimeElapsed);
         updateLocation(iTimeElapsed);
+    }
+
+
+    void Ship::updateAngle(const Action iAction, unsigned int iTimeElapsed)
+    {
+        double directionFactor = (iAction == TURN_LEFT) ? -1.0 : 1.0;
+        double rotationUpdate = iTimeElapsed * ROTATION_FACTOR * directionFactor;
+        _angle += rotationUpdate;
     }
 
 
@@ -84,7 +94,7 @@ namespace pjm
         float renderX = _location.x - widthOffset;
         float renderY = _location.y - heightOffset;
         Vector renderLocation(renderX, renderY);
-        _image->render(renderLocation);
+        _image->render(renderLocation, 0.0);
     }
 
     
