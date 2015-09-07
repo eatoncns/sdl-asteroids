@@ -70,6 +70,10 @@ namespace pjm
             printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
             return false;
         }
+        if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
+        {
+                printf( "Warning: Linear texture filtering not enabled!" );
+        }
         return true;
     }
 
@@ -134,6 +138,16 @@ namespace pjm
         if (state[SDL_SCANCODE_UP])
         {
             _gameElements->update(keyboard::UP, iTimeElapsed);
+            return;
+        }
+        if (state[SDL_SCANCODE_LEFT])
+        {
+            _gameElements->update(keyboard::LEFT, iTimeElapsed);
+            return;
+        }
+        if (state[SDL_SCANCODE_RIGHT])
+        {
+            _gameElements->update(keyboard::RIGHT, iTimeElapsed);
             return;
         }
         _gameElements->update(keyboard::NONE, iTimeElapsed);

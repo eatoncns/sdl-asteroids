@@ -26,7 +26,7 @@ namespace pjm
     {
         SDL_Rect renderQuad = {iround(iLocation.x), iround(iLocation.y), 
                                _width, _height};
-        SDL_RenderCopy(_renderer, _texture, NULL, &renderQuad);
+        SDL_RenderCopyEx(_renderer, _texture, NULL, &renderQuad, iAngle, NULL, SDL_FLIP_NONE);
     }
 
 

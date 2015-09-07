@@ -35,6 +35,10 @@ namespace pjm
 
     void Ship::updateAngle(const Action iAction, unsigned int iTimeElapsed)
     {
+        if (iAction != TURN_LEFT && iAction != TURN_RIGHT)
+        {
+            return;
+        }
         double directionFactor = (iAction == TURN_LEFT) ? -1.0 : 1.0;
         double rotationUpdate = iTimeElapsed * ROTATION_FACTOR * directionFactor;
         _angle += rotationUpdate;
@@ -94,7 +98,7 @@ namespace pjm
         float renderX = _location.x - widthOffset;
         float renderY = _location.y - heightOffset;
         Vector renderLocation(renderX, renderY);
-        _image->render(renderLocation, 0.0);
+        _image->render(renderLocation, _angle);
     }
 
     

@@ -144,3 +144,9 @@ TEST_F(ShipTest, RotatesRight)
     turnRightFor(5);
     EXPECT_THAT(_ship.getAngle(), Eq(5*Ship::ROTATION_FACTOR));
 }
+
+TEST_F(ShipTest, DoesNotRotateWhenNoActionTaken)
+{
+    doNothingFor(5);
+    EXPECT_THAT(_ship.getAngle(), Eq(0.0));
+}
