@@ -40,6 +40,8 @@ namespace pjm
     static const key_map_t key_to_action = map_list_of(keyboard::UP,   Ship::ACCELERATE)
                                                       (keyboard::LEFT, Ship::TURN_LEFT)
                                                       (keyboard::RIGHT, Ship::TURN_RIGHT)
+                                                      (keyboard::UP_LEFT, Ship::ACCELERATE_LEFT)
+                                                      (keyboard::UP_RIGHT, Ship::ACCELERATE_RIGHT)
                                                       (keyboard::NONE, Ship::NONE);
 
     void GameElements::update(keyboard::KeyPress iKeyPress, unsigned int iTimeElapsed)
