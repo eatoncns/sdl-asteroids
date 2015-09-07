@@ -104,3 +104,17 @@ TEST_F(GameElementsTest, ConvertsNoneKeyToShipNone)
     _gameElements.update(keyboard::NONE, 5);
     EXPECT_THAT(_ship->updateCalls, ElementsAre(std::make_pair(Ship::NONE, 5)));
 }
+
+TEST_F(GameElementsTest, ConvertsLeftKeyToShipTurnLeft)
+{
+    _gameElements.initialise();
+    _gameElements.update(keyboard::LEFT, 5);
+    EXPECT_THAT(_ship->updateCalls, ElementsAre(std::make_pair(Ship::TURN_LEFT, 5)));
+}
+
+TEST_F(GameElementsTest, ConvertsRightKeyToShipTurnRight)
+{
+    _gameElements.initialise();
+    _gameElements.update(keyboard::RIGHT, 5);
+    EXPECT_THAT(_ship->updateCalls, ElementsAre(std::make_pair(Ship::TURN_RIGHT, 5)));
+}

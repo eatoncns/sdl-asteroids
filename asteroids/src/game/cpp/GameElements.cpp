@@ -38,6 +38,8 @@ namespace pjm
 
     typedef std::map<keyboard::KeyPress, Ship::Action> key_map_t;
     static const key_map_t key_to_action = map_list_of(keyboard::UP,   Ship::ACCELERATE)
+                                                      (keyboard::LEFT, Ship::TURN_LEFT)
+                                                      (keyboard::RIGHT, Ship::TURN_RIGHT)
                                                       (keyboard::NONE, Ship::NONE);
 
     void GameElements::update(keyboard::KeyPress iKeyPress, unsigned int iTimeElapsed)

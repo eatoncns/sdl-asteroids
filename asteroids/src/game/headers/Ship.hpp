@@ -13,7 +13,7 @@ namespace pjm
         public:
             Ship(ImageLoader& iImageLoader);
             
-            enum Action {NONE, ACCELERATE};
+            enum Action {NONE, ACCELERATE, TURN_LEFT, TURN_RIGHT};
 
             virtual bool initialise(const Vector& iInitialLocation, const Vector& iBounds);
             virtual void update(const Action iAction, unsigned int iTimeElapsed);
