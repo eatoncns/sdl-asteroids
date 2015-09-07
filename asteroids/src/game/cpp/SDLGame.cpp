@@ -135,22 +135,28 @@ namespace pjm
             }
         }
         const Uint8 *state = SDL_GetKeyboardState(NULL);
+        keyboard::KeyPress keyPress = keyboard::NONE;
         if (state[SDL_SCANCODE_UP])
         {
-            _gameElements->update(keyboard::UP, iTimeElapsed);
-            return;
+            keyPress = keyboard::UP;
+            if (state[SDL_SCANCODE_LEFT] && !state[SDL_SCANCODE_RIGHT])
+            {
+                keyPress = keyboard::UP_LEFT;
+            }
+            else if (state[SDL_SCANCODE_RIGHT] && !state[SDL_SCANCODE_LEFT])
+            {
+                keyPress = keyboard::UP_RIGHT;
+            }
         }
-        if (state[SDL_SCANCODE_LEFT])
+        else if (state[SDL_SCANCODE_LEFT] && !state[SDL_SCANCODE_RIGHT])
         {
-            _gameElements->update(keyboard::LEFT, iTimeElapsed);
-            return;
+            keyPress = keyboard::LEFT;
         }
-        if (state[SDL_SCANCODE_RIGHT])
+        else if (state[SDL_SCANCODE_RIGHT] && !state[SDL_SCANCODE_LEFT])
         {
-            _gameElements->update(keyboard::RIGHT, iTimeElapsed);
-            return;
+            keyPress = keyboard::RIGHT;
         }
-        _gameElements->update(keyboard::NONE, iTimeElapsed);
+        _gameElements->update(keyPress, iTimeElapsed);
     }
 
 
