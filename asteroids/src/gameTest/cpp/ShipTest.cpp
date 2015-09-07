@@ -67,6 +67,16 @@ class ShipTest : public ::testing::Test
             update(Ship::TURN_RIGHT, iTime);
         }
 
+        void accelerateLeftFor(unsigned int iTime)
+        {
+            update(Ship::ACCELERATE_LEFT, iTime);
+        }
+        
+        void accelerateRightFor(unsigned int iTime)
+        {
+            update(Ship::ACCELERATE_RIGHT, iTime);
+        }
+
         void doNothingFor(unsigned int iTime)
         {
             update(Ship::NONE, iTime);
@@ -149,4 +159,20 @@ TEST_F(ShipTest, DoesNotRotateWhenNoActionTaken)
 {
     doNothingFor(5);
     EXPECT_THAT(_ship.getAngle(), Eq(0.0));
+}
+
+TEST_F(ShipTest, AcceleratesLeft)
+{
+    accelerateLeftFor(10);
+    float yPos = _initialLocation.y - 100*Ship::ACC_FACTOR;
+    EXPECT_THAT(_ship.getLocation(), Eq(Vector(_initialLocation.x, yPos)));
+    EXPECT_THAT(_ship.getAngle(), Eq(-10*Ship::ROTATION_FACTOR));
+}
+
+TEST_F(ShipTest, AcceleratesRight)
+{
+    accelerateRightFor(10);
+    float yPos = _initialLocation.y - 100*Ship::ACC_FACTOR;
+    EXPECT_THAT(_ship.getLocation(), Eq(Vector(_initialLocation.x, yPos)));
+    EXPECT_THAT(_ship.getAngle(), Eq(10*Ship::ROTATION_FACTOR));
 }

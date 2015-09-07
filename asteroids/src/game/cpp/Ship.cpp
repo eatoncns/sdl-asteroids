@@ -1,6 +1,10 @@
 #include <Ship.hpp>
 #include <Renderable.hpp>
 #include <ImageLoader.hpp>
+#include <boost/assign.hpp>
+
+using namespace std;
+using namespace boost::assign;
 
 namespace pjm
 {
@@ -35,12 +39,18 @@ namespace pjm
 
     void Ship::updateAngle(const Action iAction, unsigned int iTimeElapsed)
     {
-        if (iAction != TURN_LEFT && iAction != TURN_RIGHT)
+        static const map<Action, double> rotationDirections = 
+            map_list_of(TURN_LEFT, -1.0)
+                       (TURN_RIGHT, 1.0)
+                       (ACCELERATE_LEFT, -1.0)
+                       (ACCELERATE_RIGHT, 1.0);
+       
+        map<Action, double>::const_iterator directionIt = rotationDirections.find(iAction);
+        if (directionIt == rotationDirections.end())
         {
             return;
         }
-        double directionFactor = (iAction == TURN_LEFT) ? -1.0 : 1.0;
-        double rotationUpdate = iTimeElapsed * ROTATION_FACTOR * directionFactor;
+        double rotationUpdate = iTimeElapsed * ROTATION_FACTOR * directionIt->second;
         _angle += rotationUpdate;
     }
 
@@ -52,7 +62,9 @@ namespace pjm
             _acceleration.y = 0;
             return;
         }
-        if(iAction == ACCELERATE)
+        static const set<Action> accelerateActions = 
+            list_of(ACCELERATE)(ACCELERATE_LEFT)(ACCELERATE_RIGHT);
+        if(accelerateActions.find(iAction) != accelerateActions.end())
         {
             _acceleration.y += ACC_FACTOR;
             return;
