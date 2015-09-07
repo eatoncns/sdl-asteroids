@@ -121,19 +121,10 @@ namespace pjm
     {
         return _running;
     }
-
-
-    void SDLGame::update(unsigned int iTimeElapsed)
+    
+    
+    keyboard::KeyPress getKeyPress()
     {
-        SDL_Event e;
-        while (SDL_PollEvent(&e) != 0)
-        {
-            if (e.type == SDL_QUIT)
-            {
-                _running = false;
-                return;
-            }
-        }
         const Uint8 *state = SDL_GetKeyboardState(NULL);
         keyboard::KeyPress keyPress = keyboard::NONE;
         if (state[SDL_SCANCODE_UP])
@@ -156,6 +147,22 @@ namespace pjm
         {
             keyPress = keyboard::RIGHT;
         }
+        return keyPress;
+    }
+
+
+    void SDLGame::update(unsigned int iTimeElapsed)
+    {
+        SDL_Event e;
+        while (SDL_PollEvent(&e) != 0)
+        {
+            if (e.type == SDL_QUIT)
+            {
+                _running = false;
+                return;
+            }
+        }
+        keyboard::KeyPress keyPress = getKeyPress();
         _gameElements->update(keyPress, iTimeElapsed);
     }
 
