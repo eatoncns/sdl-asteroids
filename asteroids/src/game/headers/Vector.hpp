@@ -49,6 +49,13 @@ namespace pjm
             y *= iScalar;
             return *this;
         }
+        
+        Vector& operator*=(const float& iFloat)
+        {
+            x *= iFloat;
+            y *= iFloat;
+            return *this;
+        }
 
         const Vector operator+(const Vector& iOther) const
         {

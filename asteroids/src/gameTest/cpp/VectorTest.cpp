@@ -56,6 +56,13 @@ TEST(VectorTest, ImplementsScalarMultiplicationAssignment)
     EXPECT_EQ(Vector(9.6f, 13.2f), v1);
 }
 
+TEST(VectorTest, ImplementsFloatMultiplicationAssignment)
+{
+    Vector v1(3.2f, 4.4f);
+    v1 *= 0.5f;
+    EXPECT_EQ(Vector(1.6f, 2.2f), v1);
+}
+
 TEST(VectorTest, ImplementsAddition)
 {
     Vector v1(3.2f, 4.4f);

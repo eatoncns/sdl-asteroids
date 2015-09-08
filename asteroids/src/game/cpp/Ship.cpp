@@ -58,11 +58,6 @@ namespace pjm
 
     void Ship::updateAcceleration(const Action iAction)
     {
-        if (Vector::eqValue(fabs(_velocity.y), MAX_VELOCITY))
-        {
-            _acceleration.y = 0;
-            return;
-        }
         static const set<Action> accelerateActions = 
             list_of(ACCELERATE)(ACCELERATE_LEFT)(ACCELERATE_RIGHT);
         if(accelerateActions.find(iAction) != accelerateActions.end())
@@ -88,19 +83,15 @@ namespace pjm
     void Ship::updateVelocity(unsigned int iTimeElapsed)
     {
         _velocity = _velocity + _acceleration*iTimeElapsed;
-        bool maxVelocityExceeded = _velocity.squareSum() > MAX_VELOCITY*MAX_VELOCITY;
+        float maxSquared = MAX_VELOCITY*MAX_VELOCITY;
+        float velocitySquared = _velocity.squareSum();
+        bool maxVelocityExceeded = velocitySquared > maxSquared;
         if (maxVelocityExceeded)
         {
+            float reductionFactor = sqrt(MAX_VELOCITY/velocitySquared);
+            _velocity *= reductionFactor;
             _acceleration.x = 0;
             _acceleration.y = 0;
-        }
-        if (_velocity.y > MAX_VELOCITY)
-        {
-            _velocity.y = MAX_VELOCITY;
-        }
-        if (_velocity.y < -MAX_VELOCITY)
-        {
-            _velocity.y = -MAX_VELOCITY;
         }
     }
 
