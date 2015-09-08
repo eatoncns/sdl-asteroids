@@ -139,8 +139,10 @@ TEST_F(ShipTest, DoesNotExceedMaximumVelocity)
 
 TEST_F(ShipTest, ResetsAccelerationAtMaximumVelocity)
 {
+    unsigned int rotationTime = iround(45.0/Ship::ROTATION_FACTOR);
+    turnRightFor(rotationTime);
     accelerateFor(10000000);
-    doNothingFor(1);
+    EXPECT_THAT(_ship.getAcceleration().x, Eq(0));
     EXPECT_THAT(_ship.getAcceleration().y, Eq(0));
 }
 

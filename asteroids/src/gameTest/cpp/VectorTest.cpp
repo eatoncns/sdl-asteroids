@@ -78,3 +78,9 @@ TEST(VectorTest, ImplementsScalarMultiplication)
     Vector v3 = v1*3;
     EXPECT_EQ(Vector(9.6f, 13.2f), v3);
 }
+
+TEST(VectorTest, ComputesSquareSum)
+{
+    Vector v1(5.0f, 2.0f);
+    EXPECT_EQ(29.0f, v1.squareSum());
+}

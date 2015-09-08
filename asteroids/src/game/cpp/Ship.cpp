@@ -3,7 +3,6 @@
 #include <ImageLoader.hpp>
 #include <boost/assign.hpp>
 #include <math.h>
-#include <stdio.h>
 
 using namespace std;
 using namespace boost::assign;
@@ -89,6 +88,12 @@ namespace pjm
     void Ship::updateVelocity(unsigned int iTimeElapsed)
     {
         _velocity = _velocity + _acceleration*iTimeElapsed;
+        bool maxVelocityExceeded = _velocity.squareSum() > MAX_VELOCITY*MAX_VELOCITY;
+        if (maxVelocityExceeded)
+        {
+            _acceleration.x = 0;
+            _acceleration.y = 0;
+        }
         if (_velocity.y > MAX_VELOCITY)
         {
             _velocity.y = MAX_VELOCITY;

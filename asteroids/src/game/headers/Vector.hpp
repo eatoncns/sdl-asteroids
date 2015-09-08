@@ -64,6 +64,11 @@ namespace pjm
         {
             return Vector(*this) *= iScalar;
         }
+
+        float squareSum() const
+        {
+            return (x*x) + (y*y);
+        }
         
         friend std::ostream& operator<<(std::ostream& iOS, 
                                         const Vector& iVector)
