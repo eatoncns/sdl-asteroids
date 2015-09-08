@@ -125,10 +125,20 @@ TEST_F(ShipTest, DoesNotReduceAccelerationBelowZeroWhenNoActionTaken)
 
 TEST_F(ShipTest, WrapsToBottomOfScreenWhenExitingTop)
 {
-    _ship.initialise(Vector(0,0), _bounds);
+    _ship.initialise(Vector(1,0), _bounds);
     accelerateFor(100);
     float wrappedYPos = _bounds.y - 10000*Ship::ACC_FACTOR;
-    EXPECT_THAT(_ship.getLocation(), Eq(Vector(0, wrappedYPos)));
+    EXPECT_THAT(_ship.getLocation(), Eq(Vector(1, wrappedYPos)));
+}
+
+TEST_F(ShipTest, WrapsToRightOfScreenWhenExitingLeft)
+{
+    _ship.initialise(Vector(0,1), _bounds);
+    unsigned int rotationTime = iround(90.0/Ship::ROTATION_FACTOR); 
+    turnLeftFor(rotationTime);
+    accelerateFor(100);
+    float wrappedXPos = _bounds.x - 10000*Ship::ACC_FACTOR;
+    EXPECT_THAT(_ship.getLocation(), Eq(Vector(wrappedXPos, 1)));
 }
 
 TEST_F(ShipTest, DoesNotExceedMaximumVelocity)

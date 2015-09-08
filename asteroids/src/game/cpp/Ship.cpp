@@ -106,6 +106,14 @@ namespace pjm
         {
             _location.y -= _bounds.y;
         }
+        if (_location.x < 0)
+        {
+            _location.x += _bounds.x;
+        }
+        else if (_location.x > _bounds.x)
+        {
+            _location.x -= _bounds.x;
+        }
     }
     
     
