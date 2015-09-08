@@ -59,7 +59,7 @@ namespace pjm
 
     void Ship::updateAcceleration(const Action iAction)
     {
-        if (Vector::eqValue(_velocity.y, MAX_VELOCITY))
+        if (Vector::eqValue(fabs(_velocity.y), MAX_VELOCITY))
         {
             _acceleration.y = 0;
             return;
@@ -83,7 +83,6 @@ namespace pjm
            _acceleration.y -= ACC_FACTOR;
            return;
         }
-        _acceleration.y = 0;
     }
 
 
