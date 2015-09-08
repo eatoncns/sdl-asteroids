@@ -85,8 +85,7 @@ namespace pjm
         bool maxVelocityExceeded = velocitySquared > maxSquared;
         if (maxVelocityExceeded)
         {
-            float reductionFactor = sqrt(MAX_VELOCITY/velocitySquared);
-            _velocity *= reductionFactor;
+            _velocity *= MAX_VELOCITY/sqrt(velocitySquared);
         }
     }
 

@@ -9,6 +9,7 @@
 using namespace pjm;
 using namespace boost::math;
 using ::testing::Eq;
+using ::testing::Le;
 using ::testing::ElementsAre;
 
 struct ShipSpy : public Ship
@@ -137,32 +138,6 @@ TEST_F(ShipTest, ResetsAccelerationWhenNoActionTaken)
     EXPECT_THAT(_ship.getAcceleration().y, Eq(0));
 }
 
-TEST_F(ShipTest, WrapsToBottomOfScreenWhenExitingTop)
-{
-    _ship.initialise(Vector(1,0), _bounds);
-    accelerateFor(100);
-    float wrappedYPos = _bounds.y - 10000*Ship::ACC_FACTOR;
-    EXPECT_THAT(_ship.getLocation(), Eq(Vector(1, wrappedYPos)));
-}
-
-TEST_F(ShipTest, WrapsToRightOfScreenWhenExitingLeft)
-{
-    _ship.initialise(Vector(0,1), _bounds);
-    unsigned int rotationTime = iround(90.0/Ship::ROTATION_FACTOR); 
-    turnLeftFor(rotationTime);
-    accelerateFor(100);
-    float wrappedXPos = _bounds.x - 10000*Ship::ACC_FACTOR;
-    EXPECT_THAT(_ship.getLocation(), Eq(Vector(wrappedXPos, 1)));
-}
-
-TEST_F(ShipTest, DoesNotExceedMaximumVelocity)
-{
-    unsigned int rotationTime = iround(45.0/Ship::ROTATION_FACTOR);
-    turnRightFor(rotationTime);
-    accelerateFor(10000000);
-    EXPECT_TRUE(Vector::eqValue(_ship.getVelocity().squareSum(), Ship::MAX_VELOCITY));
-}
-
 TEST_F(ShipTest, AcceleratesLeft)
 {
     unsigned int rotationTime = iround(45.0/Ship::ROTATION_FACTOR);
@@ -181,4 +156,30 @@ TEST_F(ShipTest, AcceleratesRight)
     float yPos = _initialLocation.y - 0.5*rotationTime*rotationTime*Ship::ACC_FACTOR;
     EXPECT_THAT(_ship.getLocation(), Eq(Vector(xPos, yPos)));
     EXPECT_THAT(_ship.getAngle(), Eq(45.0));
+}
+
+TEST_F(ShipTest, DoesNotExceedMaximumVelocity)
+{
+    unsigned int rotationTime = iround(45.0/Ship::ROTATION_FACTOR);
+    turnRightFor(rotationTime);
+    accelerateFor(10000000);
+    EXPECT_THAT(_ship.getVelocity().squareSum(), Le(Ship::MAX_VELOCITY));
+}
+
+TEST_F(ShipTest, WrapsToBottomOfScreenWhenExitingTop)
+{
+    _ship.initialise(Vector(1,0), _bounds);
+    accelerateFor(100);
+    float wrappedYPos = _bounds.y - 10000*Ship::ACC_FACTOR;
+    EXPECT_THAT(_ship.getLocation(), Eq(Vector(1, wrappedYPos)));
+}
+
+TEST_F(ShipTest, WrapsToRightOfScreenWhenExitingLeft)
+{
+    _ship.initialise(Vector(0,1), _bounds);
+    unsigned int rotationTime = iround(90.0/Ship::ROTATION_FACTOR); 
+    turnLeftFor(rotationTime);
+    accelerateFor(100);
+    float wrappedXPos = _bounds.x - 10000*Ship::ACC_FACTOR;
+    EXPECT_THAT(_ship.getLocation(), Eq(Vector(wrappedXPos, 1)));
 }
