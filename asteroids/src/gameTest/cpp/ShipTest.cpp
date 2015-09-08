@@ -112,17 +112,15 @@ TEST_F(ShipTest, DoesEulerAcceleration)
 TEST_F(ShipTest, ReducesAccelerationWhenNoActionTaken)
 {
     accelerateFor(5);
-    float firstYPos = _initialLocation.y - 25*Ship::ACC_FACTOR;
-    EXPECT_THAT(_ship.getLocation(), Eq(Vector(_initialLocation.x, firstYPos)));
+    EXPECT_THAT(_ship.getAcceleration(), Eq(Vector(0, Ship::ACC_FACTOR)));
     doNothingFor(5);
-    float secondYPos = firstYPos + (firstYPos - _initialLocation.y);
-    EXPECT_THAT(_ship.getLocation(), Eq(Vector(_initialLocation.x, secondYPos)));
+    EXPECT_THAT(_ship.getAcceleration(), Eq(Vector(0, 0)));
 }
 
 TEST_F(ShipTest, DoesNotReduceAccelerationBelowZeroWhenNoActionTaken)
 {
     doNothingFor(5);
-    EXPECT_THAT(_ship.getLocation(), Eq(_initialLocation));
+    EXPECT_THAT(_ship.getAcceleration(), Eq(Vector(0,0)));
 }
 
 TEST_F(ShipTest, WrapsToBottomOfScreenWhenExitingTop)
