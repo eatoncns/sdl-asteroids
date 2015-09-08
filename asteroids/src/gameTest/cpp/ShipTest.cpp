@@ -99,28 +99,42 @@ TEST_F(ShipTest, RendersImageAtCurrentLocation)
     EXPECT_THAT(_shipImage.renderCalls, ElementsAre(std::make_pair(_initialLocation, 0.0)));
 }
 
-TEST_F(ShipTest, DoesEulerAcceleration)
+TEST_F(ShipTest, RotatesLeft)
+{
+    turnLeftFor(5);
+    EXPECT_THAT(_ship.getAngle(), Eq(-5*Ship::ROTATION_FACTOR));
+}
+
+TEST_F(ShipTest, RotatesRight)
+{
+    turnRightFor(5);
+    EXPECT_THAT(_ship.getAngle(), Eq(5*Ship::ROTATION_FACTOR));
+}
+
+TEST_F(ShipTest, DoesNotRotateWhenNoActionTaken)
+{
+    doNothingFor(5);
+    EXPECT_THAT(_ship.getAngle(), Eq(0.0));
+}
+
+TEST_F(ShipTest, DoesConstantEulerAcceleration)
 {
     accelerateFor(5);
     float firstYPos = _initialLocation.y - 25*Ship::ACC_FACTOR;
     EXPECT_THAT(_ship.getLocation(), Eq(Vector(_initialLocation.x, firstYPos)));
     accelerateFor(6);
-    float secondYPos = firstYPos - 6*(5*Ship::ACC_FACTOR + 6*2*Ship::ACC_FACTOR);
+    float secondYPos = firstYPos - 6*(5*Ship::ACC_FACTOR + 6*Ship::ACC_FACTOR);
     EXPECT_THAT(_ship.getLocation(), Eq(Vector(_initialLocation.x, secondYPos))); 
 }
 
-TEST_F(ShipTest, ReducesAccelerationWhenNoActionTaken)
+TEST_F(ShipTest, ResetsAccelerationWhenNoActionTaken)
 {
+    unsigned int rotationTime = iround(45.0/Ship::ROTATION_FACTOR);
+    turnLeftFor(rotationTime);
     accelerateFor(5);
-    EXPECT_THAT(_ship.getAcceleration(), Eq(Vector(0, Ship::ACC_FACTOR)));
     doNothingFor(5);
-    EXPECT_THAT(_ship.getAcceleration(), Eq(Vector(0, 0)));
-}
-
-TEST_F(ShipTest, DoesNotReduceAccelerationBelowZeroWhenNoActionTaken)
-{
-    doNothingFor(5);
-    EXPECT_THAT(_ship.getAcceleration(), Eq(Vector(0,0)));
+    EXPECT_THAT(_ship.getAcceleration().x, Eq(0));
+    EXPECT_THAT(_ship.getAcceleration().y, Eq(0));
 }
 
 TEST_F(ShipTest, WrapsToBottomOfScreenWhenExitingTop)
@@ -147,33 +161,6 @@ TEST_F(ShipTest, DoesNotExceedMaximumVelocity)
     turnRightFor(rotationTime);
     accelerateFor(10000000);
     EXPECT_TRUE(Vector::eqValue(_ship.getVelocity().squareSum(), Ship::MAX_VELOCITY));
-}
-
-TEST_F(ShipTest, ResetsAccelerationAtMaximumVelocity)
-{
-    unsigned int rotationTime = iround(45.0/Ship::ROTATION_FACTOR);
-    turnRightFor(rotationTime);
-    accelerateFor(10000000);
-    EXPECT_THAT(_ship.getAcceleration().x, Eq(0));
-    EXPECT_THAT(_ship.getAcceleration().y, Eq(0));
-}
-
-TEST_F(ShipTest, RotatesLeft)
-{
-    turnLeftFor(5);
-    EXPECT_THAT(_ship.getAngle(), Eq(-5*Ship::ROTATION_FACTOR));
-}
-
-TEST_F(ShipTest, RotatesRight)
-{
-    turnRightFor(5);
-    EXPECT_THAT(_ship.getAngle(), Eq(5*Ship::ROTATION_FACTOR));
-}
-
-TEST_F(ShipTest, DoesNotRotateWhenNoActionTaken)
-{
-    doNothingFor(5);
-    EXPECT_THAT(_ship.getAngle(), Eq(0.0));
 }
 
 TEST_F(ShipTest, AcceleratesLeft)

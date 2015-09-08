@@ -68,15 +68,12 @@ namespace pjm
             double absTotal = abs(sinAngle) + abs(cosAngle);
             double xProportion = sinAngle/absTotal;
             double yProportion = -cosAngle/absTotal; // - as SDL y axis is downwards
-            _acceleration.x += xProportion*ACC_FACTOR;
-            _acceleration.y += yProportion*ACC_FACTOR;
+            _acceleration.x = xProportion*ACC_FACTOR;
+            _acceleration.y = yProportion*ACC_FACTOR;
             return;
         }
-        if (_acceleration.y > ACC_FACTOR)
-        {
-           _acceleration.y -= ACC_FACTOR;
-           return;
-        }
+        _acceleration.x = 0;
+        _acceleration.y = 0;
     }
 
 
@@ -90,8 +87,6 @@ namespace pjm
         {
             float reductionFactor = sqrt(MAX_VELOCITY/velocitySquared);
             _velocity *= reductionFactor;
-            _acceleration.x = 0;
-            _acceleration.y = 0;
         }
     }
 
