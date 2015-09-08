@@ -3,8 +3,11 @@
 #include <Vector.hpp>
 #include <TestRenderable.hpp>
 #include <TestImageLoader.hpp>
+#include <boost/math/special_functions/round.hpp>
+#include <math.h>
 
 using namespace pjm;
+using namespace boost::math;
 using ::testing::Eq;
 using ::testing::ElementsAre;
 
@@ -133,7 +136,7 @@ TEST_F(ShipTest, WrapsToBottomOfScreenWhenExitingTop)
 TEST_F(ShipTest, DoesNotExceedMaximumVelocity)
 {
     accelerateFor(10000000);
-    EXPECT_THAT(_ship.getVelocity().y, Eq(Ship::MAX_VELOCITY));
+    EXPECT_THAT(fabs(_ship.getVelocity().y), Eq(Ship::MAX_VELOCITY));
 }
 
 TEST_F(ShipTest, ResetsAccelerationAtMaximumVelocity)
@@ -163,16 +166,20 @@ TEST_F(ShipTest, DoesNotRotateWhenNoActionTaken)
 
 TEST_F(ShipTest, AcceleratesLeft)
 {
-    accelerateLeftFor(10);
-    float yPos = _initialLocation.y - 100*Ship::ACC_FACTOR;
-    EXPECT_THAT(_ship.getLocation(), Eq(Vector(_initialLocation.x, yPos)));
-    EXPECT_THAT(_ship.getAngle(), Eq(-10*Ship::ROTATION_FACTOR));
+    unsigned int rotationTime = iround(45.0/Ship::ROTATION_FACTOR);
+    accelerateLeftFor(rotationTime);
+    float xPos = _initialLocation.x - 0.5*rotationTime*rotationTime*Ship::ACC_FACTOR;
+    float yPos = _initialLocation.y - 0.5*rotationTime*rotationTime*Ship::ACC_FACTOR;
+    EXPECT_THAT(_ship.getLocation(), Eq(Vector(xPos, yPos)));
+    EXPECT_THAT(_ship.getAngle(), Eq(-45.0));
 }
 
 TEST_F(ShipTest, AcceleratesRight)
 {
-    accelerateRightFor(10);
-    float yPos = _initialLocation.y - 100*Ship::ACC_FACTOR;
-    EXPECT_THAT(_ship.getLocation(), Eq(Vector(_initialLocation.x, yPos)));
-    EXPECT_THAT(_ship.getAngle(), Eq(10*Ship::ROTATION_FACTOR));
+    unsigned int rotationTime = iround(45.0/Ship::ROTATION_FACTOR);
+    accelerateRightFor(rotationTime);
+    float xPos = _initialLocation.x + 0.5*rotationTime*rotationTime*Ship::ACC_FACTOR;
+    float yPos = _initialLocation.y - 0.5*rotationTime*rotationTime*Ship::ACC_FACTOR;
+    EXPECT_THAT(_ship.getLocation(), Eq(Vector(xPos, yPos)));
+    EXPECT_THAT(_ship.getAngle(), Eq(45.0));
 }

@@ -2,6 +2,8 @@
 #include <Renderable.hpp>
 #include <ImageLoader.hpp>
 #include <boost/assign.hpp>
+#include <math.h>
+#include <stdio.h>
 
 using namespace std;
 using namespace boost::assign;
@@ -66,7 +68,14 @@ namespace pjm
             list_of(ACCELERATE)(ACCELERATE_LEFT)(ACCELERATE_RIGHT);
         if(accelerateActions.find(iAction) != accelerateActions.end())
         {
-            _acceleration.y += ACC_FACTOR;
+            double angleRadians = _angle*M_PI/180.0;
+            double sinAngle = sin(angleRadians);
+            double cosAngle = cos(angleRadians);
+            double absTotal = abs(sinAngle) + abs(cosAngle);
+            double xProportion = sinAngle/absTotal;
+            double yProportion = -cosAngle/absTotal; // - as SDL y axis is downwards
+            _acceleration.x += xProportion*ACC_FACTOR;
+            _acceleration.y += yProportion*ACC_FACTOR;
             return;
         }
         if (_acceleration.y > ACC_FACTOR)
@@ -85,13 +94,15 @@ namespace pjm
         {
             _velocity.y = MAX_VELOCITY;
         }
+        if (_velocity.y < -MAX_VELOCITY)
+        {
+            _velocity.y = -MAX_VELOCITY;
+        }
     }
 
     void Ship::updateLocation(unsigned int iTimeElapsed)
     {
-        // Minus velocity as we consider origin to be at
-        // top left of screen
-        _location = _location - _velocity*iTimeElapsed;
+        _location += _velocity*iTimeElapsed;
         if (_location.y < 0)
         {
             _location.y += _bounds.y;
