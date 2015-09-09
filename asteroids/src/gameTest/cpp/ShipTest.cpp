@@ -86,6 +86,11 @@ class ShipTest : public ::testing::Test
             update(Ship::NONE, iTime);
         }
 
+        unsigned int timeToRotate(double iAngle)
+        {
+            return iround(iAngle/Ship::ROTATION_FACTOR);
+        }
+
         Vector _initialLocation;
         Vector _bounds;
         TestImageLoader _imageLoader;
@@ -130,8 +135,7 @@ TEST_F(ShipTest, DoesConstantEulerAcceleration)
 
 TEST_F(ShipTest, ResetsAccelerationWhenNoActionTaken)
 {
-    unsigned int rotationTime = iround(45.0/Ship::ROTATION_FACTOR);
-    turnLeftFor(rotationTime);
+    turnLeftFor(timeToRotate(45.0));
     accelerateFor(5);
     doNothingFor(5);
     EXPECT_THAT(_ship.getAcceleration().x, Eq(0));
@@ -140,7 +144,7 @@ TEST_F(ShipTest, ResetsAccelerationWhenNoActionTaken)
 
 TEST_F(ShipTest, AcceleratesLeft)
 {
-    unsigned int rotationTime = iround(45.0/Ship::ROTATION_FACTOR);
+    unsigned int rotationTime = timeToRotate(45.0);
     accelerateLeftFor(rotationTime);
     float xPos = _initialLocation.x - 0.5*rotationTime*rotationTime*Ship::ACC_FACTOR;
     float yPos = _initialLocation.y - 0.5*rotationTime*rotationTime*Ship::ACC_FACTOR;
@@ -150,7 +154,7 @@ TEST_F(ShipTest, AcceleratesLeft)
 
 TEST_F(ShipTest, AcceleratesRight)
 {
-    unsigned int rotationTime = iround(45.0/Ship::ROTATION_FACTOR);
+    unsigned int rotationTime = timeToRotate(45.0);
     accelerateRightFor(rotationTime);
     float xPos = _initialLocation.x + 0.5*rotationTime*rotationTime*Ship::ACC_FACTOR;
     float yPos = _initialLocation.y - 0.5*rotationTime*rotationTime*Ship::ACC_FACTOR;
@@ -160,8 +164,7 @@ TEST_F(ShipTest, AcceleratesRight)
 
 TEST_F(ShipTest, DoesNotExceedMaximumVelocity)
 {
-    unsigned int rotationTime = iround(45.0/Ship::ROTATION_FACTOR);
-    turnRightFor(rotationTime);
+    turnRightFor(timeToRotate(45.0));
     accelerateFor(10000000);
     EXPECT_THAT(_ship.getVelocity().squareSum(), Le(Ship::MAX_VELOCITY));
 }
@@ -177,8 +180,7 @@ TEST_F(ShipTest, WrapsToBottomOfScreenWhenExitingTop)
 TEST_F(ShipTest, WrapsToRightOfScreenWhenExitingLeft)
 {
     _ship.initialise(Vector(0,1), _bounds);
-    unsigned int rotationTime = iround(90.0/Ship::ROTATION_FACTOR); 
-    turnLeftFor(rotationTime);
+    turnLeftFor(timeToRotate(90.0));
     accelerateFor(100);
     float wrappedXPos = _bounds.x - 10000*Ship::ACC_FACTOR;
     EXPECT_THAT(_ship.getLocation(), Eq(Vector(wrappedXPos, 1)));
