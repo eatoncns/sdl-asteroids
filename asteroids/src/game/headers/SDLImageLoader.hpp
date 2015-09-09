@@ -27,6 +27,11 @@ namespace pjm
             SDL_Renderer* _renderer;
 
             Renderable* loadNewImage(const std::string& iFilePath);
+
+            // Prevent copying to avoid issues with ownership
+            // of SDLImages
+            SDLImageLoader(const SDLImageLoader&);
+            void operator=(const SDLImageLoader&);
     };
 }
 

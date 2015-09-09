@@ -32,6 +32,11 @@ namespace pjm
             SDL_Texture* _texture;
             int _width;
             int _height;
+
+            // Prevent copying to avoid issues with ownership
+            // of contained texture
+            SDLImage(const SDLImage&);
+            void operator=(const SDLImage&);
     };
 }
 
