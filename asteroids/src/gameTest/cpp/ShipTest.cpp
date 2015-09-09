@@ -186,13 +186,24 @@ TEST_F(ShipTest, WrapsToRightOfScreenWhenExitingLeftAt90)
     EXPECT_THAT(_ship.getLocation(), Eq(Vector(wrappedXPos, 1)));
 }
 
-TEST_F(ShipTest, WrapsToLineOfVelocity)
+TEST_F(ShipTest, WrapsToLineOfVelocityLeft)
 {
     _ship.initialise(Vector(_bounds.x/2, 0), _bounds);
     turnRightFor(timeToRotate(45.0));
     accelerateFor(100);
     float distanceMoved = 100*100*0.5*Ship::ACC_FACTOR;
     float wrappedXPos = distanceMoved;
+    float wrappedYPos = (_bounds.x/2) - distanceMoved;
+    EXPECT_THAT(_ship.getLocation(), Eq(Vector(wrappedXPos, wrappedYPos)));
+}
+
+TEST_F(ShipTest, WrapsToLineOfVelocityRight)
+{
+    _ship.initialise(Vector(_bounds.x/2, 0), _bounds);
+    turnLeftFor(timeToRotate(45.0));
+    accelerateFor(100);
+    float distanceMoved = 100*100*0.5*Ship::ACC_FACTOR;
+    float wrappedXPos = _bounds.x - distanceMoved;
     float wrappedYPos = (_bounds.x/2) - distanceMoved;
     EXPECT_THAT(_ship.getLocation(), Eq(Vector(wrappedXPos, wrappedYPos)));
 }
