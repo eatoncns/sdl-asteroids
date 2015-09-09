@@ -94,7 +94,21 @@ namespace pjm
         _location += _velocity*iTimeElapsed;
         if (_location.y < 0)
         {
-            _location.y += _bounds.y;
+            float leftIntersection = _location.y - (_velocity.y/_velocity.x) * _location.x;
+            if (leftIntersection > 0 && leftIntersection < _bounds.y)
+            {
+                _location.x = _velocity.x*iTimeElapsed;
+                _location.y = leftIntersection + _velocity.y*iTimeElapsed;
+                return;
+            }
+            float velocityRatio = _velocity.x / _velocity.y;
+            float bottomIntersection = (_bounds.y*velocityRatio) - (_location.y*velocityRatio) + _location.x;
+            if (bottomIntersection > 0 && bottomIntersection < _bounds.x)
+            {
+                _location.x = bottomIntersection + _velocity.x*iTimeElapsed;
+                _location.y = _bounds.y + _velocity.y*iTimeElapsed;
+                return;
+            }
         }
         else if (_location.y > _bounds.y)
         {
