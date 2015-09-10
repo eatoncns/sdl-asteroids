@@ -221,3 +221,12 @@ TEST_F(ShipTest, WrapsLineOfVelocityLeftToTop)
     float wrappedYPos = distanceMoved;
     EXPECT_THAT(_ship.getLocation(), Eq(Vector(wrappedXPos, wrappedYPos)));
 }
+
+TEST_F(ShipTest, WrapsLineOfVelocityLeftToBottom)
+{
+    accelerateFrom(Vector(0, _bounds.y/2), -45.0, 100);
+    float distanceMoved = 100*100*0.5*Ship::ACC_FACTOR;
+    float wrappedXPos = (_bounds.x/2) - distanceMoved;
+    float wrappedYPos = _bounds.y - distanceMoved;
+    EXPECT_THAT(_ship.getLocation(), Eq(Vector(wrappedXPos, wrappedYPos)));
+}
