@@ -91,6 +91,19 @@ class ShipTest : public ::testing::Test
             return iround(iAngle/Ship::ROTATION_FACTOR);
         }
 
+        void turnTo(double iAngle)
+        {
+            unsigned int time = timeToRotate(abs(iAngle));
+            iAngle > 0 ? turnRightFor(time) : turnLeftFor(time);
+        }
+
+        void accelerateFrom(const Vector& iLocation, double iAngle, unsigned int iTime)
+        {
+            _ship.initialise(iLocation, _bounds);
+            turnTo(iAngle);
+            accelerateFor(iTime);
+        }
+
         Vector _initialLocation;
         Vector _bounds;
         TestImageLoader _imageLoader;
@@ -135,7 +148,7 @@ TEST_F(ShipTest, DoesConstantEulerAcceleration)
 
 TEST_F(ShipTest, ResetsAccelerationWhenNoActionTaken)
 {
-    turnLeftFor(timeToRotate(45.0));
+    turnTo(-45.0);
     accelerateFor(5);
     doNothingFor(5);
     EXPECT_THAT(_ship.getAcceleration().x, Eq(0));
@@ -164,24 +177,21 @@ TEST_F(ShipTest, AcceleratesRight)
 
 TEST_F(ShipTest, DoesNotExceedMaximumVelocity)
 {
-    turnRightFor(timeToRotate(45.0));
+    turnTo(45.0);
     accelerateFor(10000000);
     EXPECT_THAT(_ship.getVelocity().squareSum(), Le(Ship::MAX_VELOCITY));
 }
 
 TEST_F(ShipTest, WrapsToLineOfVelocityTopToBottom)
 {
-    _ship.initialise(Vector(1,0), _bounds);
-    accelerateFor(100);
+    accelerateFrom(Vector(1,0), 0, 100);
     float wrappedYPos = _bounds.y - 10000*Ship::ACC_FACTOR;
     EXPECT_THAT(_ship.getLocation(), Eq(Vector(1, wrappedYPos)));
 }
 
 TEST_F(ShipTest, WrapsToLineOfVelocityTopToLeft)
 {
-    _ship.initialise(Vector(_bounds.x/2, 0), _bounds);
-    turnRightFor(timeToRotate(45.0));
-    accelerateFor(100);
+    accelerateFrom(Vector(_bounds.x/2, 0), 45.0, 100);
     float distanceMoved = 100*100*0.5*Ship::ACC_FACTOR;
     float wrappedXPos = distanceMoved;
     float wrappedYPos = (_bounds.x/2) - distanceMoved;
@@ -190,9 +200,7 @@ TEST_F(ShipTest, WrapsToLineOfVelocityTopToLeft)
 
 TEST_F(ShipTest, WrapsToLineOfVelocityTopToRight)
 {
-    _ship.initialise(Vector(_bounds.x/2, 0), _bounds);
-    turnLeftFor(timeToRotate(45.0));
-    accelerateFor(100);
+    accelerateFrom(Vector(_bounds.x/2, 0), -45.0, 100);
     float distanceMoved = 100*100*0.5*Ship::ACC_FACTOR;
     float wrappedXPos = _bounds.x - distanceMoved;
     float wrappedYPos = (_bounds.x/2) - distanceMoved;
@@ -201,9 +209,11 @@ TEST_F(ShipTest, WrapsToLineOfVelocityTopToRight)
 
 TEST_F(ShipTest, WrapsToLineOfVelocityLeftToRight)
 {
-    _ship.initialise(Vector(0,1), _bounds);
-    turnLeftFor(timeToRotate(90.0));
-    accelerateFor(100);
+    accelerateFrom(Vector(0,1), -90.0, 100);
     float wrappedXPos = _bounds.x - 10000*Ship::ACC_FACTOR;
     EXPECT_THAT(_ship.getLocation(), Eq(Vector(wrappedXPos, 1)));
 }
+
+//TEST_F(ShipTest, WrapsLineOfVelocityLeftToTop)
+//{
+//}
