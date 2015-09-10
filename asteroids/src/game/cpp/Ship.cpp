@@ -35,6 +35,7 @@ namespace pjm
         updateAcceleration(iAction);
         updateVelocity(iTimeElapsed);
         updateLocation(iTimeElapsed);
+        handleScreenWrap(iTimeElapsed);
     }
 
 
@@ -89,9 +90,15 @@ namespace pjm
         }
     }
 
+    
     void Ship::updateLocation(unsigned int iTimeElapsed)
     {
         _location += _velocity*iTimeElapsed;
+    }
+    
+
+    void Ship::handleScreenWrap(unsigned int iTimeElapsed)
+    {
         if (_location.y < 0)
         {
             float inverseVelocityRatio = _velocity.y/_velocity.x;
@@ -124,8 +131,9 @@ namespace pjm
         {
             _location.x -= _bounds.x;
         }
+
     }
-    
+
     
     void Ship::render()
     {

@@ -32,6 +32,7 @@ namespace pjm
             void updateAcceleration(const Action iAction);
             void updateVelocity(unsigned int iTimeElapsed);
             void updateLocation(unsigned int iTimeElapsed);
+            void handleScreenWrap(unsigned int iTimeElapsed);
 
             Vector _location;
             Vector _velocity;
