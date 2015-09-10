@@ -148,8 +148,7 @@ TEST_F(ShipTest, DoesConstantEulerAcceleration)
 
 TEST_F(ShipTest, ResetsAccelerationWhenNoActionTaken)
 {
-    turnTo(-45.0);
-    accelerateFor(5);
+    accelerateFrom(_initialLocation, -45.0, 5);
     doNothingFor(5);
     EXPECT_THAT(_ship.getAcceleration().x, Eq(0));
     EXPECT_THAT(_ship.getAcceleration().y, Eq(0));
