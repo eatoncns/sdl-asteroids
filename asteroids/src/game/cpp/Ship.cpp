@@ -3,6 +3,7 @@
 #include <ImageLoader.hpp>
 #include <boost/assign.hpp>
 #include <math.h>
+#include <stdio.h>
 
 using namespace std;
 using namespace boost::assign;
@@ -99,39 +100,50 @@ namespace pjm
 
     void Ship::handleScreenWrap(unsigned int iTimeElapsed)
     {
-        if (_location.y < 0)
+        if (isOutsideOfScreen())
         {
-            float inverseVelocityRatio = _velocity.y/_velocity.x;
-            float intersectionX = _velocity.x > 0 ? 0 : _bounds.x; 
-            float intersectionY = (inverseVelocityRatio*intersectionX) - (inverseVelocityRatio*_location.x) + _location.y;
-            if (intersectionY > 0 && intersectionY < _bounds.y)
-            {
-                _location.x = intersectionX + _velocity.x*iTimeElapsed;
-                _location.y = intersectionY + _velocity.y*iTimeElapsed;
-                return;
-            }
-            float velocityRatio = _velocity.x / _velocity.y;
-            float bottomIntersection = (_bounds.y*velocityRatio) - (_location.y*velocityRatio) + _location.x;
-            if (bottomIntersection > 0 && bottomIntersection < _bounds.x)
-            {
-                _location.x = bottomIntersection + _velocity.x*iTimeElapsed;
-                _location.y = _bounds.y + _velocity.y*iTimeElapsed;
-                return;
-            }
+            wrapLeftOrRight(iTimeElapsed) || 
+            wrapTopOrBottom(iTimeElapsed);
         }
-        else if (_location.y > _bounds.y)
-        {
-            _location.y -= _bounds.y;
-        }
-        if (_location.x < 0)
-        {
-            _location.x += _bounds.x;
-        }
-        else if (_location.x > _bounds.x)
-        {
-            _location.x -= _bounds.x;
-        }
+    }
 
+
+    bool Ship::isOutsideOfScreen()
+    {
+        return (_location.x < 0 || _location.x > _bounds.x ||
+                _location.y < 0 || _location.y > _bounds.y);
+    }
+
+
+    bool Ship::wrapLeftOrRight(unsigned int iTimeElapsed)
+    {
+        float inverseVelocityRatio = _velocity.y/_velocity.x;
+        float intersectionX = _velocity.x > 0 ? 0 : _bounds.x; 
+        float intersectionY = (inverseVelocityRatio*intersectionX) - (inverseVelocityRatio*_location.x) + _location.y;
+        printf("lr (%f,%f)\n)", intersectionX, intersectionY);
+        if (intersectionY > 0 && intersectionY < _bounds.y)
+        {
+            _location.x = intersectionX + _velocity.x*iTimeElapsed;
+            _location.y = intersectionY + _velocity.y*iTimeElapsed;
+            return true;
+        }
+        return false;
+    }
+
+
+    bool Ship::wrapTopOrBottom(unsigned int iTimeElapsed)
+    {
+        float velocityRatio = _velocity.x / _velocity.y;
+        float intersectionY = _velocity.y > 0 ? 0 : _bounds.y;
+        float intersectionX = (velocityRatio*intersectionY) - (velocityRatio*_location.y) + _location.x;
+        printf("tb (%f,%f)\n)", intersectionX, intersectionY);
+        if (intersectionX > 0 && intersectionX < _bounds.x)
+        {
+            _location.x = intersectionX + _velocity.x*iTimeElapsed;
+            _location.y = intersectionY + _velocity.y*iTimeElapsed;
+            return true;
+        }
+        return false;
     }
 
     

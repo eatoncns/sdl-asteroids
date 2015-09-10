@@ -183,9 +183,9 @@ TEST_F(ShipTest, DoesNotExceedMaximumVelocity)
 
 TEST_F(ShipTest, WrapsToLineOfVelocityTopToBottom)
 {
-    accelerateFrom(Vector(1,0), 0, 100);
+    accelerateFrom(Vector(_bounds.x/2, 0), 0.0, 100);
     float wrappedYPos = _bounds.y - 10000*Ship::ACC_FACTOR;
-    EXPECT_THAT(_ship.getLocation(), Eq(Vector(1, wrappedYPos)));
+    EXPECT_THAT(_ship.getLocation(), Eq(Vector(_bounds.x/2, wrappedYPos)));
 }
 
 TEST_F(ShipTest, WrapsToLineOfVelocityTopToLeft)
@@ -213,6 +213,11 @@ TEST_F(ShipTest, WrapsToLineOfVelocityLeftToRight)
     EXPECT_THAT(_ship.getLocation(), Eq(Vector(wrappedXPos, 1)));
 }
 
-//TEST_F(ShipTest, WrapsLineOfVelocityLeftToTop)
-//{
-//}
+TEST_F(ShipTest, WrapsLineOfVelocityLeftToTop)
+{
+    accelerateFrom(Vector(0, _bounds.y/2), -135.0, 100);
+    float distanceMoved = 100*100*0.5*Ship::ACC_FACTOR;
+    float wrappedXPos = (_bounds.x/2) - distanceMoved;
+    float wrappedYPos = distanceMoved;
+    EXPECT_THAT(_ship.getLocation(), Eq(Vector(wrappedXPos, wrappedYPos)));
+}
