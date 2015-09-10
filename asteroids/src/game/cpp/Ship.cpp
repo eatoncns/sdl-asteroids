@@ -3,7 +3,6 @@
 #include <ImageLoader.hpp>
 #include <boost/assign.hpp>
 #include <math.h>
-#include <stdio.h>
 
 using namespace std;
 using namespace boost::assign;
@@ -120,7 +119,6 @@ namespace pjm
         float inverseVelocityRatio = _velocity.y/_velocity.x;
         float intersectionX = _velocity.x > 0 ? 0 : _bounds.x; 
         float intersectionY = (inverseVelocityRatio*intersectionX) - (inverseVelocityRatio*_location.x) + _location.y;
-        printf("lr (%f,%f)\n)", intersectionX, intersectionY);
         if (intersectionY > 0 && intersectionY < _bounds.y)
         {
             _location.x = intersectionX + _velocity.x*iTimeElapsed;
@@ -136,7 +134,6 @@ namespace pjm
         float velocityRatio = _velocity.x / _velocity.y;
         float intersectionY = _velocity.y > 0 ? 0 : _bounds.y;
         float intersectionX = (velocityRatio*intersectionY) - (velocityRatio*_location.y) + _location.x;
-        printf("tb (%f,%f)\n)", intersectionX, intersectionY);
         if (intersectionX > 0 && intersectionX < _bounds.x)
         {
             _location.x = intersectionX + _velocity.x*iTimeElapsed;
