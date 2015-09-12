@@ -1,6 +1,7 @@
 #include <gmock/gmock.h>
 #include <GameElements.hpp>
 #include <ScreenInfo.hpp>
+#include <ScreenWrapper.hpp>
 #include <TestImageLoader.hpp>
 #include <TestRenderable.hpp>
 #include <Ship.hpp>
@@ -15,15 +16,15 @@ using ::testing::Eq;
 
 struct TestShip : public Ship
 {
-    TestShip(ImageLoader& iImageLoader)
-        : Ship(iImageLoader),
+    TestShip(ImageLoader& iImageLoader, ScreenWrapper& iScreenWrapper)
+        : Ship(iImageLoader, iScreenWrapper),
           renderCalls(0),
           initialiseSuccess(true)
     {}
 
-    bool initialise(const Vector& iInitialLocation, const Vector& iBounds)
+    bool initialise(const Vector& iInitialLocation)
     {
-        initialiseCalls.push_back(std::make_pair(iInitialLocation, iBounds));
+        initialiseCalls.push_back(iInitialLocation);
         return initialiseSuccess;
     }
 
@@ -39,7 +40,7 @@ struct TestShip : public Ship
 
     int renderCalls;
     std::list<std::pair<Action, unsigned int> > updateCalls;
-    std::list<std::pair<Vector, Vector> > initialiseCalls;
+    std::list<Vector> initialiseCalls;
     bool initialiseSuccess;
 };
 
@@ -49,8 +50,9 @@ class GameElementsTest : public ::testing::Test
     protected:
         GameElementsTest()
             : _screenInfo("test", 640, 480),
+              _screenWrapper(Vector(640, 480)),
               _gameElements(_imageLoader, _screenInfo),
-              _ship(new TestShip(_imageLoader)) // deleted by gameElements
+              _ship(new TestShip(_imageLoader, _screenWrapper)) // deleted by gameElements
         {
             _gameElements._shipCreator = boost::bind(&GameElementsTest::getShip, this, _1);
         }
@@ -61,6 +63,7 @@ class GameElementsTest : public ::testing::Test
         }
 
         ScreenInfo _screenInfo;
+        ScreenWrapper _screenWrapper;
         TestImageLoader _imageLoader;
         GameElements _gameElements;
         TestShip* _ship;
@@ -80,8 +83,7 @@ TEST_F(GameElementsTest, InitReturnsTrueWhenInitialisationSucceeds)
 TEST_F(GameElementsTest, InitialisesShipInCentreOfScreen)
 {
     _gameElements.initialise();
-    EXPECT_THAT(_ship->initialiseCalls, 
-                ElementsAre(std::make_pair(Vector(320, 240),Vector(640, 480))));
+    EXPECT_THAT(_ship->initialiseCalls, ElementsAre(Vector(320, 240)));
 }
 
 TEST_F(GameElementsTest, CascadesRenderToShip)

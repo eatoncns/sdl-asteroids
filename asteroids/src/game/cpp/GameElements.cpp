@@ -13,7 +13,8 @@ namespace pjm
         : _shipCreator(&Ship::create),
           _ship(NULL),
           _imageLoader(iImageLoader),
-          _screenInfo(iScreenInfo)
+          _screenInfo(iScreenInfo),
+          _screenWrapper(Vector(iScreenInfo.width, iScreenInfo.height))
     {}
 
 
@@ -29,10 +30,9 @@ namespace pjm
     
     bool GameElements::initialise()
     {
-        _ship = _shipCreator(_imageLoader);
+        _ship = _shipCreator(_imageLoader, _screenWrapper);
         Vector initialShipLocation(_screenInfo.width/2, _screenInfo.height/2);
-        Vector screenBounds(_screenInfo.width, _screenInfo.height);
-        return _ship->initialise(initialShipLocation, screenBounds);
+        return _ship->initialise(initialShipLocation);
     }
 
 

@@ -1,5 +1,6 @@
 #include <gmock/gmock.h>
 #include <Ship.hpp>
+#include <ScreenWrapper.hpp>
 #include <Vector.hpp>
 #include <TestRenderable.hpp>
 #include <TestImageLoader.hpp>
@@ -8,14 +9,15 @@
 
 using namespace pjm;
 using namespace boost::math;
+using ::testing::NiceMock;
 using ::testing::Eq;
 using ::testing::Le;
 using ::testing::ElementsAre;
 
 struct ShipSpy : public Ship
 {
-    ShipSpy(ImageLoader& iImageLoader)
-        : Ship(iImageLoader)
+    ShipSpy(ImageLoader& iImageLoader, ScreenWrapper& iScreenWrapper)
+        : Ship(iImageLoader, iScreenWrapper)
     {}
 
     Vector getLocation() const
@@ -39,16 +41,27 @@ struct ShipSpy : public Ship
     }
 };
 
+struct TestScreenWrapper : public ScreenWrapper
+{
+    TestScreenWrapper(const Vector& iBounds)
+        : ScreenWrapper(iBounds)
+    {}
+
+    MOCK_CONST_METHOD3(wrap, void(Vector& ioLocation, 
+                                  const Vector& iVelocity, 
+                                  unsigned int iTimeElapsed));
+};
+
 class ShipTest : public ::testing::Test
 {
     protected:
         ShipTest()
             : _initialLocation(100, 100),
-              _bounds(200, 200),
-              _ship(_imageLoader)
+              _wrapper(Vector(200, 200)),
+              _ship(_imageLoader, _wrapper)
         {
             _imageLoader.renderable = &_shipImage;
-            _ship.initialise(_initialLocation, _bounds);
+            _ship.initialise(_initialLocation);
         }
 
         void update(Ship::Action iAction, unsigned int iTime)
@@ -99,13 +112,13 @@ class ShipTest : public ::testing::Test
 
         void accelerateFrom(const Vector& iLocation, double iAngle, unsigned int iTime)
         {
-            _ship.initialise(iLocation, _bounds);
+            _ship.initialise(iLocation);
             turnTo(iAngle);
             accelerateFor(iTime);
         }
 
         Vector _initialLocation;
-        Vector _bounds;
+        NiceMock<TestScreenWrapper> _wrapper;
         TestImageLoader _imageLoader;
         TestRenderable _shipImage;
         ShipSpy _ship;
@@ -181,52 +194,9 @@ TEST_F(ShipTest, DoesNotExceedMaximumVelocity)
     EXPECT_THAT(_ship.getVelocity().squareSum(), Le(Ship::MAX_VELOCITY));
 }
 
-TEST_F(ShipTest, WrapsToLineOfVelocityTopToBottom)
+TEST_F(ShipTest, CallsScreenWrapperOnUpdate)
 {
-    accelerateFrom(Vector(_bounds.x/2, 0), 0.0, 100);
-    float wrappedYPos = _bounds.y - 10000*Ship::ACC_FACTOR;
-    EXPECT_THAT(_ship.getLocation(), Eq(Vector(_bounds.x/2, wrappedYPos)));
-}
-
-TEST_F(ShipTest, WrapsToLineOfVelocityTopToLeft)
-{
-    accelerateFrom(Vector(_bounds.x/2, 0), 45.0, 100);
-    float distanceMoved = 100*100*0.5*Ship::ACC_FACTOR;
-    float wrappedXPos = distanceMoved;
-    float wrappedYPos = (_bounds.x/2) - distanceMoved;
-    EXPECT_THAT(_ship.getLocation(), Eq(Vector(wrappedXPos, wrappedYPos)));
-}
-
-TEST_F(ShipTest, WrapsToLineOfVelocityTopToRight)
-{
-    accelerateFrom(Vector(_bounds.x/2, 0), -45.0, 100);
-    float distanceMoved = 100*100*0.5*Ship::ACC_FACTOR;
-    float wrappedXPos = _bounds.x - distanceMoved;
-    float wrappedYPos = (_bounds.x/2) - distanceMoved;
-    EXPECT_THAT(_ship.getLocation(), Eq(Vector(wrappedXPos, wrappedYPos)));
-}
-
-TEST_F(ShipTest, WrapsToLineOfVelocityLeftToRight)
-{
-    accelerateFrom(Vector(0,1), -90.0, 100);
-    float wrappedXPos = _bounds.x - 10000*Ship::ACC_FACTOR;
-    EXPECT_THAT(_ship.getLocation(), Eq(Vector(wrappedXPos, 1)));
-}
-
-TEST_F(ShipTest, WrapsLineOfVelocityLeftToTop)
-{
-    accelerateFrom(Vector(0, _bounds.y/2), -135.0, 100);
-    float distanceMoved = 100*100*0.5*Ship::ACC_FACTOR;
-    float wrappedXPos = (_bounds.x/2) - distanceMoved;
-    float wrappedYPos = distanceMoved;
-    EXPECT_THAT(_ship.getLocation(), Eq(Vector(wrappedXPos, wrappedYPos)));
-}
-
-TEST_F(ShipTest, WrapsLineOfVelocityLeftToBottom)
-{
-    accelerateFrom(Vector(0, _bounds.y/2), -45.0, 100);
-    float distanceMoved = 100*100*0.5*Ship::ACC_FACTOR;
-    float wrappedXPos = (_bounds.x/2) - distanceMoved;
-    float wrappedYPos = _bounds.y - distanceMoved;
-    EXPECT_THAT(_ship.getLocation(), Eq(Vector(wrappedXPos, wrappedYPos)));
+    EXPECT_CALL(_wrapper, wrap(_initialLocation, Vector(0, 0), 3))
+        .Times(1);
+    doNothingFor(3);
 }

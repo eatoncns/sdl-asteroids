@@ -9,7 +9,7 @@ namespace pjm
 
     void ScreenWrapper::wrap(Vector& ioLocation,
                              const Vector& iVelocity,
-                             unsigned int iTimeElapsed)
+                             unsigned int iTimeElapsed) const
     {
         if (isOutsideOfScreen(ioLocation))
         {
@@ -19,14 +19,14 @@ namespace pjm
     }
     
     
-    bool ScreenWrapper::isOutsideOfScreen(const Vector& iLocation)
+    bool ScreenWrapper::isOutsideOfScreen(const Vector& iLocation) const
     {
         return (iLocation.x < 0 || iLocation.x > _bounds.x ||
                 iLocation.y < 0 || iLocation.y > _bounds.y);
     }
     
     
-    bool ScreenWrapper::wrapLeftOrRight(Vector& ioLocation, const Vector& iVelocity, unsigned int iTimeElapsed)
+    bool ScreenWrapper::wrapLeftOrRight(Vector& ioLocation, const Vector& iVelocity, unsigned int iTimeElapsed) const
     {
         float inverseVelocityRatio = iVelocity.y/iVelocity.x;
         float intersectionX = iVelocity.x > 0 ? 0 : _bounds.x; 
@@ -41,7 +41,7 @@ namespace pjm
     }
 
 
-    bool ScreenWrapper::wrapTopOrBottom(Vector& ioLocation, const Vector& iVelocity, unsigned int iTimeElapsed)
+    bool ScreenWrapper::wrapTopOrBottom(Vector& ioLocation, const Vector& iVelocity, unsigned int iTimeElapsed) const
     {
         float velocityRatio = iVelocity.x / iVelocity.y;
         float intersectionY = iVelocity.y > 0 ? 0 : _bounds.y;

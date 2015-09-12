@@ -1,6 +1,7 @@
 #include <Ship.hpp>
 #include <Renderable.hpp>
 #include <ImageLoader.hpp>
+#include <ScreenWrapper.hpp>
 #include <boost/assign.hpp>
 #include <math.h>
 
@@ -9,21 +10,20 @@ using namespace boost::assign;
 
 namespace pjm
 {
-    Ship::Ship(ImageLoader& iImageLoader)
+    Ship::Ship(ImageLoader& iImageLoader, ScreenWrapper& iScreenWrapper)
       : _location(0, 0),
         _velocity(0, 0),
         _acceleration(0, 0),
         _angle(0.0),
-        _bounds(0,0),
+        _screenWrapper(iScreenWrapper),
         _imageLoader(iImageLoader),
         _image(NULL)
     {}
     
 
-    bool Ship::initialise(const Vector& iInitialLocation, const Vector& iBounds)
+    bool Ship::initialise(const Vector& iInitialLocation)
     {
         _location = iInitialLocation;
-        _bounds = iBounds;
         _image = _imageLoader.loadFromFile("resources/Ship.gif");
         return (_image != NULL);
     }
@@ -99,48 +99,7 @@ namespace pjm
 
     void Ship::handleScreenWrap(unsigned int iTimeElapsed)
     {
-        if (isOutsideOfScreen())
-        {
-            wrapLeftOrRight(iTimeElapsed) || 
-            wrapTopOrBottom(iTimeElapsed);
-        }
-    }
-
-
-    bool Ship::isOutsideOfScreen()
-    {
-        return (_location.x < 0 || _location.x > _bounds.x ||
-                _location.y < 0 || _location.y > _bounds.y);
-    }
-
-
-    bool Ship::wrapLeftOrRight(unsigned int iTimeElapsed)
-    {
-        float inverseVelocityRatio = _velocity.y/_velocity.x;
-        float intersectionX = _velocity.x > 0 ? 0 : _bounds.x; 
-        float intersectionY = (inverseVelocityRatio*intersectionX) - (inverseVelocityRatio*_location.x) + _location.y;
-        if (intersectionY > 0 && intersectionY < _bounds.y)
-        {
-            _location.x = intersectionX + _velocity.x*iTimeElapsed;
-            _location.y = intersectionY + _velocity.y*iTimeElapsed;
-            return true;
-        }
-        return false;
-    }
-
-
-    bool Ship::wrapTopOrBottom(unsigned int iTimeElapsed)
-    {
-        float velocityRatio = _velocity.x / _velocity.y;
-        float intersectionY = _velocity.y > 0 ? 0 : _bounds.y;
-        float intersectionX = (velocityRatio*intersectionY) - (velocityRatio*_location.y) + _location.x;
-        if (intersectionX > 0 && intersectionX < _bounds.x)
-        {
-            _location.x = intersectionX + _velocity.x*iTimeElapsed;
-            _location.y = intersectionY + _velocity.y*iTimeElapsed;
-            return true;
-        }
-        return false;
+        _screenWrapper.wrap(_location, _velocity, iTimeElapsed);
     }
 
     
@@ -155,8 +114,8 @@ namespace pjm
     }
 
     
-    Ship* Ship::create(ImageLoader& iImageLoader)
+    Ship* Ship::create(ImageLoader& iImageLoader, ScreenWrapper& iScreenWrapper)
     {
-        return new Ship(iImageLoader);
+        return new Ship(iImageLoader, iScreenWrapper);
     }
 }
