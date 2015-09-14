@@ -22,6 +22,12 @@ namespace pjm
         return MovingObject::initialise(iInitialLocation);
     }
 
+
+    void Asteroid::update(unsigned int iTimeElapsed)
+    {
+        updateLocation(iTimeElapsed);
+    }
+
     
     std::string Asteroid::imageFilePath()
     {

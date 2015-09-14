@@ -22,6 +22,8 @@ namespace pjm
 
             virtual void handleScreenWrap(unsigned int iTimeElapsed);
             
+            virtual void updateLocation(unsigned int iTimeElapsed);
+            
             virtual ~MovingObject() {}
 
             Vector _location;

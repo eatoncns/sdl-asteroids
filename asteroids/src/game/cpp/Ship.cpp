@@ -79,13 +79,7 @@ namespace pjm
             _velocity *= MAX_VELOCITY/sqrt(velocitySquared);
         }
     }
-
-    
-    void Ship::updateLocation(unsigned int iTimeElapsed)
-    {
-        _location += _velocity*iTimeElapsed;
-    }
-    
+ 
     
     Ship* Ship::create(ImageLoader& iImageLoader, ScreenWrapper& iScreenWrapper)
     {

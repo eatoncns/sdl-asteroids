@@ -30,7 +30,6 @@ namespace pjm
             void updateAngle(const Action iAction, unsigned int iTimeElapsed);
             void updateAcceleration(const Action iAction);
             void updateVelocity(unsigned int iTimeElapsed);
-            void updateLocation(unsigned int iTimeElapsed);
             
             Vector _acceleration;
     };

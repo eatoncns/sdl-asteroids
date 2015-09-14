@@ -21,6 +21,12 @@ namespace pjm
         _image = _imageLoader.loadFromFile(imageFilePath());
         return (_image != NULL);
     }
+ 
+
+    void MovingObject::updateLocation(unsigned int iTimeElapsed)
+    {
+        _location += _velocity*iTimeElapsed;
+    }
 
     
     void MovingObject::handleScreenWrap(unsigned int iTimeElapsed)

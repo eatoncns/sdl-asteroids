@@ -15,6 +15,8 @@ namespace pjm
                      RandomGenerator& iRandomGenerator);
             
             virtual bool initialise(const Vector& iInitialLocation);
+
+            virtual void update(unsigned int iTimeElapsed);
             
             virtual ~Asteroid() {}
 
