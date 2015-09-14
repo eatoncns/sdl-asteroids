@@ -1,7 +1,4 @@
 #include <Ship.hpp>
-#include <Renderable.hpp>
-#include <ImageLoader.hpp>
-#include <ScreenWrapper.hpp>
 #include <boost/assign.hpp>
 #include <math.h>
 
@@ -11,23 +8,16 @@ using namespace boost::assign;
 namespace pjm
 {
     Ship::Ship(ImageLoader& iImageLoader, ScreenWrapper& iScreenWrapper)
-      : _location(0, 0),
-        _velocity(0, 0),
-        _acceleration(0, 0),
-        _angle(0.0),
-        _screenWrapper(iScreenWrapper),
-        _imageLoader(iImageLoader),
-        _image(NULL)
+      : MovingObject(iImageLoader, iScreenWrapper),
+        _acceleration(0, 0)
     {}
-    
 
-    bool Ship::initialise(const Vector& iInitialLocation)
+
+    std::string Ship::imageFilePath()
     {
-        _location = iInitialLocation;
-        _image = _imageLoader.loadFromFile("resources/Ship.gif");
-        return (_image != NULL);
+        return "resources/Ship.gif";
     }
-   
+    
 
     void Ship::update(const Action iAction, unsigned int iTimeElapsed)
     {
@@ -96,23 +86,6 @@ namespace pjm
         _location += _velocity*iTimeElapsed;
     }
     
-
-    void Ship::handleScreenWrap(unsigned int iTimeElapsed)
-    {
-        _screenWrapper.wrap(_location, _velocity, iTimeElapsed);
-    }
-
-    
-    void Ship::render()
-    {
-        static int widthOffset = _image->width() / 2;
-        static int heightOffset = _image->height() / 2;
-        float renderX = _location.x - widthOffset;
-        float renderY = _location.y - heightOffset;
-        Vector renderLocation(renderX, renderY);
-        _image->render(renderLocation, _angle);
-    }
-
     
     Ship* Ship::create(ImageLoader& iImageLoader, ScreenWrapper& iScreenWrapper)
     {

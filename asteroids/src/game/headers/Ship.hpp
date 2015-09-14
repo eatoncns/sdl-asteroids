@@ -1,24 +1,22 @@
 #ifndef _PJM_SHIP_HPP_
 #define _PJM_SHIP_HPP_
 
+#include <MovingObject.hpp>
 #include <Vector.hpp>
 
 namespace pjm
 {
-    struct Renderable;
-    struct ImageLoader;
-    struct ScreenWrapper;
 
-    class Ship
+    class Ship : public MovingObject
     {
         public:
             Ship(ImageLoader& iImageLoader, ScreenWrapper& iScreenWrapper);
             
             enum Action {NONE, ACCELERATE, TURN_LEFT, TURN_RIGHT, ACCELERATE_LEFT, ACCELERATE_RIGHT};
 
-            virtual bool initialise(const Vector& iInitialLocation);
             virtual void update(const Action iAction, unsigned int iTimeElapsed);
-            virtual void render();
+
+            virtual std::string imageFilePath();
 
             virtual ~Ship() {}
 
@@ -33,15 +31,8 @@ namespace pjm
             void updateAcceleration(const Action iAction);
             void updateVelocity(unsigned int iTimeElapsed);
             void updateLocation(unsigned int iTimeElapsed);
-            void handleScreenWrap(unsigned int iTimeElapsed);
-
-            Vector _location;
-            Vector _velocity;
+            
             Vector _acceleration;
-            double _angle;
-            ScreenWrapper& _screenWrapper;
-            ImageLoader& _imageLoader;
-            Renderable* _image;
     };
 }
 
