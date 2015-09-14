@@ -1,15 +1,11 @@
 #include <gmock/gmock.h>
 #include <Ship.hpp>
-#include <Vector.hpp>
-#include <TestRenderable.hpp>
-#include <TestImageLoader.hpp>
-#include <TestScreenWrapper.hpp>
+#include <MoveableObjectTest.hpp>
 #include <boost/math/special_functions/round.hpp>
 #include <math.h>
 
 using namespace pjm;
 using namespace boost::math;
-using ::testing::NiceMock;
 using ::testing::Eq;
 using ::testing::Le;
 using ::testing::ElementsAre;
@@ -42,15 +38,12 @@ struct ShipSpy : public Ship
 };
 
 
-class ShipTest : public ::testing::Test
+class ShipTest : public MoveableObjectTest
 {
     protected:
         ShipTest()
-            : _initialLocation(100, 100),
-              _wrapper(Vector(200, 200)),
-              _ship(_imageLoader, _wrapper)
+            : _ship(_imageLoader, _wrapper)
         {
-            _imageLoader.renderable = &_shipImage;
             _ship.initialise(_initialLocation);
         }
 
@@ -107,10 +100,6 @@ class ShipTest : public ::testing::Test
             accelerateFor(iTime);
         }
 
-        Vector _initialLocation;
-        NiceMock<TestScreenWrapper> _wrapper;
-        TestImageLoader _imageLoader;
-        TestRenderable _shipImage;
         ShipSpy _ship;
 };
 
@@ -118,7 +107,7 @@ class ShipTest : public ::testing::Test
 TEST_F(ShipTest, RendersImageAtCurrentLocation)
 {
     _ship.render();
-    EXPECT_THAT(_shipImage.renderCalls, ElementsAre(std::make_pair(_initialLocation, 0.0)));
+    EXPECT_THAT(_testRenderable.renderCalls, ElementsAre(std::make_pair(_initialLocation, 0.0)));
 }
 
 TEST_F(ShipTest, RotatesLeft)
