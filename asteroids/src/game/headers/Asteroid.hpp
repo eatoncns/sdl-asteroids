@@ -5,18 +5,25 @@
 
 namespace pjm
 {
+    struct RandomGenerator;
+
     class Asteroid : public MovingObject
     {
         public:
-            Asteroid(ImageLoader& iImageLoader, ScreenWrapper& iScreenWrapper)
-                : MovingObject(iImageLoader, iScreenWrapper)
-            {}
+            Asteroid(ImageLoader& iImageLoader, 
+                     ScreenWrapper& iScreenWrapper, 
+                     RandomGenerator& iRandomGenerator);
+            
+            virtual bool initialise(const Vector& iInitialLocation);
             
             virtual ~Asteroid() {}
 
+            static float VELOCITY;
+
         protected:
             virtual std::string imageFilePath();
-
+            
+            RandomGenerator& _random;
     };
 }
 

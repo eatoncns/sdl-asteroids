@@ -104,6 +104,12 @@ class ShipTest : public MoveableObjectTest
 };
 
 
+TEST_F(ShipTest, InitReturnsFalseWhenImageLoadFails)
+{
+    _imageLoader.loadSuccess = false;
+    EXPECT_FALSE(_ship.initialise(_initialLocation));
+}
+
 TEST_F(ShipTest, RendersImageAtCurrentLocation)
 {
     _ship.render();
