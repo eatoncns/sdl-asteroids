@@ -1,9 +1,9 @@
 #include <gmock/gmock.h>
 #include <Ship.hpp>
-#include <ScreenWrapper.hpp>
 #include <Vector.hpp>
 #include <TestRenderable.hpp>
 #include <TestImageLoader.hpp>
+#include <TestScreenWrapper.hpp>
 #include <boost/math/special_functions/round.hpp>
 #include <math.h>
 
@@ -41,16 +41,6 @@ struct ShipSpy : public Ship
     }
 };
 
-struct TestScreenWrapper : public ScreenWrapper
-{
-    TestScreenWrapper(const Vector& iBounds)
-        : ScreenWrapper(iBounds)
-    {}
-
-    MOCK_CONST_METHOD3(wrap, void(Vector& ioLocation, 
-                                  const Vector& iVelocity, 
-                                  unsigned int iTimeElapsed));
-};
 
 class ShipTest : public ::testing::Test
 {
