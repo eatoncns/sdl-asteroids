@@ -5,11 +5,14 @@
 #include <ScreenWrapper.hpp>
 #include <KeyPress.hpp>
 #include <boost/function.hpp>
+#include <list>
 
 namespace pjm
 {
     struct ImageLoader;
+    struct RandomGenerator;
     class Ship;
+    class Asteroid;
 
     class GameElements
     {
@@ -29,8 +32,16 @@ namespace pjm
                                           ScreenWrapper& iScreenWrapper)> ship_creator;
             ship_creator _shipCreator;
 
+            typedef boost::function<Asteroid*(ImageLoader& iImage,
+                                              ScreenWrapper& iScreenWrapper,
+                                              RandomGenerator& iRandomGenerator)> asteroid_creator;
+            asteroid_creator _asteroidCreator;
+
+            static const int NUM_ASTEROIDS = 1;
+
         private:
             Ship* _ship;
+            std::list<Asteroid*> _asteroids;
             ImageLoader& _imageLoader;
             ScreenInfo _screenInfo;
             ScreenWrapper _screenWrapper;

@@ -4,11 +4,14 @@
 #include <ScreenWrapper.hpp>
 #include <TestImageLoader.hpp>
 #include <TestRenderable.hpp>
+#include <TestRandomGenerator.hpp>
 #include <Ship.hpp>
+#include <Asteroid.hpp>
 #include <KeyPress.hpp>
 #include <utility>
 #include <boost/bind.hpp>
 #include <boost/mem_fn.hpp>
+#include <boost/foreach.hpp>
 
 using namespace pjm;
 using ::testing::ElementsAre;
@@ -44,6 +47,38 @@ struct TestShip : public Ship
     bool initialiseSuccess;
 };
 
+struct TestAsteroid : public Asteroid
+{
+    TestAsteroid(ImageLoader& iImageLoader, 
+                 ScreenWrapper& iScreenWrapper,
+                 RandomGenerator& iRandomGenerator)
+        : Asteroid(iImageLoader, iScreenWrapper, iRandomGenerator),
+          renderCalls(0),
+          initialiseSuccess(true)
+    {}
+
+    bool initialise(const Vector& iInitialLocation)
+    {
+        initialiseCalls.push_back(iInitialLocation);
+        return initialiseSuccess;
+    }
+
+    void update(unsigned int iTimeElapsed)
+    {
+        updateCalls.push_back(iTimeElapsed);
+    }
+
+    void render()
+    {
+        ++renderCalls;
+    }
+
+    int renderCalls;
+    std::list<unsigned int> updateCalls;
+    std::list<Vector> initialiseCalls;
+    bool initialiseSuccess;
+};
+
 
 class GameElementsTest : public ::testing::Test
 {
@@ -52,21 +87,38 @@ class GameElementsTest : public ::testing::Test
             : _screenInfo("test", 640, 480),
               _screenWrapper(Vector(640, 480)),
               _gameElements(_imageLoader, _screenInfo),
-              _ship(new TestShip(_imageLoader, _screenWrapper)) // deleted by gameElements
+              _ship(new TestShip(_imageLoader, _screenWrapper)), // deleted by gameElements
+              _asteroidCounter(0)
         {
-            _gameElements._shipCreator = boost::bind(&GameElementsTest::getShip, this, _1);
+            _gameElements._shipCreator = boost::bind(&GameElementsTest::getShip, this, _1, _2);
+            _gameElements._asteroidCreator = boost::bind(&GameElementsTest::getAsteroid, this, _1, _2, _3);
+            for (int i = 0 ; i < GameElements::NUM_ASTEROIDS; ++i)
+            {
+                // deleted by gameElements
+                _asteroids.push_back(new TestAsteroid(_imageLoader, _screenWrapper, _random));
+            }
         }
 
-        Ship* getShip(ImageLoader&)
+        Ship* getShip(ImageLoader&, ScreenWrapper&)
         {
             return _ship;
+        }
+
+        Asteroid* getAsteroid(ImageLoader&, ScreenWrapper&, RandomGenerator&)
+        {
+            Asteroid* asteroid = _asteroids[_asteroidCounter];
+            ++_asteroidCounter;
+            return asteroid;
         }
 
         ScreenInfo _screenInfo;
         ScreenWrapper _screenWrapper;
         TestImageLoader _imageLoader;
+        TestRandomGenerator _random;
         GameElements _gameElements;
         TestShip* _ship;
+        std::vector<TestAsteroid*> _asteroids;
+        int _asteroidCounter;
 };
 
 TEST_F(GameElementsTest, InitReturnsFalseWhenShipInitFails)
@@ -133,4 +185,37 @@ TEST_F(GameElementsTest, ConvertsUpRightToAccelerateRight)
     _gameElements.initialise();
     _gameElements.update(keyboard::UP_RIGHT, 5);
     EXPECT_THAT(_ship->updateCalls, ElementsAre(std::make_pair(Ship::ACCELERATE_RIGHT, 5))); 
+}
+
+TEST_F(GameElementsTest, InitReturnsFalseWhenAsteroidInitFails)
+{
+    _asteroids[0]->initialiseSuccess = false;
+    EXPECT_FALSE(_gameElements.initialise());
+}
+
+TEST_F(GameElementsTest, InitialisesFixedNumberOfAsteroids)
+{
+    _gameElements.initialise();
+    EXPECT_THAT(_asteroidCounter, Eq(GameElements::NUM_ASTEROIDS));
+}
+
+TEST_F(GameElementsTest, CascadesUpdateToAsteroids)
+{
+    _gameElements.initialise();
+    _gameElements.update(keyboard::NONE, 3);
+    _gameElements.update(keyboard::UP, 2);
+    BOOST_FOREACH(TestAsteroid* asteroid, _asteroids)
+    {
+        EXPECT_THAT(asteroid->updateCalls, ElementsAre(3, 2));
+    }
+}
+
+TEST_F(GameElementsTest, CascadesRenderToAsteroids)
+{
+    _gameElements.initialise();
+    _gameElements.render();
+    BOOST_FOREACH(TestAsteroid* asteroid, _asteroids)
+    {
+        EXPECT_THAT(asteroid->renderCalls, Eq(1));
+    }
 }

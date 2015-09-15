@@ -1,7 +1,10 @@
 #include <GameElements.hpp>
 #include <ImageLoader.hpp>
+#include <RandomGeneratorImpl.hpp>
 #include <Ship.hpp>
+#include <Asteroid.hpp>
 #include <boost/assign/list_of.hpp>
+#include <boost/foreach.hpp>
 #include <map>
 
 using namespace boost::assign;
@@ -25,6 +28,13 @@ namespace pjm
             delete _ship;
             _ship = NULL;
         }
+        if (!_asteroids.empty())
+        {
+            BOOST_FOREACH(Asteroid* asteroid, _asteroids)
+            {
+                delete asteroid;
+            }
+        }
     }
 
     
@@ -32,7 +42,21 @@ namespace pjm
     {
         _ship = _shipCreator(_imageLoader, _screenWrapper);
         Vector initialShipLocation(_screenInfo.width/2, _screenInfo.height/2);
-        return _ship->initialise(initialShipLocation);
+        if (!_ship->initialise(initialShipLocation))
+        {
+            return false;
+        }
+        static RandomGeneratorImpl random;
+        for (int i = 0; i < NUM_ASTEROIDS; ++i)
+        {
+            Asteroid* asteroid = _asteroidCreator(_imageLoader, _screenWrapper, random);
+            _asteroids.push_back(asteroid);
+            if (!asteroid->initialise(Vector(5, 5)))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
 
@@ -51,11 +75,19 @@ namespace pjm
         {
             _ship->update(it->second, iTimeElapsed);
         }
+        BOOST_FOREACH(Asteroid* asteroid, _asteroids)
+        {
+            asteroid->update(iTimeElapsed);
+        }
     }
 
     
     void GameElements::render()
     {
         _ship->render();
+        BOOST_FOREACH(Asteroid* asteroid, _asteroids)
+        {
+            asteroid->render();
+        }
     }
 }
