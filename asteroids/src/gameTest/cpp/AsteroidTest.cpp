@@ -1,26 +1,13 @@
 #include <gmock/gmock.h>
 #include <Asteroid.hpp>
 #include <MoveableObjectTest.hpp>
-#include <RandomGenerator.hpp>
+#include <TestRandomGenerator.hpp>
 #include <boost/assign/list_of.hpp>
-#include <queue>
 
 using namespace pjm;
 using namespace boost::assign;
 using ::testing::Eq;
 using ::testing::ElementsAre;
-
-struct TestRandomGenerator : RandomGenerator
-{
-    float uniformAboutZero(float iRange)
-    {
-        float result = sequence.front();
-        sequence.pop();
-        return result;
-    }
-
-    std::queue<float> sequence;
-};
 
 
 struct AsteroidSpy : public Asteroid
