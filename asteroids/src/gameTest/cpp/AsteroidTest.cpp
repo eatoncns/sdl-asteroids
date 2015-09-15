@@ -66,6 +66,15 @@ TEST_F(AsteroidTest, MovesWithConstantVelocity)
                                                    _initialLocation.y + distanceComponent)));
 }
 
+TEST_F(AsteroidTest, CallsScreenWrapperOnUpdate)
+{
+    float distanceComponent = _velocityComponent*5;
+    Vector location(_initialLocation.x + distanceComponent, _initialLocation.y + distanceComponent);
+    Vector velocity(_velocityComponent, _velocityComponent);
+    EXPECT_CALL(_wrapper, wrap(location, velocity, 5));
+    _asteroid.update(5);
+}
+
 TEST_F(AsteroidTest, RendersImageAtCurrentLocation)
 {
     _asteroid.render();

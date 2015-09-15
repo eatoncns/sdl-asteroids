@@ -9,7 +9,7 @@ namespace pjm
     {
         float uniformAboutZero(float iRange)
         {
-            return 0.5;
+            return 0.01;
         }
     };
 }

@@ -1,5 +1,6 @@
 #include <Asteroid.hpp>
 #include <RandomGenerator.hpp>
+#include <ScreenWrapper.hpp>
 #include <math.h>
 
 namespace pjm
@@ -26,6 +27,7 @@ namespace pjm
     void Asteroid::update(unsigned int iTimeElapsed)
     {
         updateLocation(iTimeElapsed);
+        handleScreenWrap(iTimeElapsed);
     }
 
     

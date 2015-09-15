@@ -31,7 +31,7 @@ namespace pjm
         float inverseVelocityRatio = iVelocity.y/iVelocity.x;
         float intersectionX = iVelocity.x > 0 ? 0 : _bounds.x; 
         float intersectionY = (inverseVelocityRatio*intersectionX) - (inverseVelocityRatio*ioLocation.x) + ioLocation.y;
-        if (intersectionY > 0 && intersectionY < _bounds.y)
+        if (intersectionY >= 0 && intersectionY < _bounds.y)
         {
             ioLocation.x = intersectionX + iVelocity.x*iTimeElapsed;
             ioLocation.y = intersectionY + iVelocity.y*iTimeElapsed;
@@ -46,7 +46,7 @@ namespace pjm
         float velocityRatio = iVelocity.x / iVelocity.y;
         float intersectionY = iVelocity.y > 0 ? 0 : _bounds.y;
         float intersectionX = (velocityRatio*intersectionY) - (velocityRatio*ioLocation.y) + ioLocation.x;
-        if (intersectionX > 0 && intersectionX < _bounds.x)
+        if (intersectionX >= 0 && intersectionX < _bounds.x)
         {
             ioLocation.x = intersectionX + iVelocity.x*iTimeElapsed;
             ioLocation.y = intersectionY + iVelocity.y*iTimeElapsed;
