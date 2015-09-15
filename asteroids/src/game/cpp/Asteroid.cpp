@@ -34,6 +34,14 @@ namespace pjm
         return "resources/Asteroid.gif";
     }
 
+
+    Asteroid* Asteroid::create(ImageLoader& iImageLoader,
+                               ScreenWrapper& iScreenWrapper,
+                               RandomGenerator& iRandomGenerator)
+    {
+        return new Asteroid(iImageLoader, iScreenWrapper, iRandomGenerator);
+    }
+
     
     float Asteroid::VELOCITY = 0.08;
 }

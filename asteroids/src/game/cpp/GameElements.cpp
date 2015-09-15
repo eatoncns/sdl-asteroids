@@ -14,6 +14,7 @@ namespace pjm
     GameElements::GameElements(ImageLoader& iImageLoader,
                                const ScreenInfo& iScreenInfo)
         : _shipCreator(&Ship::create),
+          _asteroidCreator(&Asteroid::create),
           _ship(NULL),
           _imageLoader(iImageLoader),
           _screenInfo(iScreenInfo),

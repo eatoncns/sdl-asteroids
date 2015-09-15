@@ -20,6 +20,10 @@ namespace pjm
             
             virtual ~Asteroid() {}
 
+            static Asteroid* create(ImageLoader& iImageLoader,
+                                    ScreenWrapper& iScreenWrapper,
+                                    RandomGenerator& iRandomGenerator);
+
             static float VELOCITY;
 
         protected:
