@@ -7,10 +7,7 @@ namespace pjm
 {
     class RandomGeneratorImpl : public RandomGenerator
     {
-        float uniformAboutZero(float iRange)
-        {
-            return 0.01;
-        }
+        float uniformAboutZero(float iRange);
     };
 }
 
