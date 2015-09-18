@@ -41,12 +41,24 @@ namespace pjm
     
     bool GameElements::initialise()
     {
+        return initialiseShip() && initialiseAsteroids();
+    }
+
+
+    bool GameElements::initialiseShip()
+    {
         _ship = _shipCreator(_imageLoader, _screenWrapper);
         Vector initialShipLocation(_screenInfo.width/2, _screenInfo.height/2);
         if (!_ship->initialise(initialShipLocation))
         {
             return false;
         }
+        return true;
+    }
+
+
+    bool GameElements::initialiseAsteroids()
+    {
         static RandomGeneratorImpl random;
         for (int i = 0; i < NUM_ASTEROIDS; ++i)
         {

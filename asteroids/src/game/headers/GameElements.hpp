@@ -40,6 +40,9 @@ namespace pjm
             static const int NUM_ASTEROIDS = 1;
 
         private:
+            bool initialiseShip();
+            bool initialiseAsteroids();
+
             Ship* _ship;
             std::list<Asteroid*> _asteroids;
             ImageLoader& _imageLoader;
