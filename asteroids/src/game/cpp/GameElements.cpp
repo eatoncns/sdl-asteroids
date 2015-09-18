@@ -52,7 +52,7 @@ namespace pjm
         {
             Asteroid* asteroid = _asteroidCreator(_imageLoader, _screenWrapper, random);
             _asteroids.push_back(asteroid);
-            if (!asteroid->initialise(Vector(5, 5)))
+            if (!asteroid->initialise(Vector(100, 100)))
             {
                 return false;
             }
