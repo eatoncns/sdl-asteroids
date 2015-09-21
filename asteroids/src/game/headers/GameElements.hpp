@@ -4,7 +4,9 @@
 #include <ScreenInfo.hpp>
 #include <ScreenWrapper.hpp>
 #include <KeyPress.hpp>
+#include <LocationGenerator.hpp>
 #include <boost/function.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <list>
 
 namespace pjm
@@ -37,6 +39,8 @@ namespace pjm
                                               ScreenWrapper& iScreenWrapper,
                                               RandomGenerator& iRandomGenerator)> asteroid_creator;
             asteroid_creator _asteroidCreator;
+
+            boost::scoped_ptr<LocationGenerator> _locationGenerator;
 
             static const int NUM_ASTEROIDS = 1;
 

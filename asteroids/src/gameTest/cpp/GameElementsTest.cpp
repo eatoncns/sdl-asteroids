@@ -7,6 +7,7 @@
 #include <TestRandomGenerator.hpp>
 #include <Ship.hpp>
 #include <Asteroid.hpp>
+#include <LocationGenerator.hpp>
 #include <KeyPress.hpp>
 #include <utility>
 #include <boost/bind.hpp>
@@ -77,6 +78,19 @@ struct TestAsteroid : public Asteroid
     std::list<unsigned int> updateCalls;
     std::list<Vector> initialiseCalls;
     bool initialiseSuccess;
+};
+
+struct TestLocationGenerator : public LocationGenerator
+{
+    TestLocationGenerator(RandomGenerator& iRandom)
+        : LocationGenerator(iRandom)
+    {}
+
+    Vector generateLocation(float iMinDistanceFromOrigin,
+                            float iMaxDistanceFromOrigin)
+    {
+        return Vector(7.7, 3.4);  
+    }
 };
 
 
@@ -199,10 +213,15 @@ TEST_F(GameElementsTest, InitialisesFixedNumberOfAsteroids)
     EXPECT_THAT(_asteroidCounter, Eq(GameElements::NUM_ASTEROIDS));
 }
 
-//TEST_F(GameElementsTest, InitialisesAsteroidsAtRandomLocation)
-//{
-//     
-//}
+TEST_F(GameElementsTest, InitialisesAsteroidsAtRandomLocation)
+{
+    _gameElements._locationGenerator.reset(new TestLocationGenerator(_random));
+    _gameElements.initialise();
+    BOOST_FOREACH(TestAsteroid* asteroid, _asteroids)
+    {
+        EXPECT_THAT(asteroid->initialiseCalls, ElementsAre(Vector(7.7, 3.4)));
+    }
+}
 
 TEST_F(GameElementsTest, CascadesUpdateToAsteroids)
 {

@@ -16,6 +16,7 @@ namespace pjm
                                RandomGenerator& iRandom)
         : _shipCreator(&Ship::create),
           _asteroidCreator(&Asteroid::create),
+          _locationGenerator(new LocationGenerator(iRandom)),
           _ship(NULL),
           _imageLoader(iImageLoader),
           _screenInfo(iScreenInfo),
@@ -65,7 +66,8 @@ namespace pjm
         {
             Asteroid* asteroid = _asteroidCreator(_imageLoader, _screenWrapper, _random);
             _asteroids.push_back(asteroid);
-            if (!asteroid->initialise(Vector(100, 100)))
+            Vector initialLocation = _locationGenerator->generateLocation(150,250);
+            if (!asteroid->initialise(initialLocation))
             {
                 return false;
             }
