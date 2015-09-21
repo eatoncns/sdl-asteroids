@@ -106,7 +106,7 @@ namespace pjm
     bool SDLGame::initGameElements()
     {
         _imageLoader = new SDLImageLoader(_renderer);
-        _gameElements = new GameElements(*_imageLoader, _screenInfo);
+        _gameElements = new GameElements(*_imageLoader, _screenInfo, _random);
         return _gameElements->initialise();
     }
 

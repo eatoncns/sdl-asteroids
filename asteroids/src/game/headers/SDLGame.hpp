@@ -3,6 +3,7 @@
 
 #include <Game.hpp>
 #include <ScreenInfo.hpp>
+#include <RandomGeneratorImpl.hpp>
 #include <string>
 
 class SDL_Window;
@@ -33,6 +34,7 @@ namespace pjm
             void startGame();
 
             ScreenInfo _screenInfo;
+            RandomGeneratorImpl _random;
             SDL_Window* _window;
             SDL_Renderer* _renderer;
             bool _running;

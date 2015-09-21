@@ -1,6 +1,6 @@
 #include <GameElements.hpp>
 #include <ImageLoader.hpp>
-#include <RandomGeneratorImpl.hpp>
+#include <RandomGenerator.hpp>
 #include <Ship.hpp>
 #include <Asteroid.hpp>
 #include <boost/assign/list_of.hpp>
@@ -12,12 +12,14 @@ using namespace boost::assign;
 namespace pjm
 {
     GameElements::GameElements(ImageLoader& iImageLoader,
-                               const ScreenInfo& iScreenInfo)
+                               const ScreenInfo& iScreenInfo,
+                               RandomGenerator& iRandom)
         : _shipCreator(&Ship::create),
           _asteroidCreator(&Asteroid::create),
           _ship(NULL),
           _imageLoader(iImageLoader),
           _screenInfo(iScreenInfo),
+          _random(iRandom),
           _screenWrapper(Vector(iScreenInfo.width, iScreenInfo.height))
     {}
 
@@ -59,10 +61,9 @@ namespace pjm
 
     bool GameElements::initialiseAsteroids()
     {
-        static RandomGeneratorImpl random;
         for (int i = 0; i < NUM_ASTEROIDS; ++i)
         {
-            Asteroid* asteroid = _asteroidCreator(_imageLoader, _screenWrapper, random);
+            Asteroid* asteroid = _asteroidCreator(_imageLoader, _screenWrapper, _random);
             _asteroids.push_back(asteroid);
             if (!asteroid->initialise(Vector(100, 100)))
             {

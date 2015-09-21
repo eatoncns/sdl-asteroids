@@ -18,7 +18,8 @@ namespace pjm
     {
         public:
             GameElements(ImageLoader& iImageLoader,
-                         const ScreenInfo& iScreenInfo);
+                         const ScreenInfo& iScreenInfo,
+                         RandomGenerator& iRandomGenerator);
 
             ~GameElements();
 
@@ -47,6 +48,7 @@ namespace pjm
             std::list<Asteroid*> _asteroids;
             ImageLoader& _imageLoader;
             ScreenInfo _screenInfo;
+            RandomGenerator& _random;
             ScreenWrapper _screenWrapper;
     };
 }

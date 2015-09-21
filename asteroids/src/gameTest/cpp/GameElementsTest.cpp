@@ -86,7 +86,7 @@ class GameElementsTest : public ::testing::Test
         GameElementsTest()
             : _screenInfo("test", 640, 480),
               _screenWrapper(Vector(640, 480)),
-              _gameElements(_imageLoader, _screenInfo),
+              _gameElements(_imageLoader, _screenInfo, _random),
               _ship(new TestShip(_imageLoader, _screenWrapper)), // deleted by gameElements
               _asteroidCounter(0)
         {
@@ -198,6 +198,11 @@ TEST_F(GameElementsTest, InitialisesFixedNumberOfAsteroids)
     _gameElements.initialise();
     EXPECT_THAT(_asteroidCounter, Eq(GameElements::NUM_ASTEROIDS));
 }
+
+//TEST_F(GameElementsTest, InitialisesAsteroidsAtRandomLocation)
+//{
+//     
+//}
 
 TEST_F(GameElementsTest, CascadesUpdateToAsteroids)
 {
