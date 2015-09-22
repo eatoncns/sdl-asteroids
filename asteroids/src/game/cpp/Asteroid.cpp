@@ -15,11 +15,10 @@ namespace pjm
     
     bool Asteroid::initialise(const Vector& iInitialLocation)
     {
-        _velocity.x  = _random.uniformAboutZero(VELOCITY);
-        _velocity.y  = _random.uniformAboutZero(VELOCITY);
-        float velocitySquared = _velocity.squareSum();
-        float magnitude = sqrt(velocitySquared);
-        _velocity *= VELOCITY/magnitude;
+        float angle = _random.uniformInRange(0, 1) * 2 * M_PI;
+        _velocity.x = sin(angle);
+        _velocity.y = -cos(angle);
+        _velocity *= VELOCITY;
         return MovingObject::initialise(iInitialLocation);
     }
 

@@ -2,10 +2,8 @@
 #include <Asteroid.hpp>
 #include <MoveableObjectTest.hpp>
 #include <TestRandomGenerator.hpp>
-#include <boost/assign/list_of.hpp>
 
 using namespace pjm;
-using namespace boost::assign;
 using ::testing::Eq;
 using ::testing::ElementsAre;
 
@@ -37,7 +35,7 @@ class AsteroidTest : public MoveableObjectTest
             : _asteroid(_imageLoader, _wrapper, _random),
               _velocityComponent(sin(45*M_PI/180.0)*Asteroid::VELOCITY)
         {
-            _random.sequence = list_of(Asteroid::VELOCITY)(Asteroid::VELOCITY).to_adapter();
+            _random.sequence.push(0.375);
             _asteroid.initialise(_initialLocation);
         }
         

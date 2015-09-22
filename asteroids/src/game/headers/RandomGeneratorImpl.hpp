@@ -7,7 +7,7 @@ namespace pjm
 {
     class RandomGeneratorImpl : public RandomGenerator
     {
-        float uniformAboutZero(float iRange);
+        float uniformInRange(float iMin, float iMax);
     };
 }
 

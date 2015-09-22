@@ -5,7 +5,7 @@ namespace pjm
 {
     struct RandomGenerator
     {
-        virtual float uniformAboutZero(float iRange) = 0;
+        virtual float uniformInRange(float iMin, float iMax) = 0;
 
         virtual ~RandomGenerator() {}
     };

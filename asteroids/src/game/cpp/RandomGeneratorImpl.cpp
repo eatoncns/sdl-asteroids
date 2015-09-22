@@ -9,11 +9,10 @@ namespace pjm
 {
     static mt19937 gen(std::time(0));
 
-    float RandomGeneratorImpl::uniformAboutZero(float iRange)
+    float RandomGeneratorImpl::uniformInRange(float iMin, float iMax)
     {
-        uniform_real_distribution<float> dist(0.0, 2*iRange);
-        float temp = dist(gen);
-        return (temp - iRange);
+        uniform_real_distribution<float> dist(iMin, iMax);
+        return dist(gen);
     }
 
 }

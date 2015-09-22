@@ -6,7 +6,7 @@
 
 struct TestRandomGenerator : pjm::RandomGenerator
 {
-    float uniformAboutZero(float iRange)
+    float uniformInRange(float iMin, float iMax)
     {
         float result = sequence.front();
         sequence.pop();
