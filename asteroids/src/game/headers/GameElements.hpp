@@ -42,7 +42,7 @@ namespace pjm
 
             boost::scoped_ptr<LocationGenerator> _locationGenerator;
 
-            static const int NUM_ASTEROIDS = 1;
+            static const int NUM_ASTEROIDS = 5;
 
         private:
             bool initialiseShip();
