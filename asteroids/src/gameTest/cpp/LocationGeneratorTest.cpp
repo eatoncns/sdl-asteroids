@@ -19,7 +19,9 @@ class LocationGeneratorTest : public ::testing::Test
         LocationGenerator _locationGenerator;
 };
 
-TEST_F(LocationGeneratorTest, GeneratesRandomLocation)
-{
-    EXPECT_THAT(_locationGenerator.generateLocation(1,1), Eq(Vector(100,100)));
-}
+//TEST_F(LocationGeneratorTest, GeneratesRandomLocation)
+//{
+//    _random.sequence.insert(0.375);
+//    _random.sequence.insert(30);
+//    EXPECT_THAT(_locationGenerator.generateLocation(20,50), Eq(Vector(,100)));
+//}

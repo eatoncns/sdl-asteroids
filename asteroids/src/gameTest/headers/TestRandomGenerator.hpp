@@ -2,18 +2,11 @@
 #define _PJM_TESTRANDOMGENERATOR_HPP_
 
 #include <RandomGenerator.hpp>
-#include <queue>
+#include <gmock/gmock.h>
 
 struct TestRandomGenerator : pjm::RandomGenerator
 {
-    float uniformInRange(float iMin, float iMax)
-    {
-        float result = sequence.front();
-        sequence.pop();
-        return result;
-    }
-
-    std::queue<float> sequence;
+    MOCK_METHOD2(uniformInRange, float(float iMin, float iMax));
 };
 
 #endif

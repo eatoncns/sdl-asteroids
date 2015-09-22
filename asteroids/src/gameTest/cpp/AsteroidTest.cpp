@@ -6,6 +6,9 @@
 using namespace pjm;
 using ::testing::Eq;
 using ::testing::ElementsAre;
+using ::testing::NiceMock;
+using ::testing::_;
+using ::testing::Return;
 
 
 struct AsteroidSpy : public Asteroid
@@ -35,11 +38,12 @@ class AsteroidTest : public MoveableObjectTest
             : _asteroid(_imageLoader, _wrapper, _random),
               _velocityComponent(sin(45*M_PI/180.0)*Asteroid::VELOCITY)
         {
-            _random.sequence.push(0.375);
+            ON_CALL(_random, uniformInRange(_,_))
+                .WillByDefault(Return(0.375));
             _asteroid.initialise(_initialLocation);
         }
         
-        TestRandomGenerator _random;
+        NiceMock<TestRandomGenerator> _random;
         AsteroidSpy _asteroid;
         float _velocityComponent;
 };
