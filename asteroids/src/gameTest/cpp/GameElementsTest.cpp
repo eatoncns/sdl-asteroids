@@ -82,8 +82,9 @@ struct TestAsteroid : public Asteroid
 
 struct TestLocationGenerator : public LocationGenerator
 {
-    TestLocationGenerator(RandomGenerator& iRandom)
-        : LocationGenerator(iRandom)
+    TestLocationGenerator(const ScreenInfo& iScreenInfo,
+                          RandomGenerator& iRandom)
+        : LocationGenerator(iScreenInfo, iRandom)
     {}
 
     Vector generateLocation(float iMinDistanceFromOrigin,
@@ -215,7 +216,7 @@ TEST_F(GameElementsTest, InitialisesFixedNumberOfAsteroids)
 
 TEST_F(GameElementsTest, InitialisesAsteroidsAtRandomLocation)
 {
-    _gameElements._locationGenerator.reset(new TestLocationGenerator(_random));
+    _gameElements._locationGenerator.reset(new TestLocationGenerator(_screenInfo, _random));
     _gameElements.initialise();
     BOOST_FOREACH(TestAsteroid* asteroid, _asteroids)
     {

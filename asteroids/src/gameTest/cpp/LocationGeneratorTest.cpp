@@ -10,14 +10,16 @@ class LocationGeneratorTest : public ::testing::Test
 {
     protected:
         LocationGeneratorTest()
-            : _locationGenerator(_random)
+            : _screenInfo("Test", 200, 200),
+              _locationGenerator(_screenInfo, _random)
         {}
 
+        ScreenInfo _screenInfo;
         TestRandomGenerator _random;
         LocationGenerator _locationGenerator;
 };
 
-TEST_F(LocationGeneratorTest, GeneratesFixedLocation)
+TEST_F(LocationGeneratorTest, GeneratesRandomLocation)
 {
     EXPECT_THAT(_locationGenerator.generateLocation(1,1), Eq(Vector(100,100)));
 }

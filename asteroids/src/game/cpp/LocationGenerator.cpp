@@ -4,8 +4,10 @@
 
 namespace pjm
 {
-    LocationGenerator::LocationGenerator(RandomGenerator& iRandom)
-        : _random(iRandom)
+    LocationGenerator::LocationGenerator(const ScreenInfo& iScreenInfo, 
+                                         RandomGenerator& iRandom)
+        : _screenInfo(iScreenInfo),
+          _random(iRandom)
     {}
 
     Vector LocationGenerator::generateLocation(float iMinDistanceFromOrigin,

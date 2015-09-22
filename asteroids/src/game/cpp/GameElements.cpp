@@ -16,7 +16,7 @@ namespace pjm
                                RandomGenerator& iRandom)
         : _shipCreator(&Ship::create),
           _asteroidCreator(&Asteroid::create),
-          _locationGenerator(new LocationGenerator(iRandom)),
+          _locationGenerator(new LocationGenerator(iScreenInfo, iRandom)),
           _ship(NULL),
           _imageLoader(iImageLoader),
           _screenInfo(iScreenInfo),
