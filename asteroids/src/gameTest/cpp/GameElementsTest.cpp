@@ -17,6 +17,7 @@
 using namespace pjm;
 using ::testing::ElementsAre;
 using ::testing::Eq;
+using ::testing::NiceMock;
 
 struct TestShip : public Ship
 {
@@ -129,7 +130,7 @@ class GameElementsTest : public ::testing::Test
         ScreenInfo _screenInfo;
         ScreenWrapper _screenWrapper;
         TestImageLoader _imageLoader;
-        TestRandomGenerator _random;
+        NiceMock<TestRandomGenerator> _random;
         GameElements _gameElements;
         TestShip* _ship;
         std::vector<TestAsteroid*> _asteroids;
