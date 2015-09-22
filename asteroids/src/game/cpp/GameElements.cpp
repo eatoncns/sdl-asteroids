@@ -62,11 +62,14 @@ namespace pjm
 
     bool GameElements::initialiseAsteroids()
     {
+        float minDistanceFromCentre = 150.0;
+        float maxDistanceFromCentre = 250.0;
         for (int i = 0; i < NUM_ASTEROIDS; ++i)
         {
             Asteroid* asteroid = _asteroidCreator(_imageLoader, _screenWrapper, _random);
             _asteroids.push_back(asteroid);
-            Vector initialLocation = _locationGenerator->generateLocation(150,250);
+            Vector initialLocation = _locationGenerator->generateLocation(minDistanceFromCentre, 
+                                                                          maxDistanceFromCentre);
             if (!asteroid->initialise(initialLocation))
             {
                 return false;
