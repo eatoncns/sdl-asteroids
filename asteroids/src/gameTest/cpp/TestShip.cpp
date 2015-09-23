@@ -2,8 +2,8 @@
 
 using namespace pjm;
 
-TestShip::TestShip(ImageLoader& iImageLoader, ScreenWrapper& iScreenWrapper)
-    : Ship(iImageLoader, iScreenWrapper),
+TestShip::TestShip(ImageLoader& iImageLoader)
+    : Ship(iImageLoader, screenWrapper),
           renderCalls(0),
           initialiseSuccess(true)
 {}
@@ -26,3 +26,6 @@ void TestShip::render()
 {
     ++renderCalls;
 }
+
+
+ScreenWrapper TestShip::screenWrapper(Vector(0,0));

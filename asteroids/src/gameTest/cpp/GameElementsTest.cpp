@@ -1,7 +1,6 @@
 #include <gmock/gmock.h>
 #include <GameElements.hpp>
 #include <ScreenInfo.hpp>
-#include <ScreenWrapper.hpp>
 #include <TestImageLoader.hpp>
 #include <TestRenderable.hpp>
 #include <TestRandomGenerator.hpp>
@@ -25,9 +24,8 @@ class GameElementsTest : public ::testing::Test
     protected:
         GameElementsTest()
             : _screenInfo("test", 640, 480),
-              _screenWrapper(Vector(640, 480)),
               _gameElements(_imageLoader, _screenInfo, _random),
-              _ship(new TestShip(_imageLoader, _screenWrapper)), // deleted by gameElements
+              _ship(new TestShip(_imageLoader)), // deleted by gameElements
               _asteroidCounter(0)
         {
             _gameElements._shipCreator = boost::bind(&GameElementsTest::getShip, this, _1, _2);
@@ -35,7 +33,7 @@ class GameElementsTest : public ::testing::Test
             for (int i = 0 ; i < GameElements::NUM_ASTEROIDS; ++i)
             {
                 // deleted by gameElements
-                _asteroids.push_back(new TestAsteroid(_imageLoader, _screenWrapper, _random));
+                _asteroids.push_back(new TestAsteroid(_imageLoader, _random));
             }
         }
 
@@ -52,7 +50,6 @@ class GameElementsTest : public ::testing::Test
         }
 
         ScreenInfo _screenInfo;
-        ScreenWrapper _screenWrapper;
         TestImageLoader _imageLoader;
         NiceMock<TestRandomGenerator> _random;
         GameElements _gameElements;
