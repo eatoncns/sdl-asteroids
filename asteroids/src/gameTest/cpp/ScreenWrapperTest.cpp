@@ -10,12 +10,22 @@ class ScreenWrapperTest : public ::testing::Test
     protected:
         ScreenWrapperTest()
             : bounds(200, 200),
+              location(0, 0),
+              velocity(0, 0),
               timeElapsed(1),
               distanceMoved(0.5),
               screenWrapper(bounds)
         {}
 
+        void testLocationEq(float iX, float iY)
+        {
+            screenWrapper.wrap(location, velocity, timeElapsed);
+            EXPECT_THAT(location, Eq(Vector(iX, iY)));
+        }
+
         Vector bounds;
+        Vector location;
+        Vector velocity;
         unsigned int timeElapsed;
         float distanceMoved;
         ScreenWrapper screenWrapper;
@@ -23,96 +33,84 @@ class ScreenWrapperTest : public ::testing::Test
 
 TEST_F(ScreenWrapperTest, WrapsTopToBottom)
 {
-    Vector location(bounds.x/2, -distanceMoved);
-    Vector velocity(0, -distanceMoved/timeElapsed);
-    screenWrapper.wrap(location, velocity, timeElapsed);
-    EXPECT_THAT(location, Eq(Vector(bounds.x/2, bounds.y - distanceMoved)));
+    location = Vector(bounds.x/2, -distanceMoved);
+    velocity = Vector(0, -distanceMoved/timeElapsed);
+    testLocationEq(bounds.x/2, bounds.y - distanceMoved);
 }
 
 TEST_F(ScreenWrapperTest, WrapsTopToLeft)
 {
-    Vector location(bounds.x/2 + distanceMoved, -distanceMoved);
-    Vector velocity(distanceMoved/timeElapsed, -distanceMoved/timeElapsed);
-    screenWrapper.wrap(location, velocity, timeElapsed);
-    EXPECT_THAT(location, Eq(Vector(distanceMoved, bounds.y/2 - distanceMoved)));
+    location = Vector(bounds.x/2 + distanceMoved, -distanceMoved);
+    velocity = Vector(distanceMoved/timeElapsed, -distanceMoved/timeElapsed);
+    testLocationEq(distanceMoved, bounds.y/2 - distanceMoved);
 }
 
 TEST_F(ScreenWrapperTest, WrapsTopToRight)
 {
-    Vector location(bounds.x/2 - distanceMoved, -distanceMoved);
-    Vector velocity(-distanceMoved/timeElapsed, -distanceMoved/timeElapsed);
-    screenWrapper.wrap(location, velocity, timeElapsed);
-    EXPECT_THAT(location, Eq(Vector(bounds.x - distanceMoved, bounds.y/2 - distanceMoved)));
+    location = Vector(bounds.x/2 - distanceMoved, -distanceMoved);
+    velocity = Vector(-distanceMoved/timeElapsed, -distanceMoved/timeElapsed);
+    testLocationEq(bounds.x - distanceMoved, bounds.y/2 - distanceMoved);
 }
 
 TEST_F(ScreenWrapperTest, WrapsLeftToRight)
 {
-    Vector location(-distanceMoved, bounds.y/2);
-    Vector velocity(-distanceMoved/timeElapsed, 0);
-    screenWrapper.wrap(location, velocity, timeElapsed);
-    EXPECT_THAT(location, Eq(Vector(bounds.x - distanceMoved, bounds.y/2)));
+    location = Vector(-distanceMoved, bounds.y/2);
+    velocity = Vector(-distanceMoved/timeElapsed, 0);
+    testLocationEq(bounds.x - distanceMoved, bounds.y/2);
 }
 
 TEST_F(ScreenWrapperTest, WrapsLeftToTop)
 {
-    Vector location(-distanceMoved, bounds.y/2 + distanceMoved);
-    Vector velocity(-distanceMoved/timeElapsed, distanceMoved/timeElapsed);
-    screenWrapper.wrap(location, velocity, timeElapsed);
-    EXPECT_THAT(location, Eq(Vector(bounds.x/2 - distanceMoved, distanceMoved)));
+    location = Vector(-distanceMoved, bounds.y/2 + distanceMoved);
+    velocity = Vector(-distanceMoved/timeElapsed, distanceMoved/timeElapsed);
+    testLocationEq(bounds.x/2 - distanceMoved, distanceMoved);
 }
 
 TEST_F(ScreenWrapperTest, WrapsLeftToBottom)
 {
-    Vector location(-distanceMoved, bounds.y/2 - distanceMoved);
-    Vector velocity(-distanceMoved/timeElapsed, -distanceMoved/timeElapsed);
-    screenWrapper.wrap(location, velocity, timeElapsed);
-    EXPECT_THAT(location, Eq(Vector(bounds.x/2 - distanceMoved, bounds.y - distanceMoved)));
+    location = Vector(-distanceMoved, bounds.y/2 - distanceMoved);
+    velocity = Vector(-distanceMoved/timeElapsed, -distanceMoved/timeElapsed);
+    testLocationEq(bounds.x/2 - distanceMoved, bounds.y - distanceMoved);
 }
 
 TEST_F(ScreenWrapperTest, WrapsBottomToTop)
 {
-    Vector location(bounds.x/2, bounds.y + distanceMoved);
-    Vector velocity(0, distanceMoved/timeElapsed);
-    screenWrapper.wrap(location, velocity, timeElapsed);
-    EXPECT_THAT(location, Eq(Vector(bounds.x/2, distanceMoved)));
+    location = Vector(bounds.x/2, bounds.y + distanceMoved);
+    velocity = Vector(0, distanceMoved/timeElapsed);
+    testLocationEq(bounds.x/2, distanceMoved);
 }
 
 TEST_F(ScreenWrapperTest, WrapsBottomToLeft)
 {
-    Vector location(bounds.x/2 + distanceMoved, bounds.y + distanceMoved);
-    Vector velocity(distanceMoved/timeElapsed, distanceMoved/timeElapsed);
-    screenWrapper.wrap(location, velocity, timeElapsed);
-    EXPECT_THAT(location, Eq(Vector(distanceMoved, bounds.y/2 + distanceMoved)));
+    location = Vector(bounds.x/2 + distanceMoved, bounds.y + distanceMoved);
+    velocity = Vector(distanceMoved/timeElapsed, distanceMoved/timeElapsed);
+    testLocationEq(distanceMoved, bounds.y/2 + distanceMoved);
 }
 
 TEST_F(ScreenWrapperTest, WrapsBottomToRight)
 {
-    Vector location(bounds.x/2 - distanceMoved, bounds.y + distanceMoved);
-    Vector velocity(-distanceMoved/timeElapsed, distanceMoved/timeElapsed);
-    screenWrapper.wrap(location, velocity, timeElapsed);
-    EXPECT_THAT(location, Eq(Vector(bounds.x - distanceMoved, bounds.y/2 + distanceMoved)));
+    location = Vector(bounds.x/2 - distanceMoved, bounds.y + distanceMoved);
+    velocity = Vector(-distanceMoved/timeElapsed, distanceMoved/timeElapsed);
+    testLocationEq(bounds.x - distanceMoved, bounds.y/2 + distanceMoved);
 }
 
 TEST_F(ScreenWrapperTest, WrapsRightToLeft)
 {
-    Vector location(bounds.x + distanceMoved, bounds.y/2);
-    Vector velocity(distanceMoved/timeElapsed, 0);
-    screenWrapper.wrap(location, velocity, timeElapsed);
-    EXPECT_THAT(location, Eq(Vector(distanceMoved, bounds.y/2)));
+    location = Vector(bounds.x + distanceMoved, bounds.y/2);
+    velocity = Vector(distanceMoved/timeElapsed, 0);
+    testLocationEq(distanceMoved, bounds.y/2);
 }
 
 TEST_F(ScreenWrapperTest, WrapsRightToTop)
 {
-    Vector location(bounds.x + distanceMoved, bounds.y/2 + distanceMoved);
-    Vector velocity(distanceMoved/timeElapsed, distanceMoved/timeElapsed);
-    screenWrapper.wrap(location, velocity, timeElapsed);
-    EXPECT_THAT(location, Eq(Vector(bounds.x/2 + distanceMoved, distanceMoved)));
+    location = Vector(bounds.x + distanceMoved, bounds.y/2 + distanceMoved);
+    velocity = Vector(distanceMoved/timeElapsed, distanceMoved/timeElapsed);
+    testLocationEq(bounds.x/2 + distanceMoved, distanceMoved);
 }
 
 TEST_F(ScreenWrapperTest, WrapsRightToBottom)
 {
-    Vector location(bounds.x + distanceMoved, bounds.y/2 - distanceMoved);
-    Vector velocity(distanceMoved/timeElapsed, -distanceMoved/timeElapsed);
-    screenWrapper.wrap(location, velocity, timeElapsed);
-    EXPECT_THAT(location, Eq(Vector(bounds.x/2 + distanceMoved, bounds.y - distanceMoved)));
+    location = Vector(bounds.x + distanceMoved, bounds.y/2 - distanceMoved);
+    velocity = Vector(distanceMoved/timeElapsed, -distanceMoved/timeElapsed);
+    testLocationEq(bounds.x/2 + distanceMoved, bounds.y - distanceMoved);
 }

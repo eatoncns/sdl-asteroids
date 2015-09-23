@@ -11,6 +11,14 @@ TEST(VectorTest, InitialisesMembers)
     EXPECT_EQ(7.0f, v.y);
 }
 
+TEST(VectorTest, ImplementsCopyOperator)
+{
+    Vector v1(3.4f, 2.5f);
+    Vector v2 = v1;
+    EXPECT_EQ(3.4f, v2.x);
+    EXPECT_EQ(2.5f, v2.y);
+}
+
 TEST(VectorTest, ImplementsEquals)
 {
     Vector v1(2.0f, 4.0f);
