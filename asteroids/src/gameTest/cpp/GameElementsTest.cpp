@@ -5,8 +5,8 @@
 #include <TestImageLoader.hpp>
 #include <TestRenderable.hpp>
 #include <TestRandomGenerator.hpp>
-#include <Ship.hpp>
-#include <Asteroid.hpp>
+#include <TestShip.hpp>
+#include <TestAsteroid.hpp>
 #include <LocationGenerator.hpp>
 #include <KeyPress.hpp>
 #include <utility>
@@ -19,67 +19,6 @@ using ::testing::ElementsAre;
 using ::testing::Eq;
 using ::testing::NiceMock;
 
-struct TestShip : public Ship
-{
-    TestShip(ImageLoader& iImageLoader, ScreenWrapper& iScreenWrapper)
-        : Ship(iImageLoader, iScreenWrapper),
-          renderCalls(0),
-          initialiseSuccess(true)
-    {}
-
-    bool initialise(const Vector& iInitialLocation)
-    {
-        initialiseCalls.push_back(iInitialLocation);
-        return initialiseSuccess;
-    }
-
-    void update(const Action iAction, unsigned int iTimeElapsed)
-    {
-        updateCalls.push_back(std::make_pair(iAction, iTimeElapsed));
-    }
-
-    void render()
-    {
-        ++renderCalls;
-    }
-
-    int renderCalls;
-    std::list<std::pair<Action, unsigned int> > updateCalls;
-    std::list<Vector> initialiseCalls;
-    bool initialiseSuccess;
-};
-
-struct TestAsteroid : public Asteroid
-{
-    TestAsteroid(ImageLoader& iImageLoader, 
-                 ScreenWrapper& iScreenWrapper,
-                 RandomGenerator& iRandomGenerator)
-        : Asteroid(iImageLoader, iScreenWrapper, iRandomGenerator),
-          renderCalls(0),
-          initialiseSuccess(true)
-    {}
-
-    bool initialise(const Vector& iInitialLocation)
-    {
-        initialiseCalls.push_back(iInitialLocation);
-        return initialiseSuccess;
-    }
-
-    void update(unsigned int iTimeElapsed)
-    {
-        updateCalls.push_back(iTimeElapsed);
-    }
-
-    void render()
-    {
-        ++renderCalls;
-    }
-
-    int renderCalls;
-    std::list<unsigned int> updateCalls;
-    std::list<Vector> initialiseCalls;
-    bool initialiseSuccess;
-};
 
 struct TestLocationGenerator : public LocationGenerator
 {
