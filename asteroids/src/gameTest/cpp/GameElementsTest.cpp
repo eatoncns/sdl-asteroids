@@ -7,7 +7,7 @@
 #include <TestRandomGenerator.hpp>
 #include <TestShip.hpp>
 #include <TestAsteroid.hpp>
-#include <LocationGenerator.hpp>
+#include <TestLocationGenerator.hpp>
 #include <KeyPress.hpp>
 #include <utility>
 #include <boost/bind.hpp>
@@ -18,21 +18,6 @@ using namespace pjm;
 using ::testing::ElementsAre;
 using ::testing::Eq;
 using ::testing::NiceMock;
-
-
-struct TestLocationGenerator : public LocationGenerator
-{
-    TestLocationGenerator(const ScreenInfo& iScreenInfo,
-                          RandomGenerator& iRandom)
-        : LocationGenerator(iScreenInfo, iRandom)
-    {}
-
-    Vector generateLocation(float iMinDistanceFromOrigin,
-                            float iMaxDistanceFromOrigin)
-    {
-        return Vector(7.7, 3.4);  
-    }
-};
 
 
 class GameElementsTest : public ::testing::Test
