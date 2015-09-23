@@ -8,27 +8,13 @@ struct TestAsteroid : public pjm::Asteroid
 {
     TestAsteroid(pjm::ImageLoader& iImageLoader, 
                  pjm::ScreenWrapper& iScreenWrapper,
-                 pjm::RandomGenerator& iRandomGenerator)
-        : Asteroid(iImageLoader, iScreenWrapper, iRandomGenerator),
-          renderCalls(0),
-          initialiseSuccess(true)
-    {}
+                 pjm::RandomGenerator& iRandomGenerator);
 
-    bool initialise(const pjm::Vector& iInitialLocation)
-    {
-        initialiseCalls.push_back(iInitialLocation);
-        return initialiseSuccess;
-    }
+    bool initialise(const pjm::Vector& iInitialLocation);
 
-    void update(unsigned int iTimeElapsed)
-    {
-        updateCalls.push_back(iTimeElapsed);
-    }
+    void update(unsigned int iTimeElapsed);
 
-    void render()
-    {
-        ++renderCalls;
-    }
+    void render();
 
     int renderCalls;
     std::list<unsigned int> updateCalls;
