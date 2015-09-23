@@ -64,6 +64,12 @@ TEST_F(GameElementsTest, InitReturnsFalseWhenShipInitFails)
     EXPECT_FALSE(_gameElements.initialise());
 }
 
+TEST_F(GameElementsTest, InitReturnsFalseWhenAsteroidInitFails)
+{
+    _asteroids[0]->initialiseSuccess = false;
+    EXPECT_FALSE(_gameElements.initialise());
+}
+
 TEST_F(GameElementsTest, InitReturnsTrueWhenInitialisationSucceeds)
 {
     EXPECT_TRUE(_gameElements.initialise());
@@ -75,11 +81,37 @@ TEST_F(GameElementsTest, InitialisesShipInCentreOfScreen)
     EXPECT_THAT(_ship->initialiseCalls, ElementsAre(Vector(320, 240)));
 }
 
+TEST_F(GameElementsTest, InitialisesFixedNumberOfAsteroids)
+{
+    _gameElements.initialise();
+    EXPECT_THAT(_asteroidCounter, Eq(GameElements::NUM_ASTEROIDS));
+}
+
+TEST_F(GameElementsTest, InitialisesAsteroidsAtRandomLocation)
+{
+    _gameElements._locationGenerator.reset(new TestLocationGenerator(_screenInfo, _random));
+    _gameElements.initialise();
+    BOOST_FOREACH(TestAsteroid* asteroid, _asteroids)
+    {
+        EXPECT_THAT(asteroid->initialiseCalls, ElementsAre(Vector(7.7, 3.4)));
+    }
+}
+
 TEST_F(GameElementsTest, CascadesRenderToShip)
 {
     _gameElements.initialise();
     _gameElements.render();
     EXPECT_THAT(_ship->renderCalls, Eq(1));
+}
+
+TEST_F(GameElementsTest, CascadesRenderToAsteroids)
+{
+    _gameElements.initialise();
+    _gameElements.render();
+    BOOST_FOREACH(TestAsteroid* asteroid, _asteroids)
+    {
+        EXPECT_THAT(asteroid->renderCalls, Eq(1));
+    }
 }
 
 TEST_F(GameElementsTest, ConvertsUpKeyToShipAccelerate)
@@ -124,28 +156,6 @@ TEST_F(GameElementsTest, ConvertsUpRightToAccelerateRight)
     EXPECT_THAT(_ship->updateCalls, ElementsAre(std::make_pair(Ship::ACCELERATE_RIGHT, 5))); 
 }
 
-TEST_F(GameElementsTest, InitReturnsFalseWhenAsteroidInitFails)
-{
-    _asteroids[0]->initialiseSuccess = false;
-    EXPECT_FALSE(_gameElements.initialise());
-}
-
-TEST_F(GameElementsTest, InitialisesFixedNumberOfAsteroids)
-{
-    _gameElements.initialise();
-    EXPECT_THAT(_asteroidCounter, Eq(GameElements::NUM_ASTEROIDS));
-}
-
-TEST_F(GameElementsTest, InitialisesAsteroidsAtRandomLocation)
-{
-    _gameElements._locationGenerator.reset(new TestLocationGenerator(_screenInfo, _random));
-    _gameElements.initialise();
-    BOOST_FOREACH(TestAsteroid* asteroid, _asteroids)
-    {
-        EXPECT_THAT(asteroid->initialiseCalls, ElementsAre(Vector(7.7, 3.4)));
-    }
-}
-
 TEST_F(GameElementsTest, CascadesUpdateToAsteroids)
 {
     _gameElements.initialise();
@@ -154,15 +164,5 @@ TEST_F(GameElementsTest, CascadesUpdateToAsteroids)
     BOOST_FOREACH(TestAsteroid* asteroid, _asteroids)
     {
         EXPECT_THAT(asteroid->updateCalls, ElementsAre(3, 2));
-    }
-}
-
-TEST_F(GameElementsTest, CascadesRenderToAsteroids)
-{
-    _gameElements.initialise();
-    _gameElements.render();
-    BOOST_FOREACH(TestAsteroid* asteroid, _asteroids)
-    {
-        EXPECT_THAT(asteroid->renderCalls, Eq(1));
     }
 }
