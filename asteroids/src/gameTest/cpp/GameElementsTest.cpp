@@ -25,7 +25,7 @@ class GameElementsTest : public ::testing::Test
         GameElementsTest()
             : _screenInfo("test", 640, 480),
               _gameElements(_imageLoader, _screenInfo, _random),
-              _ship(new TestShip(_imageLoader)), // deleted by gameElements
+              _ship(new TestShip()), // deleted by gameElements
               _asteroidCounter(0)
         {
             _gameElements._shipCreator = boost::bind(&GameElementsTest::getShip, this, _1, _2);
@@ -33,7 +33,7 @@ class GameElementsTest : public ::testing::Test
             for (int i = 0 ; i < GameElements::NUM_ASTEROIDS; ++i)
             {
                 // deleted by gameElements
-                _asteroids.push_back(new TestAsteroid(_imageLoader, _random));
+                _asteroids.push_back(new TestAsteroid());
             }
         }
 

@@ -3,11 +3,12 @@
 
 #include <Ship.hpp>
 #include <ScreenWrapper.hpp>
+#include <TestImageLoader.hpp>
 #include <list>
 
 struct TestShip : public pjm::Ship
 {
-    TestShip(pjm::ImageLoader& iImageLoader);
+    TestShip();
 
     bool initialise(const pjm::Vector& iInitialLocation);
 
@@ -19,6 +20,7 @@ struct TestShip : public pjm::Ship
     std::list<std::pair<Action, unsigned int> > updateCalls;
     std::list<pjm::Vector> initialiseCalls;
     bool initialiseSuccess;
+    static TestImageLoader imageLoader;
     static pjm::ScreenWrapper screenWrapper;
 };
 

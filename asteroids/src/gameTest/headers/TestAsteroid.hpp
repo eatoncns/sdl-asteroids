@@ -2,13 +2,14 @@
 #define _PJM_TESTASTEROID_HPP_
 
 #include <Asteroid.hpp>
+#include <TestImageLoader.hpp>
+#include <TestRandomGenerator.hpp>
 #include <ScreenWrapper.hpp>
 #include <list>
 
 struct TestAsteroid : public pjm::Asteroid
 {
-    TestAsteroid(pjm::ImageLoader& iImageLoader, 
-                 pjm::RandomGenerator& iRandomGenerator);
+    TestAsteroid();
 
     bool initialise(const pjm::Vector& iInitialLocation);
 
@@ -20,7 +21,9 @@ struct TestAsteroid : public pjm::Asteroid
     std::list<unsigned int> updateCalls;
     std::list<pjm::Vector> initialiseCalls;
     bool initialiseSuccess;
+    static TestImageLoader imageLoader;
     static pjm::ScreenWrapper screenWrapper;
+    static TestRandomGenerator random;
 };
 
 #endif

@@ -2,9 +2,8 @@
 
 using namespace pjm;
 
-TestAsteroid::TestAsteroid(ImageLoader& iImageLoader, 
-             RandomGenerator& iRandomGenerator)
-    : Asteroid(iImageLoader, screenWrapper, iRandomGenerator),
+TestAsteroid::TestAsteroid()
+    : Asteroid(imageLoader, screenWrapper, random),
       renderCalls(0),
       initialiseSuccess(true)
 {}
@@ -28,5 +27,6 @@ void TestAsteroid::render()
     ++renderCalls;
 }
 
-
+TestImageLoader TestAsteroid::imageLoader;
 ScreenWrapper TestAsteroid::screenWrapper(Vector(0,0));
+TestRandomGenerator TestAsteroid::random;
