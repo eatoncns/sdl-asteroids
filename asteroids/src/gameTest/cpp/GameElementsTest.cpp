@@ -35,6 +35,7 @@ class GameElementsTest : public ::testing::Test
                 // deleted by gameElements
                 _asteroids.push_back(new TestAsteroid());
             }
+            _gameElements._locationGenerator.reset(new TestLocationGenerator());
         }
 
         Ship* getShip(ImageLoader&, ScreenWrapper&)
@@ -51,7 +52,7 @@ class GameElementsTest : public ::testing::Test
 
         ScreenInfo _screenInfo;
         TestImageLoader _imageLoader;
-        NiceMock<TestRandomGenerator> _random;
+        TestRandomGenerator _random;
         GameElements _gameElements;
         TestShip* _ship;
         std::vector<TestAsteroid*> _asteroids;
@@ -78,7 +79,8 @@ TEST_F(GameElementsTest, InitReturnsTrueWhenInitialisationSucceeds)
 TEST_F(GameElementsTest, InitialisesShipInCentreOfScreen)
 {
     _gameElements.initialise();
-    EXPECT_THAT(_ship->initialiseCalls, ElementsAre(Vector(320, 240)));
+    EXPECT_THAT(_ship->initialiseCalls, 
+                ElementsAre(Vector(_screenInfo.width/2, _screenInfo.height/2)));
 }
 
 TEST_F(GameElementsTest, InitialisesFixedNumberOfAsteroids)
@@ -89,11 +91,11 @@ TEST_F(GameElementsTest, InitialisesFixedNumberOfAsteroids)
 
 TEST_F(GameElementsTest, InitialisesAsteroidsAtRandomLocation)
 {
-    _gameElements._locationGenerator.reset(new TestLocationGenerator(_screenInfo, _random));
     _gameElements.initialise();
     BOOST_FOREACH(TestAsteroid* asteroid, _asteroids)
     {
-        EXPECT_THAT(asteroid->initialiseCalls, ElementsAre(Vector(7.7, 3.4)));
+        EXPECT_THAT(asteroid->initialiseCalls, 
+                    ElementsAre(Vector(TestLocationGenerator::x, TestLocationGenerator::y)));
     }
 }
 
