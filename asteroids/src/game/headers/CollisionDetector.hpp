@@ -7,7 +7,7 @@ namespace pjm
 
     struct CollisionDetector
     {
-        bool areColliding(const Rectangle& iA, const Rectangle& iB);
+        virtual bool areColliding(const Rectangle& iA, const Rectangle& iB) const;
     };
 }
 

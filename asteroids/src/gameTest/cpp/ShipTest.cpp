@@ -1,5 +1,6 @@
 #include <gmock/gmock.h>
 #include <Ship.hpp>
+#include <Rectangle.hpp>
 #include <MoveableObjectTest.hpp>
 #include <boost/math/special_functions/round.hpp>
 #include <math.h>
@@ -184,4 +185,15 @@ TEST_F(ShipTest, CallsScreenWrapperOnUpdate)
     EXPECT_CALL(_wrapper, wrap(_initialLocation, Vector(0, 0), 3))
         .Times(1);
     doNothingFor(3);
+}
+
+TEST_F(ShipTest, HasBoundingBoxBasedOnImage)
+{
+    _testRenderable.w = 5;
+    _testRenderable.h = 6;
+    Rectangle boundingBox = _ship.getBoundingBox();
+    EXPECT_THAT(boundingBox.x, Eq(_initialLocation.x));
+    EXPECT_THAT(boundingBox.y, Eq(_initialLocation.y));
+    EXPECT_THAT(boundingBox.w, Eq(5));
+    EXPECT_THAT(boundingBox.h, Eq(6));
 }

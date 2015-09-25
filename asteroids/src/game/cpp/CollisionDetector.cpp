@@ -3,7 +3,7 @@
 
 namespace pjm
 {
-    bool CollisionDetector::areColliding(const Rectangle& iA, const Rectangle& iB)
+    bool CollisionDetector::areColliding(const Rectangle& iA, const Rectangle& iB) const
     {
         float leftEdgeA = iA.x;
         float rightEdgeB = iB.x + iB.w;

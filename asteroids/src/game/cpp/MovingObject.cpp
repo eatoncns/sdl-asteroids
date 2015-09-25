@@ -2,6 +2,7 @@
 #include <Renderable.hpp>
 #include <ImageLoader.hpp>
 #include <ScreenWrapper.hpp>
+#include <Rectangle.hpp>
 
 namespace pjm
 {
@@ -32,6 +33,15 @@ namespace pjm
     void MovingObject::handleScreenWrap(unsigned int iTimeElapsed)
     {
         _screenWrapper.wrap(_location, _velocity, iTimeElapsed);
+    }
+
+
+    Rectangle MovingObject::getBoundingBox()
+    {
+        return Rectangle(_location.x,
+                         _location.y,
+                         _image->width(),
+                         _image->height());    
     }
 
     

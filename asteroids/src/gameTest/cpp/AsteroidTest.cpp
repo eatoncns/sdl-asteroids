@@ -1,5 +1,6 @@
 #include <gmock/gmock.h>
 #include <Asteroid.hpp>
+#include <Rectangle.hpp>
 #include <MoveableObjectTest.hpp>
 #include <TestRandomGenerator.hpp>
 
@@ -81,4 +82,15 @@ TEST_F(AsteroidTest, RendersImageAtCurrentLocation)
 {
     _asteroid.render();
     EXPECT_THAT(_testRenderable.renderCalls, ElementsAre(std::make_pair(_initialLocation, 0.0)));
+}
+
+TEST_F(AsteroidTest, HasBoundingBoxBasedOnImage)
+{
+    _testRenderable.w = 5;
+    _testRenderable.h = 6;
+    Rectangle boundingBox = _asteroid.getBoundingBox();
+    EXPECT_THAT(boundingBox.x, Eq(_initialLocation.x));
+    EXPECT_THAT(boundingBox.y, Eq(_initialLocation.y));
+    EXPECT_THAT(boundingBox.w, Eq(5));
+    EXPECT_THAT(boundingBox.h, Eq(6));
 }

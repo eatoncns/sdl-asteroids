@@ -8,11 +8,13 @@ namespace pjm
     struct Renderable;
     struct ImageLoader;
     struct ScreenWrapper;
+    struct Rectangle;
     
     class MovingObject
     {
         public:
             virtual bool initialise(const Vector& iInitialLocation);
+            virtual Rectangle getBoundingBox();
             virtual void render();
 
         protected:
@@ -32,8 +34,6 @@ namespace pjm
             ScreenWrapper& _screenWrapper;
             ImageLoader& _imageLoader;
             Renderable* _image;
-
-
     };
 }
 

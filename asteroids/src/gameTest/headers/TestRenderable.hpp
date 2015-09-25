@@ -7,23 +7,29 @@
 
 struct TestRenderable : public pjm::Renderable
 {
+    TestRenderable()
+        : w(0),
+          h(0)
+    {}
+
     void render(const pjm::Vector& iLocation, const double iAngle)
     {
         renderCalls.push_back(std::make_pair(iLocation, iAngle));
     }
 
-
     int width()
     {
-        return 0;
+        return w;
     }
 
     int height()
     {
-        return 0;
+        return h;
     }
 
     std::list<std::pair<pjm::Vector, double> > renderCalls;
+    int w;
+    int h;
 };
 
 #endif
