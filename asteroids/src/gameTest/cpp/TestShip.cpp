@@ -5,7 +5,8 @@ using namespace pjm;
 TestShip::TestShip()
     : Ship(imageLoader, screenWrapper),
           renderCalls(0),
-          initialiseSuccess(true)
+          initialiseSuccess(true),
+          boundingBox(0,0,0,0)
 {}
 
 
@@ -19,6 +20,12 @@ bool TestShip::initialise(const Vector& iInitialLocation)
 void TestShip::update(const Action iAction, unsigned int iTimeElapsed)
 {
     updateCalls.push_back(std::make_pair(iAction, iTimeElapsed));
+}
+
+
+Rectangle TestShip::getBoundingBox()
+{
+    return boundingBox;
 }
     
 

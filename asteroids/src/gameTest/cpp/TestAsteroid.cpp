@@ -5,7 +5,8 @@ using namespace pjm;
 TestAsteroid::TestAsteroid()
     : Asteroid(imageLoader, screenWrapper, random),
       renderCalls(0),
-      initialiseSuccess(true)
+      initialiseSuccess(true),
+      boundingBox(0,0,0,0)
 {}
 
 
@@ -19,6 +20,12 @@ bool TestAsteroid::initialise(const Vector& iInitialLocation)
 void TestAsteroid::update(unsigned int iTimeElapsed)
 {
     updateCalls.push_back(iTimeElapsed);
+}
+
+
+Rectangle TestAsteroid::getBoundingBox()
+{
+    return boundingBox;
 }
 
 
