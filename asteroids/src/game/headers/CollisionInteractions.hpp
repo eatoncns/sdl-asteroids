@@ -1,6 +1,8 @@
 #ifndef _PJM_COLLISIONINTERACTIONS_HPP_
 #define _PJM_COLLISIONINTERACTIONS_HPP_
 
+#include <CollisionDetector.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <list>
 
 namespace pjm
@@ -11,9 +13,11 @@ namespace pjm
     class CollisionInteractions
     {
         public:
-            CollisionInteractions(Ship* iShip, std::list<Asteroid*>& iAsteroids)
-                : _ship(iShip), _asteroids(iAsteroids)
-            {}
+            CollisionInteractions(Ship* iShip, std::list<Asteroid*>& iAsteroids);
+
+            void update();
+
+            boost::scoped_ptr<CollisionDetector> _collisionDetector;
 
         private:
             Ship* _ship;

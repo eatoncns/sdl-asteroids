@@ -7,16 +7,19 @@
 #include <boost/foreach.hpp>
 
 using namespace pjm;
+using namespace std;
+using ::testing::Contains;
 using ::testing::NiceMock;
 
 struct FakeCollisionDetector : public CollisionDetector
 {
-    bool areColliding(const Rectangle& iA, const Rectangle& iB)
+    bool areColliding(const Rectangle& iA, const Rectangle& iB) const
     {
-        calls.push_back(std::make_pair(iA.x, iB.x));
+        calls.push_back(make_pair(iA.x, iB.x));
+        return false;
     }
 
-    std::list<std::pair<float, float> > calls;
+    mutable list<pair<float, float> > calls;
 };
 
 class CollisionInteractionsTest : public ::testing::Test
@@ -24,14 +27,17 @@ class CollisionInteractionsTest : public ::testing::Test
     protected:
         CollisionInteractionsTest()
             : _ship(new TestShip()),
+              _collisionDetector(new FakeCollisionDetector()), // deleted by _collisionInteractions
               _collisionInteractions(_ship, _asteroids)
         {
-            //_ship->boundingBox = Rectangle(1,1,1,1); 
+            _ship->boundingBox = Rectangle(0,1,1,1); 
             for (int i = 0; i < 3; ++i)
             {
-                _asteroids.push_back(new TestAsteroid());
-                //_asteroids[i]->boundingBox = Rectangle(i,1,1,1);
+                TestAsteroid* asteroid = new TestAsteroid();
+                asteroid->boundingBox = Rectangle(i+1,1,1,1);
+                _asteroids.push_back(asteroid);
             }
+            _collisionInteractions._collisionDetector.reset(_collisionDetector);
         }
 
         ~CollisionInteractionsTest()
@@ -43,12 +49,16 @@ class CollisionInteractionsTest : public ::testing::Test
             }
         }
               
-        Ship* _ship;
-        std::list<Asteroid*> _asteroids;
-        FakeCollisionDetector _collisionDetector;
+        TestShip* _ship;
+        list<Asteroid*> _asteroids;
+        FakeCollisionDetector* _collisionDetector;
         CollisionInteractions _collisionInteractions;
 };
 
 TEST_F(CollisionInteractionsTest, ChecksShipCollisionWithAllAsteroids)
 {
+    _collisionInteractions.update();
+    EXPECT_THAT(_collisionDetector->calls, Contains(make_pair(0, 1)));
+    EXPECT_THAT(_collisionDetector->calls, Contains(make_pair(0, 2)));
+    EXPECT_THAT(_collisionDetector->calls, Contains(make_pair(0, 3)));
 }
