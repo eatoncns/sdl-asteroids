@@ -2,13 +2,11 @@
 #include <GameElements.hpp>
 #include <ScreenInfo.hpp>
 #include <TestImageLoader.hpp>
-#include <TestRenderable.hpp>
 #include <TestRandomGenerator.hpp>
 #include <TestShip.hpp>
 #include <TestAsteroid.hpp>
 #include <TestLocationGenerator.hpp>
 #include <KeyPress.hpp>
-#include <utility>
 #include <boost/bind.hpp>
 #include <boost/mem_fn.hpp>
 #include <boost/foreach.hpp>
