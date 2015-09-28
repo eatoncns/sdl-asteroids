@@ -11,6 +11,7 @@ using namespace pjm;
 using namespace std;
 using ::testing::Eq;
 using ::testing::Contains;
+using ::testing::ElementsAre;
 using ::testing::NiceMock;
 
 struct FakeCollisionDetector : public CollisionDetector
@@ -86,4 +87,20 @@ TEST_F(CollisionInteractionsTest, ChecksAsteroidCollisionsWhenNoShipCollision)
     EXPECT_THAT(_collisionDetector->calls, Contains(make_pair(1,2)));
     EXPECT_THAT(_collisionDetector->calls, Contains(make_pair(1,3)));
     EXPECT_THAT(_collisionDetector->calls, Contains(make_pair(2,3)));
+}
+
+TEST_F(CollisionInteractionsTest, DelegatesCollisionUpdateToAsteroidsWhereDetected)
+{
+    _collisionDetector->colliding.push_back(pair<float, float>(1,2));
+    _collisionInteractions.update();
+    
+    list<Asteroid*>::iterator firstIt = _asteroids.begin();
+    TestAsteroid* firstAsteroid = dynamic_cast<TestAsteroid*>(*firstIt);
+    list<Asteroid*> firstCollideCalls = firstAsteroid->collideCalls;
+    
+    list<Asteroid*>::iterator secondIt = firstIt;
+    secondIt++;
+    Asteroid* secondAsteroid = *secondIt;
+    
+    EXPECT_THAT(firstCollideCalls, ElementsAre(secondAsteroid));
 }

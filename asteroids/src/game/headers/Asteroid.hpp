@@ -17,6 +17,8 @@ namespace pjm
             virtual bool initialise(const Vector& iInitialLocation);
 
             virtual void update(unsigned int iTimeElapsed);
+
+            virtual void collideWith(Asteroid* iOther);
             
             virtual ~Asteroid() {}
 

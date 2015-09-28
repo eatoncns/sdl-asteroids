@@ -23,6 +23,12 @@ void TestAsteroid::update(unsigned int iTimeElapsed)
 }
 
 
+void TestAsteroid::collideWith(Asteroid* iOther)
+{
+    collideCalls.push_back(iOther);
+}
+
+
 Rectangle TestAsteroid::getBoundingBox()
 {
     return boundingBox;

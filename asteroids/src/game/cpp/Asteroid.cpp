@@ -29,6 +29,12 @@ namespace pjm
         handleScreenWrap(iTimeElapsed);
     }
 
+
+    void Asteroid::collideWith(Asteroid* iOther)
+    {
+        // TODO: implement
+    }
+
     
     std::string Asteroid::imageFilePath()
     {

@@ -53,8 +53,11 @@ namespace pjm
             ++innerIt;
             for ( ; innerIt != _asteroids.end(); ++innerIt)
             {
-                _collisionDetector->areColliding((*outerIt)->getBoundingBox(),
-                                                 (*innerIt)->getBoundingBox());
+                if (_collisionDetector->areColliding((*outerIt)->getBoundingBox(),
+                                                     (*innerIt)->getBoundingBox()))
+                {
+                    (*outerIt)->collideWith(*innerIt);
+                }
             }
         }
     }

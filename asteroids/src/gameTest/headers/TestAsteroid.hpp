@@ -16,11 +16,14 @@ struct TestAsteroid : public pjm::Asteroid
 
     void update(unsigned int iTimeElapsed);
 
+    void collideWith(Asteroid* iOther);
+
     pjm::Rectangle getBoundingBox();
 
     void render();
 
     int renderCalls;
+    std::list<Asteroid*> collideCalls;
     std::list<unsigned int> updateCalls;
     std::list<pjm::Vector> initialiseCalls;
     bool initialiseSuccess;
