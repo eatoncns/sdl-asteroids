@@ -15,7 +15,7 @@ namespace pjm
         public:
             CollisionInteractions(Ship* iShip, std::list<Asteroid*>& iAsteroids);
 
-            void update();
+            bool update();
 
             boost::scoped_ptr<CollisionDetector> _collisionDetector;
 

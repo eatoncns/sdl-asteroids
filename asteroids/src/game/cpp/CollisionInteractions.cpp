@@ -13,12 +13,16 @@ namespace pjm
     {}
 
     
-    void CollisionInteractions::update()
+    bool CollisionInteractions::update()
     {
         BOOST_FOREACH(Asteroid* asteroid, _asteroids)
         {
-            _collisionDetector->areColliding(_ship->getBoundingBox(), 
-                                             asteroid->getBoundingBox());
+            if (_collisionDetector->areColliding(_ship->getBoundingBox(), 
+                                                 asteroid->getBoundingBox()))
+            {
+                return true;
+            }
         }
+        return false;
     }
 }

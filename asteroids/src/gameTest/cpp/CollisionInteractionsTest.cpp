@@ -8,17 +8,23 @@
 
 using namespace pjm;
 using namespace std;
+using ::testing::Eq;
 using ::testing::Contains;
 using ::testing::NiceMock;
 
 struct FakeCollisionDetector : public CollisionDetector
 {
+    FakeCollisionDetector()
+        : collisionResult(false)
+    {}
+
     bool areColliding(const Rectangle& iA, const Rectangle& iB) const
     {
         calls.push_back(make_pair(iA.x, iB.x));
-        return false;
+        return collisionResult;
     }
 
+    bool collisionResult;
     mutable list<pair<float, float> > calls;
 };
 
@@ -61,4 +67,15 @@ TEST_F(CollisionInteractionsTest, ChecksShipCollisionWithAllAsteroids)
     EXPECT_THAT(_collisionDetector->calls, Contains(make_pair(0, 1)));
     EXPECT_THAT(_collisionDetector->calls, Contains(make_pair(0, 2)));
     EXPECT_THAT(_collisionDetector->calls, Contains(make_pair(0, 3)));
+}
+
+TEST_F(CollisionInteractionsTest, ReturnsFalseWhenNoShipCollisionOccurs)
+{
+    EXPECT_THAT(_collisionInteractions.update(), Eq(false)); 
+}
+
+TEST_F(CollisionInteractionsTest, ReturnsTrueWhenShipCollisionOccurs)
+{
+    _collisionDetector->collisionResult = true;
+    EXPECT_THAT(_collisionInteractions.update(), Eq(true));
 }
