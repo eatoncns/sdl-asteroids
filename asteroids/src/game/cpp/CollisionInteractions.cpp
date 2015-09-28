@@ -15,6 +15,17 @@ namespace pjm
     
     bool CollisionInteractions::update()
     {
+        if (shipIsColliding())
+        {
+            return true;
+        }
+        handleAsteroidCollisions();
+        return false;
+    }
+
+
+    bool CollisionInteractions::shipIsColliding()
+    {
         BOOST_FOREACH(Asteroid* asteroid, _asteroids)
         {
             if (_collisionDetector->areColliding(_ship->getBoundingBox(), 
@@ -23,9 +34,15 @@ namespace pjm
                 return true;
             }
         }
+        return false;
+    }
+
+
+    void CollisionInteractions::handleAsteroidCollisions()
+    {
         if (_asteroids.size() < 2)
         {
-            return false;
+            return;
         }
         typedef std::list<Asteroid*>::iterator asteroid_it;
         asteroid_it outerIt = _asteroids.begin();
@@ -40,6 +57,5 @@ namespace pjm
                                                  (*innerIt)->getBoundingBox());
             }
         }
-        return false;
     }
 }

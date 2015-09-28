@@ -20,6 +20,9 @@ namespace pjm
             boost::scoped_ptr<CollisionDetector> _collisionDetector;
 
         private:
+            bool shipIsColliding();
+            void handleAsteroidCollisions();
+
             Ship* _ship;
             std::list<Asteroid*>& _asteroids;
     };
