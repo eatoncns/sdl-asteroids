@@ -79,3 +79,11 @@ TEST_F(CollisionInteractionsTest, ReturnsTrueWhenShipCollisionOccurs)
     _collisionDetector->collisionResult = true;
     EXPECT_THAT(_collisionInteractions.update(), Eq(true));
 }
+
+TEST_F(CollisionInteractionsTest, ChecksAsteroidCollisionsWhenNoShipCollision)
+{
+    _collisionInteractions.update();
+    EXPECT_THAT(_collisionDetector->calls, Contains(make_pair(1,2)));
+    EXPECT_THAT(_collisionDetector->calls, Contains(make_pair(1,3)));
+    EXPECT_THAT(_collisionDetector->calls, Contains(make_pair(2,3)));
+}

@@ -23,6 +23,23 @@ namespace pjm
                 return true;
             }
         }
+        if (_asteroids.size() < 2)
+        {
+            return false;
+        }
+        typedef std::list<Asteroid*>::iterator asteroid_it;
+        asteroid_it outerIt = _asteroids.begin();
+        asteroid_it lastIt = _asteroids.end()--;
+        for ( ; outerIt != lastIt; ++outerIt)
+        {
+            asteroid_it innerIt = outerIt;
+            ++innerIt;
+            for ( ; innerIt != _asteroids.end(); ++innerIt)
+            {
+                _collisionDetector->areColliding((*outerIt)->getBoundingBox(),
+                                                 (*innerIt)->getBoundingBox());
+            }
+        }
         return false;
     }
 }
