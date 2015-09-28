@@ -5,6 +5,7 @@
 #include <TestShip.hpp>
 #include <TestAsteroid.hpp>
 #include <boost/foreach.hpp>
+#include <algorithm>
 
 using namespace pjm;
 using namespace std;
@@ -14,18 +15,17 @@ using ::testing::NiceMock;
 
 struct FakeCollisionDetector : public CollisionDetector
 {
-    FakeCollisionDetector()
-        : collisionResult(false)
-    {}
-
     bool areColliding(const Rectangle& iA, const Rectangle& iB) const
     {
-        calls.push_back(make_pair(iA.x, iB.x));
-        return collisionResult;
+        pair<float, float> inputPair = make_pair(iA.x, iB.x);
+        calls.push_back(inputPair);
+        pair_list::const_iterator it = find(colliding.begin(), colliding.end(), inputPair);
+        return (it != colliding.end());
     }
-
-    bool collisionResult;
-    mutable list<pair<float, float> > calls;
+    
+    typedef list<pair<float, float> > pair_list;
+    pair_list colliding;
+    mutable pair_list calls;
 };
 
 class CollisionInteractionsTest : public ::testing::Test
@@ -76,7 +76,7 @@ TEST_F(CollisionInteractionsTest, ReturnsFalseWhenNoShipCollisionOccurs)
 
 TEST_F(CollisionInteractionsTest, ReturnsTrueWhenShipCollisionOccurs)
 {
-    _collisionDetector->collisionResult = true;
+    _collisionDetector->colliding.push_back(pair<float, float>(0,2));
     EXPECT_THAT(_collisionInteractions.update(), Eq(true));
 }
 
