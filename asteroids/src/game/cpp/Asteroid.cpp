@@ -32,7 +32,9 @@ namespace pjm
 
     void Asteroid::collideWith(Asteroid* iOther)
     {
-        // TODO: implement
+        Vector tmp = _velocity;
+        _velocity = iOther->_velocity;
+        iOther->_velocity = tmp;
     }
 
     

@@ -29,6 +29,11 @@ struct AsteroidSpy : public Asteroid
     {
         return _velocity;
     }
+
+    void setVelocity(const Vector& iVelocity)
+    {
+        _velocity = iVelocity;
+    }
 };
 
 
@@ -93,4 +98,16 @@ TEST_F(AsteroidTest, HasBoundingBoxBasedOnImage)
     EXPECT_THAT(boundingBox.y, Eq(_initialLocation.y));
     EXPECT_THAT(boundingBox.w, Eq(5));
     EXPECT_THAT(boundingBox.h, Eq(6));
+}
+
+TEST_F(AsteroidTest, SwapsVelocityWithOtherAsteroidOnCollision)
+{
+    AsteroidSpy otherAsteroid(_imageLoader, _wrapper, _random);
+    Vector otherVelocity(1, 1);
+    otherAsteroid.setVelocity(otherVelocity);
+    _asteroid.collideWith(&otherAsteroid);
+    EXPECT_THAT(_asteroid.getVelocity(),
+                Eq(otherVelocity));
+    EXPECT_THAT(otherAsteroid.getVelocity(), 
+                Eq(Vector(_velocityComponent, _velocityComponent)));
 }
