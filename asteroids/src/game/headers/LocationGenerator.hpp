@@ -13,6 +13,8 @@ namespace pjm
         public:
             LocationGenerator(const ScreenInfo& iScreenInfo, RandomGenerator& iRandom);
 
+            virtual ~LocationGenerator() {}
+
             virtual Vector generateLocation(float iMinDistanceFromCentre,
                                             float iMaxDistanceFromCentre);
 

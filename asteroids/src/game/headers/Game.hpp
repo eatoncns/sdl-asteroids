@@ -9,6 +9,8 @@ namespace pjm
         virtual bool initialise() = 0;
         virtual void update(unsigned int iTimeElapsed) = 0;
         virtual void draw() = 0;
+
+        virtual ~Game() {}
     };
 }
 
