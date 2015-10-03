@@ -3,7 +3,7 @@
 
 #include <Game.hpp>
 #include <ScreenInfo.hpp>
-#include <RandomGeneratorImpl.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <string>
 
 class SDL_Window;
@@ -37,7 +37,7 @@ namespace pjm
             SDL_Window* _window;
             SDL_Renderer* _renderer;
             bool _running;
-            GameElements* _gameElements;
+            boost::scoped_ptr<GameElements> _gameElements;
     };
 }
 

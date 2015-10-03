@@ -10,6 +10,7 @@
 #include <ShipCreator.hpp>
 #include <AsteroidCreator.hpp>
 #include <LocationGenerator.hpp>
+#include <RandomGeneratorImpl.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
 
@@ -23,8 +24,7 @@ namespace pjm
         : _screenInfo(iScreenInfo),
           _window(NULL),
           _renderer(NULL),
-          _running(false),
-          _gameElements(NULL)
+          _running(false)
     {}
 
     
@@ -34,10 +34,6 @@ namespace pjm
         {
             if (_renderer != NULL)
             {
-                if (_gameElements != NULL)
-                {
-                    delete _gameElements;
-                }
                 SDL_DestroyRenderer(_renderer);
                 _renderer = NULL;
             }
@@ -133,7 +129,7 @@ namespace pjm
         {
             return false;
         }
-        _gameElements = new GameElements(ship, asteroids);
+        _gameElements.reset(new GameElements(ship, asteroids));
         return true;
     }
 
