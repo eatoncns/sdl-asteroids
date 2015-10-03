@@ -4,7 +4,7 @@ using namespace pjm;
 using boost::shared_ptr;
 
 TestAsteroid::TestAsteroid()
-    : Asteroid(screenWrapper, random),
+    : Asteroid(screenWrapper),
       renderCalls(0),
       initialiseSuccess(true),
       boundingBox(0,0,0,0)
@@ -12,7 +12,8 @@ TestAsteroid::TestAsteroid()
 
 
 bool TestAsteroid::initialise(const Vector& iInitialLocation,
-                              ImageLoader& iImageLoader)
+                              ImageLoader& iImageLoader,
+                              RandomGenerator& iRandomGenerator)
 {
     initialiseCalls.push_back(iInitialLocation);
     return initialiseSuccess;
@@ -44,4 +45,3 @@ void TestAsteroid::render()
 
 TestImageLoader TestAsteroid::imageLoader;
 shared_ptr<ScreenWrapper> TestAsteroid::screenWrapper;
-TestRandomGenerator TestAsteroid::random;

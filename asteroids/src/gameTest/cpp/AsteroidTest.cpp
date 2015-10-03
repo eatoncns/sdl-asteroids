@@ -15,9 +15,8 @@ using ::testing::Return;
 
 struct AsteroidSpy : public Asteroid
 {
-    AsteroidSpy(shared_ptr<ScreenWrapper> iScreenWrapper,
-                RandomGenerator& iRandomGenerator)
-        : Asteroid(iScreenWrapper, iRandomGenerator)
+    AsteroidSpy(shared_ptr<ScreenWrapper> iScreenWrapper)
+        : Asteroid(iScreenWrapper)
     {}
 
     Vector getLocation()
@@ -41,12 +40,12 @@ class AsteroidTest : public MoveableObjectTest
 {
     protected:
         AsteroidTest()
-            : _asteroid(_wrapper, _random),
+            : _asteroid(_wrapper),
               _velocityComponent(sin(45*M_PI/180.0)*Asteroid::VELOCITY)
         {
             ON_CALL(_random, uniformInRange(_,_))
                 .WillByDefault(Return(0.375));
-            _asteroid.initialise(_initialLocation, _imageLoader);
+            _asteroid.initialise(_initialLocation, _imageLoader, _random);
         }
         
         NiceMock<TestRandomGenerator> _random;
@@ -58,7 +57,7 @@ class AsteroidTest : public MoveableObjectTest
 TEST_F(AsteroidTest, InitReturnsFalseWhenImageLoadFails)
 {
     _imageLoader.loadSuccess = false;
-    EXPECT_FALSE(_asteroid.initialise(_initialLocation, _imageLoader));
+    EXPECT_FALSE(_asteroid.initialise(_initialLocation, _imageLoader, _random));
 }
 
 TEST_F(AsteroidTest, InitialisesWithFixedVelocityInRandomDirection)
@@ -102,7 +101,7 @@ TEST_F(AsteroidTest, HasBoundingBoxBasedOnImage)
 
 TEST_F(AsteroidTest, SwapsVelocityWithOtherAsteroidOnCollision)
 {
-    AsteroidSpy otherAsteroid(_wrapper, _random);
+    AsteroidSpy otherAsteroid(_wrapper);
     Vector otherVelocity(1, 1);
     otherAsteroid.setVelocity(otherVelocity);
     _asteroid.collideWith(&otherAsteroid);

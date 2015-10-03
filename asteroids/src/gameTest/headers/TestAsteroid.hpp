@@ -13,7 +13,8 @@ struct TestAsteroid : public pjm::Asteroid
     TestAsteroid();
 
     bool initialise(const pjm::Vector& iInitialLocation,
-                    pjm::ImageLoader& iImageLoader);
+                    pjm::ImageLoader& iImageLoader,
+                    pjm::RandomGenerator& iRandomGenerator);
 
     void update(unsigned int iTimeElapsed);
 
@@ -31,7 +32,6 @@ struct TestAsteroid : public pjm::Asteroid
     pjm::Rectangle boundingBox;
     static TestImageLoader imageLoader;
     static boost::shared_ptr<pjm::ScreenWrapper> screenWrapper;
-    static TestRandomGenerator random;
 };
 
 #endif

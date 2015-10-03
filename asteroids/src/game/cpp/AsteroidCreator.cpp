@@ -19,10 +19,10 @@ namespace pjm
         float maxDistanceFromCentre = 250.0;
         for (int i = 0; i < NUM_ASTEROIDS; ++i)
         {
-            shared_ptr<Asteroid> asteroid = makeAsteroid(iScreenWrapper, iRandomGenerator);
+            shared_ptr<Asteroid> asteroid = makeAsteroid(iScreenWrapper);
             Vector initialLocation = iLocationGenerator.generateLocation(minDistanceFromCentre,
                                                                          maxDistanceFromCentre);
-            if (!asteroid->initialise(initialLocation, iImageLoader))
+            if (!asteroid->initialise(initialLocation, iImageLoader, iRandomGenerator))
             {
                 return list<shared_ptr<Asteroid> >();
             } 
@@ -32,10 +32,9 @@ namespace pjm
     }
             
     
-    shared_ptr<Asteroid> AsteroidCreator::makeAsteroid(shared_ptr<ScreenWrapper> iScreenWrapper,
-                                                       RandomGenerator& iRandomGenerator)
+    shared_ptr<Asteroid> AsteroidCreator::makeAsteroid(shared_ptr<ScreenWrapper> iScreenWrapper)
     {
-        shared_ptr<Asteroid> asteroid(new Asteroid(iScreenWrapper, iRandomGenerator));
+        shared_ptr<Asteroid> asteroid(new Asteroid(iScreenWrapper));
         return asteroid;
     }
 }

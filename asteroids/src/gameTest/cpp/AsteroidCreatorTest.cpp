@@ -19,8 +19,7 @@ struct TestableAsteroidCreator : public AsteroidCreator
         : testAsteroid(new TestAsteroid())
     {}
 
-    shared_ptr<Asteroid> makeAsteroid(shared_ptr<ScreenWrapper>,
-                                      RandomGenerator&)
+    shared_ptr<Asteroid> makeAsteroid(shared_ptr<ScreenWrapper>)
     {
         return testAsteroid;
     }

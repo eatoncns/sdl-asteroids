@@ -7,17 +7,16 @@ using boost::shared_ptr;
 
 namespace pjm
 { 
-    Asteroid::Asteroid(shared_ptr<ScreenWrapper> iScreenWrapper, 
-                       RandomGenerator& iRandomGenerator)
-        : MovingObject(iScreenWrapper),
-          _random(iRandomGenerator)
+    Asteroid::Asteroid(shared_ptr<ScreenWrapper> iScreenWrapper)
+        : MovingObject(iScreenWrapper)
     {}
     
     
     bool Asteroid::initialise(const Vector& iInitialLocation,
-                              ImageLoader& iImageLoader)
+                              ImageLoader& iImageLoader,
+                              RandomGenerator& iRandomGenerator)
     {
-        float angle = _random.uniformInRange(0, 1) * 2 * M_PI;
+        float angle = iRandomGenerator.uniformInRange(0, 1) * 2 * M_PI;
         _velocity.x = sin(angle);
         _velocity.y = -cos(angle);
         _velocity *= VELOCITY;

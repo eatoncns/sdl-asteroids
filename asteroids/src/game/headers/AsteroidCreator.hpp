@@ -24,8 +24,7 @@ namespace pjm
             const static int NUM_ASTEROIDS = 5;
 
         protected:
-            virtual boost::shared_ptr<Asteroid> makeAsteroid(boost::shared_ptr<ScreenWrapper> iScreenWrapper,
-                                                             RandomGenerator& iRandomGenerator);
+            virtual boost::shared_ptr<Asteroid> makeAsteroid(boost::shared_ptr<ScreenWrapper> iScreenWrapper);
     };
 }
 

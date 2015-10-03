@@ -10,11 +10,11 @@ namespace pjm
     class Asteroid : public MovingObject
     {
         public:
-            Asteroid(boost::shared_ptr<ScreenWrapper> iScreenWrapper, 
-                     RandomGenerator& iRandomGenerator);
+            Asteroid(boost::shared_ptr<ScreenWrapper> iScreenWrapper);
             
             virtual bool initialise(const Vector& iInitialLocation,
-                                    ImageLoader& iImageLoader);
+                                    ImageLoader& iImageLoader,
+                                    RandomGenerator& iRandomGenerator);
 
             virtual void update(unsigned int iTimeElapsed);
 
@@ -26,8 +26,6 @@ namespace pjm
 
         protected:
             virtual std::string imageFilePath();
-            
-            RandomGenerator& _random;
     };
 }
 
