@@ -12,8 +12,7 @@ namespace pjm
         : _location(0, 0),
           _velocity(0, 0),
           _angle(0.0),
-          _screenWrapper(iScreenWrapper),
-          _image(NULL)
+          _screenWrapper(iScreenWrapper)
     {}
 
     
@@ -22,7 +21,7 @@ namespace pjm
     {
         _location = iInitialLocation;
         _image = iImageLoader.loadFromFile(imageFilePath());
-        return (_image != NULL);
+        return _image;
     }
  
 

@@ -85,13 +85,13 @@ TEST_F(AsteroidTest, CallsScreenWrapperOnUpdate)
 TEST_F(AsteroidTest, RendersImageAtCurrentLocation)
 {
     _asteroid.render();
-    EXPECT_THAT(_testRenderable.renderCalls, ElementsAre(std::make_pair(_initialLocation, 0.0)));
+    EXPECT_THAT(_testRenderable->renderCalls, ElementsAre(std::make_pair(_initialLocation, 0.0)));
 }
 
 TEST_F(AsteroidTest, HasBoundingBoxBasedOnImage)
 {
-    _testRenderable.w = 5;
-    _testRenderable.h = 6;
+    _testRenderable->w = 5;
+    _testRenderable->h = 6;
     Rectangle boundingBox = _asteroid.getBoundingBox();
     EXPECT_THAT(boundingBox.x, Eq(_initialLocation.x));
     EXPECT_THAT(boundingBox.y, Eq(_initialLocation.y));

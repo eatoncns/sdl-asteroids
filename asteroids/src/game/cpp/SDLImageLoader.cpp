@@ -3,6 +3,10 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <boost/foreach.hpp>
+#include <boost/make_shared.hpp>
+
+using boost::shared_ptr;
+using boost::make_shared;
 
 namespace pjm
 {
@@ -10,17 +14,7 @@ namespace pjm
         : _renderer(iRenderer)
     {}
 
-
-    SDLImageLoader::~SDLImageLoader()
-    {
-        BOOST_FOREACH(image_map::value_type imagePair, _images)
-        {
-            delete imagePair.second;
-        }
-    }
-
-
-    Renderable* SDLImageLoader::loadFromFile(const std::string& iFilePath)
+    shared_ptr<Renderable> SDLImageLoader::loadFromFile(const std::string& iFilePath)
     {
         image_map::iterator it = _images.find(iFilePath);
         if (it != _images.end())
@@ -32,7 +26,7 @@ namespace pjm
     }
 
 
-    Renderable* SDLImageLoader::loadNewImage(const std::string& iFilePath)
+    shared_ptr<Renderable> SDLImageLoader::loadNewImage(const std::string& iFilePath)
     {
         SDL_Texture* texture = NULL;
         int width = 0;
@@ -43,7 +37,7 @@ namespace pjm
             printf("Unable to load image %s! SDL Error: %s\n", 
                    iFilePath.c_str(), 
                    IMG_GetError());
-            return NULL;
+            return shared_ptr<Renderable>();
         }
         else
         {
@@ -53,13 +47,13 @@ namespace pjm
                 printf("Unable to create texture from %s! SDL Error: %s\n", 
                        iFilePath.c_str(), 
                        SDL_GetError());
-                return NULL;
+                return shared_ptr<Renderable>();
             }
             width = loadedSurface->w;
             height = loadedSurface->h;
             SDL_FreeSurface(loadedSurface);
         }
-        _images[iFilePath] = new SDLImage(_renderer, texture, width, height); 
+        _images[iFilePath] = make_shared<SDLImage>(_renderer, texture, width, height); 
         return _images[iFilePath];
 
     }

@@ -15,21 +15,15 @@ namespace pjm
         public:
             SDLImageLoader(SDL_Renderer* iRenderer);
 
-            ~SDLImageLoader();
-
-            // N.b. ownership of the pointer returned remains with
-            //      the ImageLoader class
-            Renderable* loadFromFile(const std::string& iFilePath);
+            boost::shared_ptr<Renderable> loadFromFile(const std::string& iFilePath);
 
         private:
-            typedef std::map<std::string, SDLImage*> image_map;
+            typedef std::map<std::string, boost::shared_ptr<SDLImage> > image_map;
             image_map _images;
             SDL_Renderer* _renderer;
 
-            Renderable* loadNewImage(const std::string& iFilePath);
+            boost::shared_ptr<Renderable> loadNewImage(const std::string& iFilePath);
 
-            // Prevent copying to avoid issues with ownership
-            // of SDLImages
             SDLImageLoader(const SDLImageLoader&);
             void operator=(const SDLImageLoader&);
     };

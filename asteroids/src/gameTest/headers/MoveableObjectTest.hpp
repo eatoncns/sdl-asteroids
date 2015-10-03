@@ -11,15 +11,16 @@ class MoveableObjectTest : public ::testing::Test
     protected:
         MoveableObjectTest()
             : _initialLocation(100, 100),
-              _wrapper(new ::testing::NiceMock<TestScreenWrapper>(pjm::Vector(200, 200)))
+              _wrapper(new ::testing::NiceMock<TestScreenWrapper>(pjm::Vector(200, 200))),
+              _testRenderable(new TestRenderable())
         {
-            _imageLoader.renderable = &_testRenderable;
+            _imageLoader.renderable = _testRenderable;
         }
         
         pjm::Vector _initialLocation;
         boost::shared_ptr< ::testing::NiceMock<TestScreenWrapper> > _wrapper;
         TestImageLoader _imageLoader;
-        TestRenderable _testRenderable;
+        boost::shared_ptr<TestRenderable> _testRenderable;
 };
 
 #endif

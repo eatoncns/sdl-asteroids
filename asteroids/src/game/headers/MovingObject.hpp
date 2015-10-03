@@ -34,7 +34,7 @@ namespace pjm
             Vector _velocity;
             double _angle;
             boost::shared_ptr<ScreenWrapper> _screenWrapper;
-            Renderable* _image;
+            boost::shared_ptr<Renderable> _image;
     };
 }
 

@@ -115,7 +115,7 @@ TEST_F(ShipTest, InitReturnsFalseWhenImageLoadFails)
 TEST_F(ShipTest, RendersImageAtCurrentLocation)
 {
     _ship.render();
-    EXPECT_THAT(_testRenderable.renderCalls, ElementsAre(std::make_pair(_initialLocation, 0.0)));
+    EXPECT_THAT(_testRenderable->renderCalls, ElementsAre(std::make_pair(_initialLocation, 0.0)));
 }
 
 TEST_F(ShipTest, RotatesLeft)
@@ -190,8 +190,8 @@ TEST_F(ShipTest, CallsScreenWrapperOnUpdate)
 
 TEST_F(ShipTest, HasBoundingBoxBasedOnImage)
 {
-    _testRenderable.w = 5;
-    _testRenderable.h = 6;
+    _testRenderable->w = 5;
+    _testRenderable->h = 6;
     Rectangle boundingBox = _ship.getBoundingBox();
     EXPECT_THAT(boundingBox.x, Eq(_initialLocation.x));
     EXPECT_THAT(boundingBox.y, Eq(_initialLocation.y));
