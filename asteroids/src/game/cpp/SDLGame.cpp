@@ -8,6 +8,8 @@
 #include <Ship.hpp>
 #include <Asteroid.hpp>
 #include <ShipCreator.hpp>
+#include <AsteroidCreator.hpp>
+#include <LocationGenerator.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
 
@@ -120,12 +122,17 @@ namespace pjm
         {
             return false;
         }
-        //AsteroidCreator asteroidCreator;
-        list<shared_ptr<Asteroid> > asteroids; // = asteroidCreator.create(screenWrapper, imageLoader);
-        //if (asteroids.empty())
-        //{
-        //    return false;
-        //}
+        RandomGeneratorImpl random;
+        LocationGenerator locationGenerator(_screenInfo, random);
+        AsteroidCreator asteroidCreator;
+        list<shared_ptr<Asteroid> > asteroids = asteroidCreator.create(screenWrapper,
+                                                                       imageLoader,
+                                                                       locationGenerator,
+                                                                       random);
+        if (asteroids.empty())
+        {
+            return false;
+        }
         _gameElements = new GameElements(ship, asteroids);
         return true;
     }
