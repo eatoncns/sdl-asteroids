@@ -29,7 +29,7 @@ struct TestAsteroid : public pjm::Asteroid
     bool initialiseSuccess;
     pjm::Rectangle boundingBox;
     static TestImageLoader imageLoader;
-    static pjm::ScreenWrapper screenWrapper;
+    static boost::shared_ptr<pjm::ScreenWrapper> screenWrapper;
     static TestRandomGenerator random;
 };
 

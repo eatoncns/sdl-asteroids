@@ -10,7 +10,7 @@ namespace pjm
     class Ship : public MovingObject
     {
         public:
-            Ship(ImageLoader& iImageLoader, ScreenWrapper& iScreenWrapper);
+            Ship(boost::shared_ptr<ScreenWrapper> iScreenWrapper);
             
             enum Action {NONE, ACCELERATE, TURN_LEFT, TURN_RIGHT, ACCELERATE_LEFT, ACCELERATE_RIGHT};
 
@@ -23,8 +23,6 @@ namespace pjm
             static const float ACC_FACTOR = 0.0001;
             static const double ROTATION_FACTOR = 0.1;
             static const float MAX_VELOCITY = 0.1;
-
-            static Ship* create(ImageLoader& iImageLoader, ScreenWrapper& iScreenWrapper);
 
         protected:
             void updateAngle(const Action iAction, unsigned int iTimeElapsed);

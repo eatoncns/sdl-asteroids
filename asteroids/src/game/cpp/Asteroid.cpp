@@ -3,23 +3,25 @@
 #include <ScreenWrapper.hpp>
 #include <math.h>
 
+using boost::shared_ptr;
+
 namespace pjm
 { 
-    Asteroid::Asteroid(ImageLoader& iImageLoader, 
-                       ScreenWrapper& iScreenWrapper, 
+    Asteroid::Asteroid(shared_ptr<ScreenWrapper> iScreenWrapper, 
                        RandomGenerator& iRandomGenerator)
-        : MovingObject(iImageLoader, iScreenWrapper),
+        : MovingObject(iScreenWrapper),
           _random(iRandomGenerator)
     {}
     
     
-    bool Asteroid::initialise(const Vector& iInitialLocation)
+    bool Asteroid::initialise(const Vector& iInitialLocation,
+                              ImageLoader& iImageLoader)
     {
         float angle = _random.uniformInRange(0, 1) * 2 * M_PI;
         _velocity.x = sin(angle);
         _velocity.y = -cos(angle);
         _velocity *= VELOCITY;
-        return MovingObject::initialise(iInitialLocation);
+        return MovingObject::initialise(iInitialLocation, iImageLoader);
     }
 
 
@@ -41,14 +43,6 @@ namespace pjm
     std::string Asteroid::imageFilePath()
     {
         return "resources/Asteroid.gif";
-    }
-
-
-    Asteroid* Asteroid::create(ImageLoader& iImageLoader,
-                               ScreenWrapper& iScreenWrapper,
-                               RandomGenerator& iRandomGenerator)
-    {
-        return new Asteroid(iImageLoader, iScreenWrapper, iRandomGenerator);
     }
 
     

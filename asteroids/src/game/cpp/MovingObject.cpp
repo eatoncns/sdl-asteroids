@@ -4,22 +4,24 @@
 #include <ScreenWrapper.hpp>
 #include <Rectangle.hpp>
 
+using boost::shared_ptr;
+
 namespace pjm
 {
-    MovingObject::MovingObject(ImageLoader& iImageLoader, ScreenWrapper& iScreenWrapper)
+    MovingObject::MovingObject(shared_ptr<ScreenWrapper> iScreenWrapper)
         : _location(0, 0),
           _velocity(0, 0),
           _angle(0.0),
           _screenWrapper(iScreenWrapper),
-          _imageLoader(iImageLoader),
           _image(NULL)
     {}
 
     
-    bool MovingObject::initialise(const Vector& iInitialLocation)
+    bool MovingObject::initialise(const Vector& iInitialLocation,
+                                  ImageLoader& iImageLoader)
     {
         _location = iInitialLocation;
-        _image = _imageLoader.loadFromFile(imageFilePath());
+        _image = iImageLoader.loadFromFile(imageFilePath());
         return (_image != NULL);
     }
  
@@ -32,7 +34,7 @@ namespace pjm
     
     void MovingObject::handleScreenWrap(unsigned int iTimeElapsed)
     {
-        _screenWrapper.wrap(_location, _velocity, iTimeElapsed);
+        _screenWrapper->wrap(_location, _velocity, iTimeElapsed);
     }
 
 

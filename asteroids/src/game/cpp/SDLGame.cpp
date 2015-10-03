@@ -3,6 +3,17 @@
 #include <GameElements.hpp>
 #include <SDLImageLoader.hpp>
 #include <KeyPress.hpp>
+#include <Vector.hpp>
+#include <ScreenWrapper.hpp>
+#include <Ship.hpp>
+#include <Asteroid.hpp>
+#include <ShipCreator.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
+
+using boost::shared_ptr;
+using boost::make_shared;
+using std::list;
 
 namespace pjm
 {
@@ -11,7 +22,6 @@ namespace pjm
           _window(NULL),
           _renderer(NULL),
           _running(false),
-          _imageLoader(NULL),
           _gameElements(NULL)
     {}
 
@@ -25,10 +35,6 @@ namespace pjm
                 if (_gameElements != NULL)
                 {
                     delete _gameElements;
-                }
-                if (_imageLoader != NULL)
-                {
-                    delete _imageLoader;
                 }
                 SDL_DestroyRenderer(_renderer);
                 _renderer = NULL;
@@ -105,9 +111,23 @@ namespace pjm
 
     bool SDLGame::initGameElements()
     {
-        _imageLoader = new SDLImageLoader(_renderer);
-        _gameElements = new GameElements(*_imageLoader, _screenInfo, _random);
-        return _gameElements->initialise();
+        static SDLImageLoader imageLoader(_renderer);
+        Vector screenBounds(_screenInfo.width, _screenInfo.height);
+        shared_ptr<ScreenWrapper> screenWrapper = make_shared<ScreenWrapper>(screenBounds);
+        ShipCreator shipCreator;
+        shared_ptr<Ship> ship = shipCreator.create(screenWrapper, imageLoader, _screenInfo);
+        if (!ship)
+        {
+            return false;
+        }
+        //AsteroidCreator asteroidCreator;
+        list<shared_ptr<Asteroid> > asteroids; // = asteroidCreator.create(screenWrapper, imageLoader);
+        //if (asteroids.empty())
+        //{
+        //    return false;
+        //}
+        _gameElements = new GameElements(ship, asteroids);
+        return true;
     }
 
     

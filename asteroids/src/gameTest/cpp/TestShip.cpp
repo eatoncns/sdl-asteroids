@@ -1,16 +1,18 @@
 #include <TestShip.hpp>
 
 using namespace pjm;
+using boost::shared_ptr;
 
 TestShip::TestShip()
-    : Ship(imageLoader, screenWrapper),
+    : Ship(screenWrapper),
           renderCalls(0),
           initialiseSuccess(true),
           boundingBox(0,0,0,0)
 {}
 
 
-bool TestShip::initialise(const Vector& iInitialLocation)
+bool TestShip::initialise(const Vector& iInitialLocation,
+                          ImageLoader& iImageLoader)
 {
     initialiseCalls.push_back(iInitialLocation);
     return initialiseSuccess;
@@ -35,5 +37,5 @@ void TestShip::render()
 }
 
 
+shared_ptr<ScreenWrapper> TestShip::screenWrapper;
 TestImageLoader TestShip::imageLoader;
-ScreenWrapper TestShip::screenWrapper(Vector(0,0));

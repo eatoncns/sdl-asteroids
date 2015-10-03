@@ -1,59 +1,28 @@
 #ifndef _PJM_GAMEELEMENTS_HPP_
 #define _PJM_GAMEELEMENTS_HPP_
 
-#include <ScreenInfo.hpp>
-#include <ScreenWrapper.hpp>
 #include <KeyPress.hpp>
-#include <LocationGenerator.hpp>
-#include <boost/function.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 #include <list>
 
 namespace pjm
 {
-    struct ImageLoader;
-    struct RandomGenerator;
     class Ship;
     class Asteroid;
 
     class GameElements
     {
         public:
-            GameElements(ImageLoader& iImageLoader,
-                         const ScreenInfo& iScreenInfo,
-                         RandomGenerator& iRandomGenerator);
-
-            ~GameElements();
-
-            bool initialise();
+            GameElements(boost::shared_ptr<Ship> iShip,
+                         std::list<boost::shared_ptr<Asteroid> > iAsteroids);
 
             void update(keyboard::KeyPress iKeyPress, unsigned int iTimeElapsed);
 
             void render();
              
-            typedef boost::function<Ship*(ImageLoader& iImage, 
-                                          ScreenWrapper& iScreenWrapper)> ship_creator;
-            ship_creator _shipCreator;
-
-            typedef boost::function<Asteroid*(ImageLoader& iImage,
-                                              ScreenWrapper& iScreenWrapper,
-                                              RandomGenerator& iRandomGenerator)> asteroid_creator;
-            asteroid_creator _asteroidCreator;
-
-            boost::scoped_ptr<LocationGenerator> _locationGenerator;
-
-            static const int NUM_ASTEROIDS = 5;
-
-        private:
-            bool initialiseShip();
-            bool initialiseAsteroids();
-
-            Ship* _ship;
-            std::list<Asteroid*> _asteroids;
-            ImageLoader& _imageLoader;
-            ScreenInfo _screenInfo;
-            RandomGenerator& _random;
-            ScreenWrapper _screenWrapper;
+        protected:
+            boost::shared_ptr<Ship> _ship;
+            std::list<boost::shared_ptr<Asteroid> > _asteroids;
     };
 }
 

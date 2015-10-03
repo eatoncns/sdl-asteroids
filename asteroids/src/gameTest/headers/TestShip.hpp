@@ -11,7 +11,8 @@ struct TestShip : public pjm::Ship
 {
     TestShip();
 
-    bool initialise(const pjm::Vector& iInitialLocation);
+    bool initialise(const pjm::Vector& iInitialLocation,
+                    pjm::ImageLoader& iImageLoader);
 
     void update(const Action iAction, unsigned int iTimeElapsed);
 
@@ -25,7 +26,7 @@ struct TestShip : public pjm::Ship
     bool initialiseSuccess;
     pjm::Rectangle boundingBox;
     static TestImageLoader imageLoader;
-    static pjm::ScreenWrapper screenWrapper;
+    static boost::shared_ptr<pjm::ScreenWrapper> screenWrapper;
 };
 
 #endif

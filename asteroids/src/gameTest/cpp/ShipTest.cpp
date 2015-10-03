@@ -7,14 +7,15 @@
 
 using namespace pjm;
 using namespace boost::math;
+using boost::shared_ptr;
 using ::testing::Eq;
 using ::testing::Le;
 using ::testing::ElementsAre;
 
 struct ShipSpy : public Ship
 {
-    ShipSpy(ImageLoader& iImageLoader, ScreenWrapper& iScreenWrapper)
-        : Ship(iImageLoader, iScreenWrapper)
+    ShipSpy(shared_ptr<ScreenWrapper> iScreenWrapper)
+        : Ship(iScreenWrapper)
     {}
 
     Vector getLocation() const
@@ -43,9 +44,9 @@ class ShipTest : public MoveableObjectTest
 {
     protected:
         ShipTest()
-            : _ship(_imageLoader, _wrapper)
+            : _ship(_wrapper)
         {
-            _ship.initialise(_initialLocation);
+            _ship.initialise(_initialLocation, _imageLoader);
         }
 
         void update(Ship::Action iAction, unsigned int iTime)
@@ -96,7 +97,7 @@ class ShipTest : public MoveableObjectTest
 
         void accelerateFrom(const Vector& iLocation, double iAngle, unsigned int iTime)
         {
-            _ship.initialise(iLocation);
+            _ship.initialise(iLocation, _imageLoader);
             turnTo(iAngle);
             accelerateFor(iTime);
         }
@@ -108,7 +109,7 @@ class ShipTest : public MoveableObjectTest
 TEST_F(ShipTest, InitReturnsFalseWhenImageLoadFails)
 {
     _imageLoader.loadSuccess = false;
-    EXPECT_FALSE(_ship.initialise(_initialLocation));
+    EXPECT_FALSE(_ship.initialise(_initialLocation, _imageLoader));
 }
 
 TEST_F(ShipTest, RendersImageAtCurrentLocation)
@@ -182,7 +183,7 @@ TEST_F(ShipTest, DoesNotExceedMaximumVelocity)
 
 TEST_F(ShipTest, CallsScreenWrapperOnUpdate)
 {
-    EXPECT_CALL(_wrapper, wrap(_initialLocation, Vector(0, 0), 3))
+    EXPECT_CALL(*_wrapper, wrap(_initialLocation, Vector(0, 0), 3))
         .Times(1);
     doNothingFor(3);
 }

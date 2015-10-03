@@ -5,6 +5,7 @@
 #include <TestRandomGenerator.hpp>
 
 using namespace pjm;
+using boost::shared_ptr;
 using ::testing::Eq;
 using ::testing::ElementsAre;
 using ::testing::NiceMock;
@@ -14,10 +15,9 @@ using ::testing::Return;
 
 struct AsteroidSpy : public Asteroid
 {
-    AsteroidSpy(ImageLoader& iImageLoader,
-                ScreenWrapper& iScreenWrapper,
+    AsteroidSpy(shared_ptr<ScreenWrapper> iScreenWrapper,
                 RandomGenerator& iRandomGenerator)
-        : Asteroid(iImageLoader, iScreenWrapper, iRandomGenerator)
+        : Asteroid(iScreenWrapper, iRandomGenerator)
     {}
 
     Vector getLocation()
@@ -41,12 +41,12 @@ class AsteroidTest : public MoveableObjectTest
 {
     protected:
         AsteroidTest()
-            : _asteroid(_imageLoader, _wrapper, _random),
+            : _asteroid(_wrapper, _random),
               _velocityComponent(sin(45*M_PI/180.0)*Asteroid::VELOCITY)
         {
             ON_CALL(_random, uniformInRange(_,_))
                 .WillByDefault(Return(0.375));
-            _asteroid.initialise(_initialLocation);
+            _asteroid.initialise(_initialLocation, _imageLoader);
         }
         
         NiceMock<TestRandomGenerator> _random;
@@ -58,7 +58,7 @@ class AsteroidTest : public MoveableObjectTest
 TEST_F(AsteroidTest, InitReturnsFalseWhenImageLoadFails)
 {
     _imageLoader.loadSuccess = false;
-    EXPECT_FALSE(_asteroid.initialise(_initialLocation));
+    EXPECT_FALSE(_asteroid.initialise(_initialLocation, _imageLoader));
 }
 
 TEST_F(AsteroidTest, InitialisesWithFixedVelocityInRandomDirection)
@@ -79,7 +79,7 @@ TEST_F(AsteroidTest, CallsScreenWrapperOnUpdate)
     float distanceComponent = _velocityComponent*5;
     Vector location(_initialLocation.x + distanceComponent, _initialLocation.y + distanceComponent);
     Vector velocity(_velocityComponent, _velocityComponent);
-    EXPECT_CALL(_wrapper, wrap(location, velocity, 5));
+    EXPECT_CALL(*_wrapper, wrap(location, velocity, 5));
     _asteroid.update(5);
 }
 
@@ -102,7 +102,7 @@ TEST_F(AsteroidTest, HasBoundingBoxBasedOnImage)
 
 TEST_F(AsteroidTest, SwapsVelocityWithOtherAsteroidOnCollision)
 {
-    AsteroidSpy otherAsteroid(_imageLoader, _wrapper, _random);
+    AsteroidSpy otherAsteroid(_wrapper, _random);
     Vector otherVelocity(1, 1);
     otherAsteroid.setVelocity(otherVelocity);
     _asteroid.collideWith(&otherAsteroid);

@@ -34,11 +34,9 @@ namespace pjm
             void startGame();
 
             ScreenInfo _screenInfo;
-            RandomGeneratorImpl _random;
             SDL_Window* _window;
             SDL_Renderer* _renderer;
             bool _running;
-            SDLImageLoader* _imageLoader;
             GameElements* _gameElements;
     };
 }

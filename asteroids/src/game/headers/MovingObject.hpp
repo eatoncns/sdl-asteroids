@@ -2,6 +2,7 @@
 #define _PJM_MOVINGOBJECT_HPP_
 
 #include <Vector.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace pjm
 {
@@ -13,12 +14,13 @@ namespace pjm
     class MovingObject
     {
         public:
-            virtual bool initialise(const Vector& iInitialLocation);
+            virtual bool initialise(const Vector& iInitialLocation, 
+                                    ImageLoader& iImageLoader);
             virtual Rectangle getBoundingBox();
             virtual void render();
 
         protected:
-            MovingObject(ImageLoader& iImageLoader, ScreenWrapper& iScreenWrapper);
+            MovingObject(boost::shared_ptr<ScreenWrapper> iScreenWrapper);
 
             virtual std::string imageFilePath() = 0;
 
@@ -31,8 +33,7 @@ namespace pjm
             Vector _location;
             Vector _velocity;
             double _angle;
-            ScreenWrapper& _screenWrapper;
-            ImageLoader& _imageLoader;
+            boost::shared_ptr<ScreenWrapper> _screenWrapper;
             Renderable* _image;
     };
 }

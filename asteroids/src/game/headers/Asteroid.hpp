@@ -10,21 +10,17 @@ namespace pjm
     class Asteroid : public MovingObject
     {
         public:
-            Asteroid(ImageLoader& iImageLoader, 
-                     ScreenWrapper& iScreenWrapper, 
+            Asteroid(boost::shared_ptr<ScreenWrapper> iScreenWrapper, 
                      RandomGenerator& iRandomGenerator);
             
-            virtual bool initialise(const Vector& iInitialLocation);
+            virtual bool initialise(const Vector& iInitialLocation,
+                                    ImageLoader& iImageLoader);
 
             virtual void update(unsigned int iTimeElapsed);
 
             virtual void collideWith(Asteroid* iOther);
             
             virtual ~Asteroid() {}
-
-            static Asteroid* create(ImageLoader& iImageLoader,
-                                    ScreenWrapper& iScreenWrapper,
-                                    RandomGenerator& iRandomGenerator);
 
             static float VELOCITY;
 

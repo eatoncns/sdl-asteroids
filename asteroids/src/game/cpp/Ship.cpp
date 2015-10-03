@@ -4,11 +4,12 @@
 
 using namespace std;
 using namespace boost::assign;
+using boost::shared_ptr;
 
 namespace pjm
 {
-    Ship::Ship(ImageLoader& iImageLoader, ScreenWrapper& iScreenWrapper)
-      : MovingObject(iImageLoader, iScreenWrapper),
+    Ship::Ship(shared_ptr<ScreenWrapper> iScreenWrapper)
+      : MovingObject(iScreenWrapper),
         _acceleration(0, 0)
     {}
 
@@ -78,11 +79,5 @@ namespace pjm
         {
             _velocity *= MAX_VELOCITY/sqrt(velocitySquared);
         }
-    }
- 
-    
-    Ship* Ship::create(ImageLoader& iImageLoader, ScreenWrapper& iScreenWrapper)
-    {
-        return new Ship(iImageLoader, iScreenWrapper);
-    }
+    }    
 }

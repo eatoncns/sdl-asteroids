@@ -1,9 +1,10 @@
 #include <TestAsteroid.hpp>
 
 using namespace pjm;
+using boost::shared_ptr;
 
 TestAsteroid::TestAsteroid()
-    : Asteroid(imageLoader, screenWrapper, random),
+    : Asteroid(screenWrapper, random),
       renderCalls(0),
       initialiseSuccess(true),
       boundingBox(0,0,0,0)
@@ -41,5 +42,5 @@ void TestAsteroid::render()
 }
 
 TestImageLoader TestAsteroid::imageLoader;
-ScreenWrapper TestAsteroid::screenWrapper(Vector(0,0));
+shared_ptr<ScreenWrapper> TestAsteroid::screenWrapper;
 TestRandomGenerator TestAsteroid::random;
