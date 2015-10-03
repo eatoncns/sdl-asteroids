@@ -11,7 +11,6 @@
 #include <AsteroidCreator.hpp>
 #include <LocationGenerator.hpp>
 #include <RandomGeneratorImpl.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
 
 using boost::shared_ptr;
@@ -112,25 +111,37 @@ namespace pjm
         static SDLImageLoader imageLoader(_renderer);
         Vector screenBounds(_screenInfo.width, _screenInfo.height);
         shared_ptr<ScreenWrapper> screenWrapper = make_shared<ScreenWrapper>(screenBounds);
-        ShipCreator shipCreator;
-        shared_ptr<Ship> ship = shipCreator.create(screenWrapper, imageLoader, _screenInfo);
-        if (!ship)
-        {
-            return false;
-        }
-        RandomGeneratorImpl random;
-        LocationGenerator locationGenerator(_screenInfo, random);
-        AsteroidCreator asteroidCreator;
-        list<shared_ptr<Asteroid> > asteroids = asteroidCreator.create(screenWrapper,
-                                                                       imageLoader,
-                                                                       locationGenerator,
-                                                                       random);
-        if (asteroids.empty())
+        shared_ptr<Ship> ship = createShip(screenWrapper, imageLoader);
+        list<shared_ptr<Asteroid> > asteroids = createAsteroids(screenWrapper, imageLoader);
+        if (!ship || asteroids.empty())
         {
             return false;
         }
         _gameElements.reset(new GameElements(ship, asteroids));
         return true;
+    }
+
+
+    shared_ptr<Ship> SDLGame::createShip(shared_ptr<ScreenWrapper> iScreenWrapper,
+                                         ImageLoader& iImageLoader)
+    {
+        ShipCreator shipCreator;
+        shared_ptr<Ship> ship = shipCreator.create(iScreenWrapper, iImageLoader, _screenInfo);
+        return ship;
+    }
+
+
+    list<shared_ptr<Asteroid> > SDLGame::createAsteroids(shared_ptr<ScreenWrapper> iScreenWrapper,
+                                                         ImageLoader& iImageLoader)
+    {
+        RandomGeneratorImpl random;
+        LocationGenerator locationGenerator(_screenInfo, random);
+        AsteroidCreator asteroidCreator;
+        list<shared_ptr<Asteroid> > asteroids = asteroidCreator.create(iScreenWrapper,
+                                                                       iImageLoader,
+                                                                       locationGenerator,
+                                                                       random);
+        return asteroids;
     }
 
     

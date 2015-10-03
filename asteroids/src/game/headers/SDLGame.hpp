@@ -3,16 +3,20 @@
 
 #include <Game.hpp>
 #include <ScreenInfo.hpp>
+#include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <string>
+#include <list>
 
 class SDL_Window;
 class SDL_Renderer;
 
 namespace pjm
 {
-    class SDLImageLoader;
+    struct ImageLoader;
+    class ScreenWrapper;
     class GameElements;
+    class Ship;
+    class Asteroid;
 
     class SDLGame : public Game
     {
@@ -31,6 +35,10 @@ namespace pjm
             bool initWindow();
             bool initRenderer();
             bool initGameElements();
+            boost::shared_ptr<Ship> createShip(boost::shared_ptr<ScreenWrapper> iScreenWrapper,
+                                               ImageLoader& iImageLoader);
+            std::list<boost::shared_ptr<Asteroid> > createAsteroids(boost::shared_ptr<ScreenWrapper> iScreenWrapper,
+                                                                    ImageLoader& iImageLoader);
             void startGame();
 
             ScreenInfo _screenInfo;
