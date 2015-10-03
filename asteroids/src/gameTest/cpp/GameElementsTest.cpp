@@ -1,11 +1,7 @@
 #include <gmock/gmock.h>
 #include <GameElements.hpp>
-#include <ScreenInfo.hpp>
-#include <TestImageLoader.hpp>
-#include <TestRandomGenerator.hpp>
 #include <TestShip.hpp>
 #include <TestAsteroid.hpp>
-#include <TestLocationGenerator.hpp>
 #include <KeyPress.hpp>
 #include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>
