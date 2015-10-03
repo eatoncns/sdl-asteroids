@@ -49,32 +49,6 @@ class GameElementsTest : public ::testing::Test
         TestableGameElements _gameElements;
 };
 
-/*TEST_F(GameElementsTest, InitReturnsFalseWhenAsteroidInitFails)
-{
-    _asteroids[0]->initialiseSuccess = false;
-    EXPECT_FALSE(_gameElements.initialise());
-}
-
-TEST_F(GameElementsTest, InitReturnsTrueWhenInitialisationSucceeds)
-{
-    EXPECT_TRUE(_gameElements.initialise());
-}
-
-TEST_F(GameElementsTest, InitialisesFixedNumberOfAsteroids)
-{
-    _gameElements.initialise();
-    EXPECT_THAT(_asteroidCounter, Eq(GameElements::NUM_ASTEROIDS));
-}
-
-TEST_F(GameElementsTest, InitialisesAsteroidsAtRandomLocation)
-{
-    _gameElements.initialise();
-    BOOST_FOREACH(TestAsteroid* asteroid, _asteroids)
-    {
-        EXPECT_THAT(asteroid->initialiseCalls, 
-                    ElementsAre(Vector(TestLocationGenerator::x, TestLocationGenerator::y)));
-    }
-}*/
 
 TEST_F(GameElementsTest, CascadesRenderToShip)
 {

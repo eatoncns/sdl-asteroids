@@ -11,7 +11,8 @@ TestAsteroid::TestAsteroid()
 {}
 
 
-bool TestAsteroid::initialise(const Vector& iInitialLocation)
+bool TestAsteroid::initialise(const Vector& iInitialLocation,
+                              ImageLoader& iImageLoader)
 {
     initialiseCalls.push_back(iInitialLocation);
     return initialiseSuccess;

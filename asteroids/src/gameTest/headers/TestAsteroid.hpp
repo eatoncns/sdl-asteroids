@@ -12,7 +12,8 @@ struct TestAsteroid : public pjm::Asteroid
 {
     TestAsteroid();
 
-    bool initialise(const pjm::Vector& iInitialLocation);
+    bool initialise(const pjm::Vector& iInitialLocation,
+                    pjm::ImageLoader& iImageLoader);
 
     void update(unsigned int iTimeElapsed);
 
