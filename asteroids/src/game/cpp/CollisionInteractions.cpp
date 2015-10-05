@@ -4,9 +4,13 @@
 #include <Rectangle.hpp>
 #include <boost/foreach.hpp>
 
+using boost::shared_ptr;
+using std::list;
+
 namespace pjm
 {
-    CollisionInteractions::CollisionInteractions(Ship* iShip, std::list<Asteroid*>& iAsteroids)
+    CollisionInteractions::CollisionInteractions(shared_ptr<Ship> iShip,
+                                                 list<shared_ptr<Asteroid> >& iAsteroids)
         : _collisionDetector(new CollisionDetector()),
           _ship(iShip), 
           _asteroids(iAsteroids)
@@ -26,7 +30,7 @@ namespace pjm
 
     bool CollisionInteractions::shipIsColliding()
     {
-        BOOST_FOREACH(Asteroid* asteroid, _asteroids)
+        BOOST_FOREACH(shared_ptr<Asteroid> asteroid, _asteroids)
         {
             if (_collisionDetector->areColliding(_ship->getBoundingBox(), 
                                                  asteroid->getBoundingBox()))
@@ -44,7 +48,7 @@ namespace pjm
         {
             return;
         }
-        typedef std::list<Asteroid*>::iterator asteroid_it;
+        typedef list<shared_ptr<Asteroid> >::iterator asteroid_it;
         asteroid_it outerIt = _asteroids.begin();
         asteroid_it lastIt = _asteroids.end()--;
         for ( ; outerIt != lastIt; ++outerIt)
@@ -56,7 +60,7 @@ namespace pjm
                 if (_collisionDetector->areColliding((*outerIt)->getBoundingBox(),
                                                      (*innerIt)->getBoundingBox()))
                 {
-                    (*outerIt)->collideWith(*innerIt);
+                    (*outerIt)->collideWith(innerIt->get());
                 }
             }
         }

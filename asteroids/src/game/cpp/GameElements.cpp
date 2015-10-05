@@ -14,7 +14,8 @@ namespace pjm
     GameElements::GameElements(shared_ptr<Ship> iShip,
                                list<shared_ptr<Asteroid> > iAsteroids)
         : _ship(iShip),
-          _asteroids(iAsteroids)
+          _asteroids(iAsteroids),
+          _collisionInteractions(new CollisionInteractions(_ship, _asteroids))
     {}
 
 
@@ -37,6 +38,7 @@ namespace pjm
         {
             asteroid->update(iTimeElapsed);
         }
+        _collisionInteractions->update();
     }
 
     

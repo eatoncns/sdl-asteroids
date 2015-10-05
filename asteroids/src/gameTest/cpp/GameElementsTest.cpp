@@ -2,6 +2,7 @@
 #include <GameElements.hpp>
 #include <TestShip.hpp>
 #include <TestAsteroid.hpp>
+#include <TestCollisionInteractions.hpp>
 #include <KeyPress.hpp>
 #include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>
@@ -23,6 +24,11 @@ struct TestableGameElements : public GameElements
     {
         _asteroids.push_back(iAsteroid);
     }
+
+    void resetCollisionInteractions(CollisionInteractions* iCollisionInteractions)
+    {
+        _collisionInteractions.reset(iCollisionInteractions);
+    }
 };
 
 class GameElementsTest : public ::testing::Test
@@ -30,6 +36,7 @@ class GameElementsTest : public ::testing::Test
     protected:
         GameElementsTest()
             : _ship(new TestShip()),
+              _collisionInteractions(new TestCollisionInteractions()),
               _gameElements(_ship)
         {
             for (int i = 0 ; i < 5; ++i)
@@ -38,10 +45,12 @@ class GameElementsTest : public ::testing::Test
                 _asteroids.push_back(asteroid);
                 _gameElements.addAsteroid(asteroid);
             }
+            _gameElements.resetCollisionInteractions(_collisionInteractions);
         }
 
         shared_ptr<TestShip> _ship;
         std::list<shared_ptr<TestAsteroid> > _asteroids;
+        TestCollisionInteractions* _collisionInteractions;
         TestableGameElements _gameElements;
 };
 
@@ -105,4 +114,10 @@ TEST_F(GameElementsTest, CascadesUpdateToAsteroids)
     {
         EXPECT_THAT(asteroid->updateCalls, ElementsAre(3, 2));
     }
+}
+
+TEST_F(GameElementsTest, CascadesUpdateToCollisionInteractions)
+{
+    _gameElements.update(keyboard::NONE, 3);
+    EXPECT_THAT(_collisionInteractions->updateCalls, Eq(1));
 }

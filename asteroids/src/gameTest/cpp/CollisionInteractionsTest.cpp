@@ -5,10 +5,13 @@
 #include <TestShip.hpp>
 #include <TestAsteroid.hpp>
 #include <boost/foreach.hpp>
+#include <boost/make_shared.hpp>
+#include <boost/pointer_cast.hpp>
 #include <algorithm>
 
 using namespace pjm;
 using namespace std;
+using namespace boost;
 using ::testing::Eq;
 using ::testing::Contains;
 using ::testing::ElementsAre;
@@ -29,6 +32,19 @@ struct FakeCollisionDetector : public CollisionDetector
     mutable pair_list calls;
 };
 
+struct TestableCollisionInteractions : public CollisionInteractions
+{
+    TestableCollisionInteractions(shared_ptr<Ship> iShip,
+                                 list<shared_ptr<Asteroid> >& iAsteroids)
+        : CollisionInteractions(iShip, iAsteroids)
+    {}
+
+    void resetCollisionDetector(CollisionDetector* iCollisionDetector)
+    {
+        _collisionDetector.reset(iCollisionDetector);
+    }
+};
+
 class CollisionInteractionsTest : public ::testing::Test
 {
     protected:
@@ -40,26 +56,17 @@ class CollisionInteractionsTest : public ::testing::Test
             _ship->boundingBox = Rectangle(0,1,1,1); 
             for (int i = 0; i < 3; ++i)
             {
-                TestAsteroid* asteroid = new TestAsteroid();
+                shared_ptr<TestAsteroid> asteroid = make_shared<TestAsteroid>();
                 asteroid->boundingBox = Rectangle(i+1,1,1,1);
                 _asteroids.push_back(asteroid);
             }
-            _collisionInteractions._collisionDetector.reset(_collisionDetector);
+            _collisionInteractions.resetCollisionDetector(_collisionDetector);
         }
-
-        ~CollisionInteractionsTest()
-        {
-            delete _ship;
-            BOOST_FOREACH(Asteroid* asteroid, _asteroids)
-            {
-                delete asteroid;
-            }
-        }
-              
-        TestShip* _ship;
-        list<Asteroid*> _asteroids;
+ 
+        shared_ptr<TestShip> _ship;
+        list<shared_ptr<Asteroid> > _asteroids;
         FakeCollisionDetector* _collisionDetector;
-        CollisionInteractions _collisionInteractions;
+        TestableCollisionInteractions _collisionInteractions;
 };
 
 TEST_F(CollisionInteractionsTest, ChecksShipCollisionWithAllAsteroids)
@@ -94,13 +101,13 @@ TEST_F(CollisionInteractionsTest, DelegatesCollisionUpdateToAsteroidsWhereDetect
     _collisionDetector->colliding.push_back(pair<float, float>(1,2));
     _collisionInteractions.update();
     
-    list<Asteroid*>::iterator firstIt = _asteroids.begin();
-    TestAsteroid* firstAsteroid = dynamic_cast<TestAsteroid*>(*firstIt);
+    list<shared_ptr<Asteroid> >::iterator firstIt = _asteroids.begin();
+    shared_ptr<TestAsteroid> firstAsteroid = dynamic_pointer_cast<TestAsteroid>(*firstIt);
     list<Asteroid*> firstCollideCalls = firstAsteroid->collideCalls;
     
-    list<Asteroid*>::iterator secondIt = firstIt;
+    list<shared_ptr<Asteroid> >::iterator secondIt = firstIt;
     secondIt++;
-    Asteroid* secondAsteroid = *secondIt;
+    Asteroid* secondAsteroid = secondIt->get();
     
     EXPECT_THAT(firstCollideCalls, ElementsAre(secondAsteroid));
 }

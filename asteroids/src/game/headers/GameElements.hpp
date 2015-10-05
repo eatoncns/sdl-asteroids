@@ -2,7 +2,9 @@
 #define _PJM_GAMEELEMENTS_HPP_
 
 #include <KeyPress.hpp>
+#include <CollisionInteractions.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <list>
 
 namespace pjm
@@ -23,6 +25,7 @@ namespace pjm
         protected:
             boost::shared_ptr<Ship> _ship;
             std::list<boost::shared_ptr<Asteroid> > _asteroids;
+            boost::scoped_ptr<CollisionInteractions> _collisionInteractions;
     };
 }
 
