@@ -19,6 +19,8 @@ namespace pjm
             virtual Rectangle getBoundingBox();
             virtual void render();
 
+            const static float BOUNDING_BOX_RATIO;
+
         protected:
             MovingObject(boost::shared_ptr<ScreenWrapper> iScreenWrapper);
 

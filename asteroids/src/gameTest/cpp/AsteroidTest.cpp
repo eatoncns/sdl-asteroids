@@ -3,9 +3,11 @@
 #include <Rectangle.hpp>
 #include <MoveableObjectTest.hpp>
 #include <TestRandomGenerator.hpp>
+#include <boost/math/special_functions/round.hpp>
 
 using namespace pjm;
 using boost::shared_ptr;
+using boost::math::iround;
 using ::testing::Eq;
 using ::testing::ElementsAre;
 using ::testing::NiceMock;
@@ -88,15 +90,17 @@ TEST_F(AsteroidTest, RendersImageAtCurrentLocation)
     EXPECT_THAT(_testRenderable->renderCalls, ElementsAre(std::make_pair(_initialLocation, 0.0)));
 }
 
-TEST_F(AsteroidTest, HasBoundingBoxBasedOnImage)
+TEST_F(AsteroidTest, HasBoundingBoxBasedOnScaledImage)
 {
-    _testRenderable->w = 5;
-    _testRenderable->h = 6;
+    int testLength = 53;
+    _testRenderable->w = testLength;
+    _testRenderable->h = testLength;
     Rectangle boundingBox = _asteroid.getBoundingBox();
-    EXPECT_THAT(boundingBox.x, Eq(_initialLocation.x));
-    EXPECT_THAT(boundingBox.y, Eq(_initialLocation.y));
-    EXPECT_THAT(boundingBox.w, Eq(5));
-    EXPECT_THAT(boundingBox.h, Eq(6));
+    float ratioLength = testLength*MovingObject::BOUNDING_BOX_RATIO;
+    EXPECT_THAT(boundingBox.x, Eq(_initialLocation.x + ratioLength));
+    EXPECT_THAT(boundingBox.y, Eq(_initialLocation.y + ratioLength));
+    EXPECT_THAT(boundingBox.w, Eq(iround(testLength - 2*ratioLength)));
+    EXPECT_THAT(boundingBox.h, Eq(iround(testLength - 2*ratioLength)));
 }
 
 TEST_F(AsteroidTest, SwapsVelocityWithOtherAsteroidOnCollision)
