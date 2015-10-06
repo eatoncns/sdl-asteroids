@@ -121,3 +121,9 @@ TEST_F(GameElementsTest, CascadesUpdateToCollisionInteractions)
     _gameElements.update(keyboard::NONE, 3);
     EXPECT_THAT(_collisionInteractions->updateCalls, Eq(1));
 }
+
+TEST_F(GameElementsTest, UpdateReturnsFalseOnShipCollision)
+{
+    _collisionInteractions->shipCollision = true;
+    EXPECT_THAT(_gameElements.update(keyboard::NONE, 2), Eq(true));
+}

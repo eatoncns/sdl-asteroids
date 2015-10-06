@@ -18,7 +18,7 @@ namespace pjm
             GameElements(boost::shared_ptr<Ship> iShip,
                          std::list<boost::shared_ptr<Asteroid> > iAsteroids);
 
-            void update(keyboard::KeyPress iKeyPress, unsigned int iTimeElapsed);
+            bool update(keyboard::KeyPress iKeyPress, unsigned int iTimeElapsed);
 
             void render();
              

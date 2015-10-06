@@ -27,7 +27,7 @@ namespace pjm
                                                       (keyboard::UP_RIGHT, Ship::ACCELERATE_RIGHT)
                                                       (keyboard::NONE, Ship::NONE);
 
-    void GameElements::update(keyboard::KeyPress iKeyPress, unsigned int iTimeElapsed)
+    bool GameElements::update(keyboard::KeyPress iKeyPress, unsigned int iTimeElapsed)
     {
         key_map_t::const_iterator it = key_to_action.find(iKeyPress);
         if (it != key_to_action.end())
@@ -38,7 +38,7 @@ namespace pjm
         {
             asteroid->update(iTimeElapsed);
         }
-        _collisionInteractions->update();
+        return _collisionInteractions->update();
     }
 
     
