@@ -197,7 +197,11 @@ namespace pjm
             }
         }
         keyboard::KeyPress keyPress = getKeyPress();
-        _gameElements->update(keyPress, iTimeElapsed);
+        bool shipCollision = _gameElements->update(keyPress, iTimeElapsed);
+        if (shipCollision)
+        {
+            initGameElements();
+        }
     }
 
 
