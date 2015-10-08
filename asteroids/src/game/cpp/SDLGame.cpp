@@ -1,6 +1,7 @@
 #include <SDLGame.hpp>
 #include <SDL2/SDL.h>
 #include <GameElements.hpp>
+#include <LifeCounter.hpp>
 #include <SDLImageLoader.hpp>
 #include <KeyPress.hpp>
 #include <Vector.hpp>
@@ -45,19 +46,11 @@ namespace pjm
     
     bool SDLGame::initialise()
     {
-        if (!initSDL())
-        {
-            return false;
-        }
-        if (!initWindow())
-        {
-            return false;
-        }
-        if (!initRenderer())
-        {
-            return false;
-        }
-        if (!initGameElements())
+        if (!(initSDL() &&
+              initWindow() &&
+              initRenderer() &&
+              initGameElements() &&
+              initLifeCounter()))
         {
             return false;
         }
@@ -105,10 +98,20 @@ namespace pjm
         return true;
     }
 
+    
+    bool SDLGame::initLifeCounter()
+    {
+        ImageLoader& imageLoader = getImageLoader();
+        Vector initialLocation(10, 10);
+        int initialLives(3);
+        _lifeCounter.reset(new LifeCounter(initialLocation, initialLives));
+        return _lifeCounter->initialise(imageLoader);
+    }
+
 
     bool SDLGame::initGameElements()
     {
-        static SDLImageLoader imageLoader(_renderer);
+        ImageLoader& imageLoader = getImageLoader();
         Vector screenBounds(_screenInfo.width, _screenInfo.height);
         shared_ptr<ScreenWrapper> screenWrapper = make_shared<ScreenWrapper>(screenBounds);
         shared_ptr<Ship> ship = createShip(screenWrapper, imageLoader);
@@ -119,6 +122,13 @@ namespace pjm
         }
         _gameElements.reset(new GameElements(ship, asteroids));
         return true;
+    }
+
+
+    ImageLoader& SDLGame::getImageLoader()
+    {
+        static SDLImageLoader imageLoader(_renderer);
+        return imageLoader;
     }
 
 
@@ -209,6 +219,7 @@ namespace pjm
     {
         SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 0);
         SDL_RenderClear(_renderer);
+        _lifeCounter->render();
         _gameElements->render();
         SDL_RenderPresent(_renderer);
     }

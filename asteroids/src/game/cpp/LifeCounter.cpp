@@ -13,7 +13,7 @@ namespace pjm
     
     bool LifeCounter::initialise(ImageLoader& iImageLoader)
     {
-        _image = iImageLoader.loadFromFile("Life.gif");
+        _image = iImageLoader.loadFromFile("resources/Life.gif");
         return _image;
     }
 

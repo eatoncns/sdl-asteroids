@@ -15,6 +15,7 @@ namespace pjm
     struct ImageLoader;
     class ScreenWrapper;
     class GameElements;
+    class LifeCounter;
     class Ship;
     class Asteroid;
 
@@ -34,7 +35,9 @@ namespace pjm
             bool initSDL();
             bool initWindow();
             bool initRenderer();
+            bool initLifeCounter();
             bool initGameElements();
+            ImageLoader& getImageLoader();
             boost::shared_ptr<Ship> createShip(boost::shared_ptr<ScreenWrapper> iScreenWrapper,
                                                ImageLoader& iImageLoader);
             std::list<boost::shared_ptr<Asteroid> > createAsteroids(boost::shared_ptr<ScreenWrapper> iScreenWrapper,
@@ -46,6 +49,7 @@ namespace pjm
             SDL_Renderer* _renderer;
             bool _running;
             boost::scoped_ptr<GameElements> _gameElements;
+            boost::scoped_ptr<LifeCounter> _lifeCounter;
     };
 }
 
