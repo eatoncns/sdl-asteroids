@@ -16,6 +16,15 @@ namespace pjm
         _image = iImageLoader.loadFromFile("Life.gif");
         return _image;
     }
+
+
+    void LifeCounter::decrement()
+    {
+        if (_numLives > 0)
+        {
+            _numLives--;
+        }
+    }
     
     
     void LifeCounter::render()

@@ -51,3 +51,10 @@ TEST_F(LifeCounterTest, RendersRowOfLivesAtLocation)
     pair<Vector, double> secondLife = make_pair(_initialLocation + Vector(_renderable->w, 0), 0);
     EXPECT_THAT(_renderable->renderCalls, ElementsAre(firstLife, secondLife));
 }
+
+TEST_F(LifeCounterTest, DecrementsLivesRendered)
+{
+    _lifeCounter.decrement();
+    _lifeCounter.render();
+    EXPECT_THAT(_renderable->renderCalls, ElementsAre(make_pair(_initialLocation, 0)));
+}

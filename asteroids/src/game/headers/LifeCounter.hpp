@@ -16,6 +16,8 @@ namespace pjm
                         int iInitialLives);
 
             bool initialise(ImageLoader& iImageLoader);
+
+            void decrement();
             
             void render();
 
