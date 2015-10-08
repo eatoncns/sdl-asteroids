@@ -18,6 +18,8 @@ namespace pjm
             bool initialise(ImageLoader& iImageLoader);
 
             void decrement();
+
+            bool gameOver();
             
             void render();
 

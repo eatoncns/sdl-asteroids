@@ -58,3 +58,17 @@ TEST_F(LifeCounterTest, DecrementsLivesRendered)
     _lifeCounter.render();
     EXPECT_THAT(_renderable->renderCalls, ElementsAre(make_pair(_initialLocation, 0)));
 }
+
+TEST_F(LifeCounterTest, GameOverFalseWhenLivesLeft)
+{
+    EXPECT_THAT(_lifeCounter.gameOver(), Eq(false));
+    _lifeCounter.decrement();
+    EXPECT_THAT(_lifeCounter.gameOver(), Eq(false));
+}
+
+TEST_F(LifeCounterTest, GameOverTrueWhenNoLivesLeft)
+{
+    _lifeCounter.decrement();
+    _lifeCounter.decrement();
+    EXPECT_THAT(_lifeCounter.gameOver(), Eq(true)); 
+}

@@ -25,6 +25,12 @@ namespace pjm
             _numLives--;
         }
     }
+
+
+    bool LifeCounter::gameOver()
+    {
+        return _numLives == 0;
+    }
     
     
     void LifeCounter::render()
