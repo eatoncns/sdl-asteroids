@@ -10,14 +10,20 @@ namespace pjm
           _numLives(iInitialLives)
     {}
 
+    
     bool LifeCounter::initialise(ImageLoader& iImageLoader)
     {
         _image = iImageLoader.loadFromFile("Life.gif");
         return _image;
     }
     
+    
     void LifeCounter::render()
     {
-
+        for (int i = 0; i < _numLives; ++i)
+        {
+            Vector renderLocation = _location + Vector(i*_image->width(), 0);
+            _image->render(renderLocation, 0);
+        }
     }
 }
