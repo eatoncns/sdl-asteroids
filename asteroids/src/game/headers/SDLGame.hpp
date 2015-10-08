@@ -35,6 +35,7 @@ namespace pjm
             bool initSDL();
             bool initWindow();
             bool initRenderer();
+            bool initGame();
             bool initLifeCounter();
             bool initGameElements();
             ImageLoader& getImageLoader();

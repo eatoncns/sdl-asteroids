@@ -49,8 +49,7 @@ namespace pjm
         if (!(initSDL() &&
               initWindow() &&
               initRenderer() &&
-              initGameElements() &&
-              initLifeCounter()))
+              initGame()))
         {
             return false;
         }
@@ -96,6 +95,12 @@ namespace pjm
             return false;
         }
         return true;
+    }
+
+
+    bool SDLGame::initGame()
+    {
+        return (initLifeCounter() && initGameElements());
     }
 
     
@@ -210,7 +215,12 @@ namespace pjm
         bool shipCollision = _gameElements->update(keyPress, iTimeElapsed);
         if (shipCollision)
         {
+            _lifeCounter->decrement();
             initGameElements();
+            if (_lifeCounter->gameOver())
+            {
+                initLifeCounter();
+            }
         }
     }
 
