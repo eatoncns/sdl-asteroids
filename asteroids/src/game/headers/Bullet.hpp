@@ -17,6 +17,8 @@ namespace pjm
                             const Vector& iShooterVelocity,
                             ImageLoader& iImageLoader);
 
+            void update(unsigned int iTimeElapsed);
+
             static const float VELOCITY = 1.02;
 
         protected:

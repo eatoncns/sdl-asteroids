@@ -23,6 +23,12 @@ namespace pjm
         _velocity *= velocityFactor;
         return MovingObject::initialise(iInitialLocation, iImageLoader);
     }
+    
+    
+    void Bullet::update(unsigned int iTimeElapsed)
+    {
+        MovingObject::updateLocation(iTimeElapsed);
+    }
 
 
     std::string Bullet::imageFilePath()

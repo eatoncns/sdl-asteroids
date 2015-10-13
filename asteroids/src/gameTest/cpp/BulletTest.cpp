@@ -1,9 +1,13 @@
 #include <gmock/gmock.h>
 #include <Bullet.hpp>
 #include <MoveableObjectTest.hpp>
+#include <Rectangle.hpp>
+#include <boost/math/special_functions/round.hpp>
 
 using namespace pjm;
+using boost::math::iround;
 using ::testing::Eq;
+using ::testing::ElementsAre;
 
 struct BulletSpy : public Bullet
 {
@@ -14,6 +18,11 @@ struct BulletSpy : public Bullet
     Vector& getVelocity()
     {
         return _velocity;
+    }
+
+    Vector& getLocation()
+    {
+        return _location;
     }
 };
 
@@ -49,4 +58,30 @@ TEST_F(BulletTest, InitialiseReturnsTrueWhenImageLoadSucceeds)
 TEST_F(BulletTest, InitialisesWithFixedVelocityInSameDirectionAsShooter)
 {
     EXPECT_THAT(_bullet.getVelocity(), Eq(Vector(Bullet::VELOCITY, 0)));
+}
+
+TEST_F(BulletTest, MovesWithConstantVelocity)
+{
+    _bullet.update(5);
+    EXPECT_THAT(_bullet.getLocation(), Eq(Vector(_initialLocation.x + Bullet::VELOCITY*5,
+                                                 _initialLocation.y)));
+}
+
+TEST_F(BulletTest, RendersImageAtCurrentLocation)
+{
+    _bullet.render();
+    EXPECT_THAT(_testRenderable->renderCalls, ElementsAre(std::make_pair(_initialLocation, 0.0)));
+}
+
+TEST_F(BulletTest, HasBoundingBoxBasedOnScaledImage)
+{
+    int testLength = 53;
+    _testRenderable->w = testLength;
+    _testRenderable->h = testLength;
+    Rectangle boundingBox = _bullet.getBoundingBox();
+    float ratioLength = testLength*MovingObject::BOUNDING_BOX_RATIO;
+    EXPECT_THAT(boundingBox.x, Eq(_initialLocation.x + ratioLength));
+    EXPECT_THAT(boundingBox.y, Eq(_initialLocation.y + ratioLength));
+    EXPECT_THAT(boundingBox.w, Eq(iround(testLength - 2*ratioLength)));
+    EXPECT_THAT(boundingBox.h, Eq(iround(testLength - 2*ratioLength)));
 }
