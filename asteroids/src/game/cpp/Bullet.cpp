@@ -1,6 +1,7 @@
 #include <Bullet.hpp>
 #include <ScreenWrapper.hpp>
 #include <boost/make_shared.hpp>
+#include <math.h>
 
 using boost::make_shared;
 
@@ -17,13 +18,15 @@ namespace pjm
                             const Vector& iShooterVelocity,
                             ImageLoader& iImageLoader)
     {
-        return true;
+        _velocity = iShooterVelocity;
+        float velocityFactor = VELOCITY/sqrt(_velocity.squareSum());
+        _velocity *= velocityFactor;
+        return MovingObject::initialise(iInitialLocation, iImageLoader);
     }
 
 
     std::string Bullet::imageFilePath()
     {
         return "resources/Bullet.gif";
-    }
-    
+    } 
 }

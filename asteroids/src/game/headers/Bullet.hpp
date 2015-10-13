@@ -17,6 +17,8 @@ namespace pjm
                             const Vector& iShooterVelocity,
                             ImageLoader& iImageLoader);
 
+            static const float VELOCITY = 1.02;
+
         protected:
             std::string imageFilePath();
 
