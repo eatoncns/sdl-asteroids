@@ -30,7 +30,7 @@ class BulletTest : public MoveableObjectTest
 {
     protected:
         BulletTest()
-            : _bounds(200, 200),
+            : _bounds(110, 110),
               _shooterVelocity(0.5, 0),
               _bullet(_bounds)
 
@@ -65,6 +65,18 @@ TEST_F(BulletTest, MovesWithConstantVelocity)
     _bullet.update(5);
     EXPECT_THAT(_bullet.getLocation(), Eq(Vector(_initialLocation.x + Bullet::VELOCITY*5,
                                                  _initialLocation.y)));
+}
+
+TEST_F(BulletTest, IsNotExpiredWhileStillOnScreen)
+{
+    _bullet.update(5);
+    EXPECT_THAT(_bullet.isExpired(), Eq(false));
+}
+
+TEST_F(BulletTest, ExpiresWhenMovesOffScreen)
+{
+    _bullet.update(10);
+    EXPECT_THAT(_bullet.isExpired(), Eq(true));
 }
 
 TEST_F(BulletTest, RendersImageAtCurrentLocation)

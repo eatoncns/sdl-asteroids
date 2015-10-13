@@ -8,10 +8,10 @@ using boost::make_shared;
 namespace pjm
 {
     Bullet::Bullet(const Vector& iBounds)
-        : MovingObject(make_shared<ScreenWrapper>(Vector(0, 0)))
-    {
-    
-    }
+        : MovingObject(make_shared<ScreenWrapper>(Vector(0, 0))),
+          _expired(false),
+          _bounds(iBounds)
+    {}
 
     
     bool Bullet::initialise(const Vector& iInitialLocation,
@@ -28,6 +28,22 @@ namespace pjm
     void Bullet::update(unsigned int iTimeElapsed)
     {
         MovingObject::updateLocation(iTimeElapsed);
+        _expired = isOutsideOfScreen();
+    }
+
+
+    bool Bullet::isOutsideOfScreen()
+    {
+        return (_location.x < 0 ||
+                _location.y < 0 ||
+                _location.x > _bounds.x ||
+                _location.y > _bounds.y);
+    }
+
+
+    bool Bullet::isExpired()
+    {
+        return _expired;
     }
 
 
