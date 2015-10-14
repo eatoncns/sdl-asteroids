@@ -63,7 +63,7 @@ class ShipTest : public MoveableObjectTest
         {
             update(Ship::TURN_LEFT, iTime);
         }
-        
+
         void turnRightFor(unsigned int iTime)
         {
             update(Ship::TURN_RIGHT, iTime);
@@ -73,7 +73,7 @@ class ShipTest : public MoveableObjectTest
         {
             update(Ship::ACCELERATE_LEFT, iTime);
         }
-        
+
         void accelerateRightFor(unsigned int iTime)
         {
             update(Ship::ACCELERATE_RIGHT, iTime);
@@ -143,7 +143,7 @@ TEST_F(ShipTest, DoesConstantEulerAcceleration)
     EXPECT_THAT(_ship.getLocation(), Eq(Vector(_initialLocation.x, firstYPos)));
     accelerateFor(6);
     float secondYPos = firstYPos - 6*(5*Ship::ACC_FACTOR + 6*Ship::ACC_FACTOR);
-    EXPECT_THAT(_ship.getLocation(), Eq(Vector(_initialLocation.x, secondYPos))); 
+    EXPECT_THAT(_ship.getLocation(), Eq(Vector(_initialLocation.x, secondYPos)));
 }
 
 TEST_F(ShipTest, ResetsAccelerationWhenNoActionTaken)

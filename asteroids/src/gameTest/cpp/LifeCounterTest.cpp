@@ -5,7 +5,8 @@
 #include <utility>
 
 using namespace pjm;
-using namespace std;
+using std::pair;
+using std::make_pair;
 using boost::shared_ptr;
 using ::testing::Eq;
 using ::testing::ElementsAre;
@@ -70,5 +71,5 @@ TEST_F(LifeCounterTest, GameOverTrueWhenNoLivesLeft)
 {
     _lifeCounter.decrement();
     _lifeCounter.decrement();
-    EXPECT_THAT(_lifeCounter.gameOver(), Eq(true)); 
+    EXPECT_THAT(_lifeCounter.gameOver(), Eq(true));
 }

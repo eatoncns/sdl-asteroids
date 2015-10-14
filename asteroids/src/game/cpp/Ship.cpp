@@ -2,8 +2,10 @@
 #include <boost/assign.hpp>
 #include <math.h>
 
-using namespace std;
 using namespace boost::assign;
+using std::string;
+using std::map;
+using std::set;
 using boost::shared_ptr;
 
 namespace pjm
@@ -14,11 +16,11 @@ namespace pjm
     {}
 
 
-    std::string Ship::imageFilePath()
+    string Ship::imageFilePath()
     {
         return "resources/Ship.gif";
     }
-    
+
 
     void Ship::update(const Action iAction, unsigned int iTimeElapsed)
     {
@@ -32,12 +34,12 @@ namespace pjm
 
     void Ship::updateAngle(const Action iAction, unsigned int iTimeElapsed)
     {
-        static const map<Action, double> rotationDirections = 
+        static const map<Action, double> rotationDirections =
             map_list_of(TURN_LEFT, -1.0)
                        (TURN_RIGHT, 1.0)
                        (ACCELERATE_LEFT, -1.0)
                        (ACCELERATE_RIGHT, 1.0);
-       
+
         map<Action, double>::const_iterator directionIt = rotationDirections.find(iAction);
         if (directionIt == rotationDirections.end())
         {
@@ -50,14 +52,14 @@ namespace pjm
 
     void Ship::updateAcceleration(const Action iAction)
     {
-        static const set<Action> accelerateActions = 
+        static const set<Action> accelerateActions =
             list_of(ACCELERATE)(ACCELERATE_LEFT)(ACCELERATE_RIGHT);
         if(accelerateActions.find(iAction) != accelerateActions.end())
         {
             double angleRadians = _angle*M_PI/180.0;
             double sinAngle = sin(angleRadians);
             double cosAngle = cos(angleRadians);
-            double absTotal = abs(sinAngle) + abs(cosAngle);
+            double absTotal = fabs(sinAngle) + fabs(cosAngle);
             double xProportion = sinAngle/absTotal;
             double yProportion = -cosAngle/absTotal; // - as SDL y axis is downwards
             _acceleration.x = xProportion*ACC_FACTOR;
@@ -77,7 +79,8 @@ namespace pjm
         bool maxVelocityExceeded = velocitySquared > maxSquared;
         if (maxVelocityExceeded)
         {
-            _velocity *= MAX_VELOCITY/sqrt(velocitySquared);
+            float velocityFactor = MAX_VELOCITY/sqrt(velocitySquared);
+            _velocity *= velocityFactor;
         }
-    }    
+    }
 }

@@ -10,8 +10,10 @@
 #include <algorithm>
 
 using namespace pjm;
-using namespace std;
 using namespace boost;
+using std::pair;
+using std::make_pair;
+using std::list;
 using ::testing::Eq;
 using ::testing::Contains;
 using ::testing::ElementsAre;
@@ -26,7 +28,7 @@ struct FakeCollisionDetector : public CollisionDetector
         pair_list::const_iterator it = find(colliding.begin(), colliding.end(), inputPair);
         return (it != colliding.end());
     }
-    
+
     typedef list<pair<float, float> > pair_list;
     pair_list colliding;
     mutable pair_list calls;
@@ -53,7 +55,7 @@ class CollisionInteractionsTest : public ::testing::Test
               _collisionDetector(new FakeCollisionDetector()), // deleted by _collisionInteractions
               _collisionInteractions(_ship, _asteroids)
         {
-            _ship->boundingBox = Rectangle(0,1,1,1); 
+            _ship->boundingBox = Rectangle(0,1,1,1);
             for (int i = 0; i < 3; ++i)
             {
                 shared_ptr<TestAsteroid> asteroid = make_shared<TestAsteroid>();
@@ -62,7 +64,7 @@ class CollisionInteractionsTest : public ::testing::Test
             }
             _collisionInteractions.resetCollisionDetector(_collisionDetector);
         }
- 
+
         shared_ptr<TestShip> _ship;
         list<shared_ptr<Asteroid> > _asteroids;
         FakeCollisionDetector* _collisionDetector;
@@ -79,7 +81,7 @@ TEST_F(CollisionInteractionsTest, ChecksShipCollisionWithAllAsteroids)
 
 TEST_F(CollisionInteractionsTest, ReturnsFalseWhenNoShipCollisionOccurs)
 {
-    EXPECT_THAT(_collisionInteractions.update(), Eq(false)); 
+    EXPECT_THAT(_collisionInteractions.update(), Eq(false));
 }
 
 TEST_F(CollisionInteractionsTest, ReturnsTrueWhenShipCollisionOccurs)
@@ -100,14 +102,14 @@ TEST_F(CollisionInteractionsTest, DelegatesCollisionUpdateToAsteroidsWhereDetect
 {
     _collisionDetector->colliding.push_back(pair<float, float>(1,2));
     _collisionInteractions.update();
-    
+
     list<shared_ptr<Asteroid> >::iterator firstIt = _asteroids.begin();
     shared_ptr<TestAsteroid> firstAsteroid = dynamic_pointer_cast<TestAsteroid>(*firstIt);
     list<Asteroid*> firstCollideCalls = firstAsteroid->collideCalls;
-    
+
     list<shared_ptr<Asteroid> >::iterator secondIt = firstIt;
     secondIt++;
     Asteroid* secondAsteroid = secondIt->get();
-    
+
     EXPECT_THAT(firstCollideCalls, ElementsAre(secondAsteroid));
 }

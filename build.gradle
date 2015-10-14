@@ -1,10 +1,13 @@
 allprojects {
     apply plugin: "cpp"
-    
+
     model {
         platforms {
             x86 {
                 architecture "x86"
+            }
+            x64 {
+                architecture "x86_64"
             }
         }
         repositories {
@@ -15,7 +18,7 @@ allprojects {
             }
         }
     }
-    
+
     binaries.all {
         cppCompiler.args '-g'
         lib library: "boost", linkage: "api"
@@ -43,11 +46,10 @@ project(":asteroids") {
         }
         components {
             game(NativeLibrarySpec) {
-                targetPlatform "x86"
             }
         }
     }
-    
+
     binaries.withType(GoogleTestTestSuiteBinarySpec) {
         lib library: "googleMock", linkage: "static"
 
@@ -68,7 +70,6 @@ project(":main") {
     model {
         components {
             main(NativeExecutableSpec) {
-                targetPlatform "x86"
                 sources {
                     cpp {
                         lib project: ':asteroids', library: 'game', linkage: 'static'
