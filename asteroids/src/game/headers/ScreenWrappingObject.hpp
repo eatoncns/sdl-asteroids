@@ -1,13 +1,13 @@
 #ifndef _PJM_SCREENWRAPPINGOBJECT_HPP_
 #define _PJM_SCREENWRAPPINGOBJECT_HPP_
 
-#include <MovingObject.hpp>
+#include <CollidableObject.hpp>
 
 namespace pjm
 {
     class ScreenWrapper;
 
-    class ScreenWrappingObject : public MovingObject
+    class ScreenWrappingObject : public CollidableObject
     {
         public:
             ScreenWrappingObject(boost::shared_ptr<ScreenWrapper> iScreenWrapper);

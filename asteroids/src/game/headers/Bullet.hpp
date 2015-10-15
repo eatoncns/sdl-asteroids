@@ -1,14 +1,14 @@
 #ifndef _PJM_BULLET_HPP_
 #define _PJM_BULLET_HPP_
 
-#include <MovingObject.hpp>
+#include <CollidableObject.hpp>
 
 namespace pjm
 {
     struct Vector;
     struct ImageLoader;
 
-    class Bullet : public MovingObject
+    class Bullet : public CollidableObject
     {
         public:
             Bullet(const Vector& iBounds);
@@ -22,11 +22,11 @@ namespace pjm
             bool isExpired();
 
             static const float VELOCITY = 1.02;
-        
-        private:    
+
+        private:
             std::string imageFilePath();
             bool isOutsideOfScreen();
-            
+
             bool _expired;
             Vector _bounds;
 

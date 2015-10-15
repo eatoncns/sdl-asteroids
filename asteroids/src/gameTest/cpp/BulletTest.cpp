@@ -91,7 +91,7 @@ TEST_F(BulletTest, HasBoundingBoxBasedOnScaledImage)
     _testRenderable->w = testLength;
     _testRenderable->h = testLength;
     Rectangle boundingBox = _bullet.getBoundingBox();
-    float ratioLength = testLength*MovingObject::BOUNDING_BOX_RATIO;
+    float ratioLength = testLength*CollidableObject::BOUNDING_BOX_RATIO;
     EXPECT_THAT(boundingBox.x, Eq(_initialLocation.x + ratioLength));
     EXPECT_THAT(boundingBox.y, Eq(_initialLocation.y + ratioLength));
     EXPECT_THAT(boundingBox.w, Eq(iround(testLength - 2*ratioLength)));

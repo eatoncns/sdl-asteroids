@@ -9,17 +9,14 @@ namespace pjm
     struct Renderable;
     struct ImageLoader;
     struct ScreenWrapper;
-    struct Rectangle;
 
     class MovingObject
     {
         public:
             virtual bool initialise(const Vector& iInitialLocation,
                                     ImageLoader& iImageLoader);
-            virtual Rectangle getBoundingBox();
-            virtual void render();
 
-            const static float BOUNDING_BOX_RATIO;
+            virtual void render();
 
         protected:
             MovingObject();
