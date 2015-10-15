@@ -1,17 +1,17 @@
 #ifndef _PJM_SHIP_HPP_
 #define _PJM_SHIP_HPP_
 
-#include <MovingObject.hpp>
+#include <ScreenWrappingObject.hpp>
 #include <Vector.hpp>
 
 namespace pjm
 {
 
-    class Ship : public MovingObject
+    class Ship : public ScreenWrappingObject
     {
         public:
             Ship(boost::shared_ptr<ScreenWrapper> iScreenWrapper);
-            
+
             enum Action {NONE, ACCELERATE, TURN_LEFT, TURN_RIGHT, ACCELERATE_LEFT, ACCELERATE_RIGHT};
 
             virtual void update(const Action iAction, unsigned int iTimeElapsed);
@@ -28,7 +28,7 @@ namespace pjm
             void updateAngle(const Action iAction, unsigned int iTimeElapsed);
             void updateAcceleration(const Action iAction);
             void updateVelocity(unsigned int iTimeElapsed);
-            
+
             Vector _acceleration;
     };
 }

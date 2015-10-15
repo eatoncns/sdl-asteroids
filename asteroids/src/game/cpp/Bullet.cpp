@@ -8,12 +8,11 @@ using boost::make_shared;
 namespace pjm
 {
     Bullet::Bullet(const Vector& iBounds)
-        : MovingObject(make_shared<ScreenWrapper>(Vector(0, 0))),
-          _expired(false),
+        : _expired(false),
           _bounds(iBounds)
     {}
 
-    
+
     bool Bullet::initialise(const Vector& iInitialLocation,
                             const Vector& iShooterVelocity,
                             ImageLoader& iImageLoader)
@@ -23,8 +22,8 @@ namespace pjm
         _velocity *= velocityFactor;
         return MovingObject::initialise(iInitialLocation, iImageLoader);
     }
-    
-    
+
+
     void Bullet::update(unsigned int iTimeElapsed)
     {
         MovingObject::updateLocation(iTimeElapsed);
@@ -50,5 +49,5 @@ namespace pjm
     std::string Bullet::imageFilePath()
     {
         return "resources/Bullet.gif";
-    } 
+    }
 }

@@ -11,7 +11,7 @@ using boost::shared_ptr;
 namespace pjm
 {
     Ship::Ship(shared_ptr<ScreenWrapper> iScreenWrapper)
-      : MovingObject(iScreenWrapper),
+      : ScreenWrappingObject(iScreenWrapper),
         _acceleration(0, 0)
     {}
 

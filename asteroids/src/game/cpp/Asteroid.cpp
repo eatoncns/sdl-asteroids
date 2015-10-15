@@ -6,12 +6,12 @@
 using boost::shared_ptr;
 
 namespace pjm
-{ 
+{
     Asteroid::Asteroid(shared_ptr<ScreenWrapper> iScreenWrapper)
-        : MovingObject(iScreenWrapper)
+        : ScreenWrappingObject(iScreenWrapper)
     {}
-    
-    
+
+
     bool Asteroid::initialise(const Vector& iInitialLocation,
                               ImageLoader& iImageLoader,
                               RandomGenerator& iRandomGenerator)
@@ -38,12 +38,12 @@ namespace pjm
         iOther->_velocity = tmp;
     }
 
-    
+
     std::string Asteroid::imageFilePath()
     {
         return "resources/Asteroid.gif";
     }
 
-    
+
     float Asteroid::VELOCITY = 0.08;
 }

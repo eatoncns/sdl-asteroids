@@ -1,17 +1,17 @@
 #ifndef _PJM_ASTEROID_HPP_
 #define _PJM_ASTEROID_HPP_
 
-#include <MovingObject.hpp>
+#include <ScreenWrappingObject.hpp>
 
 namespace pjm
 {
     struct RandomGenerator;
 
-    class Asteroid : public MovingObject
+    class Asteroid : public ScreenWrappingObject
     {
         public:
             Asteroid(boost::shared_ptr<ScreenWrapper> iScreenWrapper);
-            
+
             virtual bool initialise(const Vector& iInitialLocation,
                                     ImageLoader& iImageLoader,
                                     RandomGenerator& iRandomGenerator);
@@ -19,7 +19,7 @@ namespace pjm
             virtual void update(unsigned int iTimeElapsed);
 
             virtual void collideWith(Asteroid* iOther);
-            
+
             virtual ~Asteroid() {}
 
             static float VELOCITY;
