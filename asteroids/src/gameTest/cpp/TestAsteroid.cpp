@@ -32,6 +32,12 @@ void TestAsteroid::collideWith(Asteroid* iOther)
 }
 
 
+void TestAsteroid::collideWith(Bullet* iBullet)
+{
+    bulletCollideCalls.push_back(iBullet);
+}
+
+
 Rectangle TestAsteroid::getBoundingBox()
 {
     return boundingBox;

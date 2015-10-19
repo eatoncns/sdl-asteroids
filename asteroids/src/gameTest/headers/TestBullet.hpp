@@ -4,6 +4,11 @@
 #include <Bullet.hpp>
 #include <Vector.hpp>
 
+namespace pjm
+{
+    class Asteroid;
+}
+
 struct TestBullet : public pjm::Bullet
 {
     TestBullet()
@@ -16,8 +21,14 @@ struct TestBullet : public pjm::Bullet
         return boundingBox;
     }
 
+    void collideWith(pjm::Asteroid* iAsteroid)
+    {
+        collideCalls.push_back(iAsteroid);
+    }
+
 
     pjm::Rectangle boundingBox;
+    std::list<pjm::Asteroid*> collideCalls;
 };
 
 #endif /* end of include guard: _PJM_TESTBULLET_HPP_ */

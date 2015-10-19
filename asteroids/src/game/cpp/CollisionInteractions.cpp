@@ -79,8 +79,8 @@ namespace pjm
                 if (_collisionDetector->areColliding(bullet->getBoundingBox(),
                                                      asteroid->getBoundingBox()))
                 {
-                        //asteroid->collideWith(bullet.get());
-                        //bullet->collideWith(asteroid.get());
+                    asteroid->collideWith(bullet.get());
+                    bullet->collideWith(asteroid.get());
                 }
             }
         }

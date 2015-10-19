@@ -125,3 +125,18 @@ TEST_F(CollisionInteractionsTest, ChecksBulletCollisionWhenNoShipCollision)
     EXPECT_THAT(_collisionDetector->calls, Contains(make_pair(4, 2)));
     EXPECT_THAT(_collisionDetector->calls, Contains(make_pair(4, 3)));
 }
+
+TEST_F(CollisionInteractionsTest, DelegatesAsteroidBulletCollisionToBothParties)
+{
+    _collisionDetector->colliding.push_back(pair<float, float>(4,1));
+    _collisionInteractions.update();
+
+    shared_ptr<Asteroid> asteroid = _asteroids.front();
+    shared_ptr<TestAsteroid> testAsteroid = dynamic_pointer_cast<TestAsteroid>(asteroid);
+
+    shared_ptr<Bullet> bullet = _bullets.front();
+    shared_ptr<TestBullet> testBullet = dynamic_pointer_cast<TestBullet>(bullet);
+
+    EXPECT_THAT(testAsteroid->bulletCollideCalls, ElementsAre(bullet.get()));
+    EXPECT_THAT(testBullet->collideCalls, ElementsAre(asteroid.get()));
+}

@@ -20,7 +20,9 @@ namespace pjm
 
             void update(unsigned int iTimeElapsed);
 
-            void collideWith(Asteroid* iAsteroid);
+            virtual void collideWith(Asteroid* iAsteroid);
+
+            virtual ~Bullet() {}
 
             static const float VELOCITY = 1.02;
 
