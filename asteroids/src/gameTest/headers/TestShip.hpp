@@ -17,13 +17,19 @@ struct TestShip : public pjm::Ship
     void update(const Action iAction, unsigned int iTimeElapsed);
 
     pjm::Rectangle getBoundingBox();
-    
+
     void render();
+
+    void collideWith(pjm::Asteroid* iAsteroid);
+
+    bool isExpired();
 
     int renderCalls;
     std::list<std::pair<Action, unsigned int> > updateCalls;
     std::list<pjm::Vector> initialiseCalls;
+    std::list<pjm::Asteroid*> collideCalls;
     bool initialiseSuccess;
+    bool expired;
     pjm::Rectangle boundingBox;
     static TestImageLoader imageLoader;
     static boost::shared_ptr<pjm::ScreenWrapper> screenWrapper;

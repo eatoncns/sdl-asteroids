@@ -14,18 +14,18 @@ namespace pjm
     class CollisionInteractions
     {
         public:
-            CollisionInteractions(boost::shared_ptr<Ship> iShip, 
+            CollisionInteractions(boost::shared_ptr<Ship> iShip,
                                   std::list<boost::shared_ptr<Asteroid> >& iAsteroids);
 
             virtual ~CollisionInteractions() {}
 
-            virtual bool update();
-        
+            virtual void update();
+
         protected:
             boost::scoped_ptr<CollisionDetector> _collisionDetector;
 
         private:
-            bool shipIsColliding();
+            void handleShipCollision();
             void handleAsteroidCollisions();
 
             boost::shared_ptr<Ship> _ship;

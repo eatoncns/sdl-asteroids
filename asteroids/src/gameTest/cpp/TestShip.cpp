@@ -7,6 +7,7 @@ TestShip::TestShip()
     : Ship(screenWrapper),
           renderCalls(0),
           initialiseSuccess(true),
+          expired(false),
           boundingBox(0,0,0,0)
 {}
 
@@ -29,11 +30,23 @@ Rectangle TestShip::getBoundingBox()
 {
     return boundingBox;
 }
-    
+
 
 void TestShip::render()
 {
     ++renderCalls;
+}
+
+
+void TestShip::collideWith(pjm::Asteroid* iAsteroid)
+{
+    collideCalls.push_back(iAsteroid);
+}
+
+
+bool TestShip::isExpired()
+{
+    return expired;
 }
 
 

@@ -38,10 +38,11 @@ namespace pjm
         {
             asteroid->update(iTimeElapsed);
         }
-        return _collisionInteractions->update();
+        _collisionInteractions->update();
+        return _ship->isExpired();
     }
 
-    
+
     void GameElements::render()
     {
         _ship->render();

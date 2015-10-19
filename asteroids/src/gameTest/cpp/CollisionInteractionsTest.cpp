@@ -79,15 +79,13 @@ TEST_F(CollisionInteractionsTest, ChecksShipCollisionWithAllAsteroids)
     EXPECT_THAT(_collisionDetector->calls, Contains(make_pair(0, 3)));
 }
 
-TEST_F(CollisionInteractionsTest, ReturnsFalseWhenNoShipCollisionOccurs)
+TEST_F(CollisionInteractionsTest, DelegatesCollisionUpdateToShipWhereDetected)
 {
-    EXPECT_THAT(_collisionInteractions.update(), Eq(false));
-}
-
-TEST_F(CollisionInteractionsTest, ReturnsTrueWhenShipCollisionOccurs)
-{
-    _collisionDetector->colliding.push_back(pair<float, float>(0,2));
-    EXPECT_THAT(_collisionInteractions.update(), Eq(true));
+    _collisionDetector->colliding.push_back(pair<float, float>(0,1));
+    _collisionInteractions.update();
+    list<shared_ptr<Asteroid> >::iterator firstIt = _asteroids.begin();
+    shared_ptr<TestAsteroid> firstAsteroid = dynamic_pointer_cast<TestAsteroid>(*firstIt);
+    EXPECT_THAT(_ship->collideCalls, ElementsAre(firstAsteroid.get()));
 }
 
 TEST_F(CollisionInteractionsTest, ChecksAsteroidCollisionsWhenNoShipCollision)

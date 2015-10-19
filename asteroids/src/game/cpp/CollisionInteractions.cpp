@@ -12,33 +12,32 @@ namespace pjm
     CollisionInteractions::CollisionInteractions(shared_ptr<Ship> iShip,
                                                  list<shared_ptr<Asteroid> >& iAsteroids)
         : _collisionDetector(new CollisionDetector()),
-          _ship(iShip), 
+          _ship(iShip),
           _asteroids(iAsteroids)
     {}
 
-    
-    bool CollisionInteractions::update()
+
+    void CollisionInteractions::update()
     {
-        if (shipIsColliding())
+        handleShipCollision();
+        if (_ship->isExpired())
         {
-            return true;
+            return;
         }
         handleAsteroidCollisions();
-        return false;
     }
 
 
-    bool CollisionInteractions::shipIsColliding()
+    void CollisionInteractions::handleShipCollision()
     {
         BOOST_FOREACH(shared_ptr<Asteroid> asteroid, _asteroids)
         {
-            if (_collisionDetector->areColliding(_ship->getBoundingBox(), 
+            if (_collisionDetector->areColliding(_ship->getBoundingBox(),
                                                  asteroid->getBoundingBox()))
             {
-                return true;
+                _ship->collideWith(asteroid.get());
             }
         }
-        return false;
     }
 
 

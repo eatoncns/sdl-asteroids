@@ -17,7 +17,7 @@ namespace pjm
 
             virtual void update(const Action iAction, unsigned int iTimeElapsed);
 
-            void collideWith(Asteroid* iAsteroid);
+            virtual void collideWith(Asteroid* iAsteroid);
 
             virtual std::string imageFilePath();
 

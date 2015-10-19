@@ -97,13 +97,13 @@ TEST_F(GameElementsTest, ConvertsRightKeyToShipTurnRight)
 TEST_F(GameElementsTest, ConvertsUpLeftToAccelerateLeft)
 {
     _gameElements.update(keyboard::UP_LEFT, 5);
-    EXPECT_THAT(_ship->updateCalls, ElementsAre(std::make_pair(Ship::ACCELERATE_LEFT, 5))); 
+    EXPECT_THAT(_ship->updateCalls, ElementsAre(std::make_pair(Ship::ACCELERATE_LEFT, 5)));
 }
 
 TEST_F(GameElementsTest, ConvertsUpRightToAccelerateRight)
 {
     _gameElements.update(keyboard::UP_RIGHT, 5);
-    EXPECT_THAT(_ship->updateCalls, ElementsAre(std::make_pair(Ship::ACCELERATE_RIGHT, 5))); 
+    EXPECT_THAT(_ship->updateCalls, ElementsAre(std::make_pair(Ship::ACCELERATE_RIGHT, 5)));
 }
 
 TEST_F(GameElementsTest, CascadesUpdateToAsteroids)
@@ -122,8 +122,8 @@ TEST_F(GameElementsTest, CascadesUpdateToCollisionInteractions)
     EXPECT_THAT(_collisionInteractions->updateCalls, Eq(1));
 }
 
-TEST_F(GameElementsTest, UpdateReturnsFalseOnShipCollision)
+TEST_F(GameElementsTest, UpdateReturnsFalseOnShipExpiry)
 {
-    _collisionInteractions->shipCollision = true;
+    _ship->expired = true;
     EXPECT_THAT(_gameElements.update(keyboard::NONE, 2), Eq(true));
 }
