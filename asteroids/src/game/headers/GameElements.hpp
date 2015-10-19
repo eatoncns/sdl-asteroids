@@ -28,6 +28,9 @@ namespace pjm
             std::list<boost::shared_ptr<Asteroid> > _asteroids;
             std::list<boost::shared_ptr<Bullet> > _bullets;
             boost::scoped_ptr<CollisionInteractions> _collisionInteractions;
+
+            void removeExpiredBullets();
+            void removeExpiredAsteroids();
     };
 }
 

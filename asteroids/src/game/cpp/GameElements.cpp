@@ -1,6 +1,7 @@
 #include <GameElements.hpp>
 #include <Ship.hpp>
 #include <Asteroid.hpp>
+#include <Bullet.hpp>
 #include <boost/assign/list_of.hpp>
 #include <boost/foreach.hpp>
 #include <map>
@@ -8,6 +9,14 @@
 using boost::shared_ptr;
 using std::list;
 using namespace boost::assign;
+
+namespace
+{
+    bool isExpired(shared_ptr<pjm::MovingObject> iMovingObject)
+    {
+        return iMovingObject->isExpired();
+    }
+}
 
 namespace pjm
 {
@@ -39,7 +48,23 @@ namespace pjm
             asteroid->update(iTimeElapsed);
         }
         _collisionInteractions->update();
+        removeExpiredAsteroids();
+        removeExpiredBullets();
         return _ship->isExpired();
+    }
+
+
+    void GameElements::removeExpiredBullets()
+    {
+        _bullets.erase(std::remove_if(_bullets.begin(), _bullets.end(), isExpired),
+                       _bullets.end());
+    }
+
+
+    void GameElements::removeExpiredAsteroids()
+    {
+        _asteroids.erase(std::remove_if(_asteroids.begin(), _asteroids.end(), isExpired),
+                         _asteroids.end());
     }
 
 

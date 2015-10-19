@@ -13,7 +13,8 @@ struct TestBullet : public pjm::Bullet
 {
     TestBullet()
         : Bullet(pjm::Vector(1,1)),
-          boundingBox(0,0,0,0)
+          boundingBox(0,0,0,0),
+          expired(false)
     {}
 
     pjm::Rectangle getBoundingBox()
@@ -26,9 +27,14 @@ struct TestBullet : public pjm::Bullet
         collideCalls.push_back(iAsteroid);
     }
 
+    bool isExpired()
+    {
+        return expired;
+    }
 
     pjm::Rectangle boundingBox;
     std::list<pjm::Asteroid*> collideCalls;
+    bool expired;
 };
 
 #endif /* end of include guard: _PJM_TESTBULLET_HPP_ */

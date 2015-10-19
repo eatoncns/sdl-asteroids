@@ -7,6 +7,7 @@ TestAsteroid::TestAsteroid()
     : Asteroid(screenWrapper),
       renderCalls(0),
       initialiseSuccess(true),
+      expired(false),
       boundingBox(0,0,0,0)
 {}
 
@@ -35,6 +36,12 @@ void TestAsteroid::collideWith(Asteroid* iOther)
 void TestAsteroid::collideWith(Bullet* iBullet)
 {
     bulletCollideCalls.push_back(iBullet);
+}
+
+
+bool TestAsteroid::isExpired()
+{
+    return expired;
 }
 
 

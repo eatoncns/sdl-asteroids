@@ -2,6 +2,7 @@
 #include <GameElements.hpp>
 #include <TestShip.hpp>
 #include <TestAsteroid.hpp>
+#include <TestBullet.hpp>
 #include <TestCollisionInteractions.hpp>
 #include <KeyPress.hpp>
 #include <boost/foreach.hpp>
@@ -25,9 +26,24 @@ struct TestableGameElements : public GameElements
         _asteroids.push_back(iAsteroid);
     }
 
+    void addBullet(shared_ptr<Bullet> iBullet)
+    {
+        _bullets.push_back(iBullet);
+    }
+
     void resetCollisionInteractions(CollisionInteractions* iCollisionInteractions)
     {
         _collisionInteractions.reset(iCollisionInteractions);
+    }
+
+    std::list<shared_ptr<Asteroid> >& getAsteroids()
+    {
+        return _asteroids;
+    }
+
+    std::list<shared_ptr<Bullet> >& getBullets()
+    {
+        return _bullets;
     }
 };
 
@@ -36,6 +52,7 @@ class GameElementsTest : public ::testing::Test
     protected:
         GameElementsTest()
             : _ship(new TestShip()),
+              _bullet(new TestBullet()),
               _collisionInteractions(new TestCollisionInteractions()),
               _gameElements(_ship)
         {
@@ -45,11 +62,13 @@ class GameElementsTest : public ::testing::Test
                 _asteroids.push_back(asteroid);
                 _gameElements.addAsteroid(asteroid);
             }
+            _gameElements.addBullet(_bullet);
             _gameElements.resetCollisionInteractions(_collisionInteractions);
         }
 
         shared_ptr<TestShip> _ship;
         std::list<shared_ptr<TestAsteroid> > _asteroids;
+        shared_ptr<TestBullet> _bullet;
         TestCollisionInteractions* _collisionInteractions;
         TestableGameElements _gameElements;
 };
@@ -126,4 +145,18 @@ TEST_F(GameElementsTest, UpdateReturnsFalseOnShipExpiry)
 {
     _ship->expired = true;
     EXPECT_THAT(_gameElements.update(keyboard::NONE, 2), Eq(true));
+}
+
+TEST_F(GameElementsTest, RemovesExpiredAsteroidsOnUpdate)
+{
+    _asteroids.front()->expired = true;
+    _gameElements.update(keyboard::NONE, 3);
+    EXPECT_THAT(_gameElements.getAsteroids().size(), Eq(4));
+}
+
+TEST_F(GameElementsTest, RemovesExpiredBulletsOnUpdate)
+{
+    _bullet->expired = true;
+    _gameElements.update(keyboard::NONE, 3);
+    EXPECT_THAT(_gameElements.getBullets().empty(), Eq(true));
 }

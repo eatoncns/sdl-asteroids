@@ -21,6 +21,8 @@ struct TestAsteroid : public pjm::Asteroid
     void collideWith(pjm::Asteroid* iOther);
     void collideWith(pjm::Bullet* iBullet);
 
+    bool isExpired();
+
     pjm::Rectangle getBoundingBox();
 
     void render();
@@ -31,6 +33,7 @@ struct TestAsteroid : public pjm::Asteroid
     std::list<unsigned int> updateCalls;
     std::list<pjm::Vector> initialiseCalls;
     bool initialiseSuccess;
+    bool expired;
     pjm::Rectangle boundingBox;
     static TestImageLoader imageLoader;
     static boost::shared_ptr<pjm::ScreenWrapper> screenWrapper;
