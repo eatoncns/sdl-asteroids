@@ -2,6 +2,7 @@
 #include <Asteroid.hpp>
 #include <Rectangle.hpp>
 #include <MoveableObjectTest.hpp>
+#include <TestBullet.hpp>
 #include <TestRandomGenerator.hpp>
 #include <boost/math/special_functions/round.hpp>
 
@@ -49,7 +50,7 @@ class AsteroidTest : public MoveableObjectTest
                 .WillByDefault(Return(0.375));
             _asteroid.initialise(_initialLocation, _imageLoader, _random);
         }
-        
+
         NiceMock<TestRandomGenerator> _random;
         AsteroidSpy _asteroid;
         float _velocityComponent;
@@ -63,7 +64,7 @@ TEST_F(AsteroidTest, InitReturnsFalseWhenImageLoadFails)
 }
 
 TEST_F(AsteroidTest, InitialisesWithFixedVelocityInRandomDirection)
-{ 
+{
     EXPECT_THAT(_asteroid.getVelocity(), Eq(Vector(_velocityComponent, _velocityComponent)));
 }
 
@@ -111,6 +112,18 @@ TEST_F(AsteroidTest, SwapsVelocityWithOtherAsteroidOnCollision)
     _asteroid.collideWith(&otherAsteroid);
     EXPECT_THAT(_asteroid.getVelocity(),
                 Eq(otherVelocity));
-    EXPECT_THAT(otherAsteroid.getVelocity(), 
+    EXPECT_THAT(otherAsteroid.getVelocity(),
                 Eq(Vector(_velocityComponent, _velocityComponent)));
+}
+
+TEST_F(AsteroidTest, IsNotExpiredOnInit)
+{
+    EXPECT_THAT(_asteroid.isExpired(), Eq(false));
+}
+
+TEST_F(AsteroidTest, ExpiresOnCollisionWithBullet)
+{
+    TestBullet bullet;
+    _asteroid.collideWith(&bullet);
+    EXPECT_THAT(_asteroid.isExpired(), Eq(true));
 }
