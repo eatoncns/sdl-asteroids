@@ -28,6 +28,7 @@ namespace pjm
             return;
         }
         handleAsteroidCollisions();
+        handleBulletCollisions();
     }
 
 
@@ -63,6 +64,23 @@ namespace pjm
                                                      (*innerIt)->getBoundingBox()))
                 {
                     (*outerIt)->collideWith(innerIt->get());
+                }
+            }
+        }
+    }
+
+
+    void CollisionInteractions::handleBulletCollisions()
+    {
+        BOOST_FOREACH(shared_ptr<Bullet> bullet, _bullets)
+        {
+            BOOST_FOREACH(shared_ptr<Asteroid> asteroid, _asteroids)
+            {
+                if (_collisionDetector->areColliding(bullet->getBoundingBox(),
+                                                     asteroid->getBoundingBox()))
+                {
+                        //asteroid->collideWith(bullet.get());
+                        //bullet->collideWith(asteroid.get());
                 }
             }
         }

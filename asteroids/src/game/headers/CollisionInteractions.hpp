@@ -29,6 +29,7 @@ namespace pjm
         private:
             void handleShipCollision();
             void handleAsteroidCollisions();
+            void handleBulletCollisions();
 
             boost::shared_ptr<Ship> _ship;
             std::list<boost::shared_ptr<Asteroid> >& _asteroids;

@@ -63,10 +63,10 @@ class CollisionInteractionsTest : public ::testing::Test
                 shared_ptr<TestAsteroid> asteroid = make_shared<TestAsteroid>();
                 asteroid->boundingBox = Rectangle(i+1,1,1,1);
                 _asteroids.push_back(asteroid);
-                shared_ptr<TestBullet> bullet = make_shared<TestBullet>();
-                bullet->boundingBox = Rectangle(i+4,1,1,1);
-                _bullets.push_back(bullet);
             }
+            shared_ptr<TestBullet> bullet = make_shared<TestBullet>();
+            bullet->boundingBox = Rectangle(4,1,1,1);
+            _bullets.push_back(bullet);
             _collisionInteractions.resetCollisionDetector(_collisionDetector);
         }
 
@@ -116,4 +116,12 @@ TEST_F(CollisionInteractionsTest, DelegatesCollisionUpdateToAsteroidsWhereDetect
     Asteroid* secondAsteroid = secondIt->get();
 
     EXPECT_THAT(firstCollideCalls, ElementsAre(secondAsteroid));
+}
+
+TEST_F(CollisionInteractionsTest, ChecksBulletCollisionWhenNoShipCollision)
+{
+    _collisionInteractions.update();
+    EXPECT_THAT(_collisionDetector->calls, Contains(make_pair(4, 1)));
+    EXPECT_THAT(_collisionDetector->calls, Contains(make_pair(4, 2)));
+    EXPECT_THAT(_collisionDetector->calls, Contains(make_pair(4, 3)));
 }

@@ -11,6 +11,12 @@ struct TestBullet : public pjm::Bullet
           boundingBox(0,0,0,0)
     {}
 
+    pjm::Rectangle getBoundingBox()
+    {
+        return boundingBox;
+    }
+
+
     pjm::Rectangle boundingBox;
 };
 
