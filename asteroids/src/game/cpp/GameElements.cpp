@@ -15,7 +15,7 @@ namespace pjm
                                list<shared_ptr<Asteroid> > iAsteroids)
         : _ship(iShip),
           _asteroids(iAsteroids),
-          _collisionInteractions(new CollisionInteractions(_ship, _asteroids))
+          _collisionInteractions(new CollisionInteractions(_ship, _asteroids, _bullets))
     {}
 
 

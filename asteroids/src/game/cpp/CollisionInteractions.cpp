@@ -1,6 +1,7 @@
 #include <CollisionInteractions.hpp>
 #include <Ship.hpp>
 #include <Asteroid.hpp>
+#include <Bullet.hpp>
 #include <Rectangle.hpp>
 #include <boost/foreach.hpp>
 
@@ -10,10 +11,12 @@ using std::list;
 namespace pjm
 {
     CollisionInteractions::CollisionInteractions(shared_ptr<Ship> iShip,
-                                                 list<shared_ptr<Asteroid> >& iAsteroids)
+                                                 list<shared_ptr<Asteroid> >& iAsteroids,
+                                                 list<shared_ptr<Bullet> >& iBullets)
         : _collisionDetector(new CollisionDetector()),
           _ship(iShip),
-          _asteroids(iAsteroids)
+          _asteroids(iAsteroids),
+          _bullets(iBullets)
     {}
 
 

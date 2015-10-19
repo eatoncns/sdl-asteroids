@@ -4,6 +4,7 @@
 #include <Rectangle.hpp>
 #include <TestShip.hpp>
 #include <TestAsteroid.hpp>
+#include <TestBullet.hpp>
 #include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/pointer_cast.hpp>
@@ -37,8 +38,9 @@ struct FakeCollisionDetector : public CollisionDetector
 struct TestableCollisionInteractions : public CollisionInteractions
 {
     TestableCollisionInteractions(shared_ptr<Ship> iShip,
-                                 list<shared_ptr<Asteroid> >& iAsteroids)
-        : CollisionInteractions(iShip, iAsteroids)
+                                 list<shared_ptr<Asteroid> >& iAsteroids,
+                                 list<shared_ptr<Bullet> >& iBullets)
+        : CollisionInteractions(iShip, iAsteroids, iBullets)
     {}
 
     void resetCollisionDetector(CollisionDetector* iCollisionDetector)
@@ -53,7 +55,7 @@ class CollisionInteractionsTest : public ::testing::Test
         CollisionInteractionsTest()
             : _ship(new TestShip()),
               _collisionDetector(new FakeCollisionDetector()), // deleted by _collisionInteractions
-              _collisionInteractions(_ship, _asteroids)
+              _collisionInteractions(_ship, _asteroids, _bullets)
         {
             _ship->boundingBox = Rectangle(0,1,1,1);
             for (int i = 0; i < 3; ++i)
@@ -61,12 +63,16 @@ class CollisionInteractionsTest : public ::testing::Test
                 shared_ptr<TestAsteroid> asteroid = make_shared<TestAsteroid>();
                 asteroid->boundingBox = Rectangle(i+1,1,1,1);
                 _asteroids.push_back(asteroid);
+                shared_ptr<TestBullet> bullet = make_shared<TestBullet>();
+                bullet->boundingBox = Rectangle(i+4,1,1,1);
+                _bullets.push_back(bullet);
             }
             _collisionInteractions.resetCollisionDetector(_collisionDetector);
         }
 
         shared_ptr<TestShip> _ship;
         list<shared_ptr<Asteroid> > _asteroids;
+        list<shared_ptr<Bullet> > _bullets;
         FakeCollisionDetector* _collisionDetector;
         TestableCollisionInteractions _collisionInteractions;
 };

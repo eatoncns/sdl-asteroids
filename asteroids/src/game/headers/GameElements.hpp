@@ -11,6 +11,7 @@ namespace pjm
 {
     class Ship;
     class Asteroid;
+    class Bullet;
 
     class GameElements
     {
@@ -21,10 +22,11 @@ namespace pjm
             bool update(keyboard::KeyPress iKeyPress, unsigned int iTimeElapsed);
 
             void render();
-             
+
         protected:
             boost::shared_ptr<Ship> _ship;
             std::list<boost::shared_ptr<Asteroid> > _asteroids;
+            std::list<boost::shared_ptr<Bullet> > _bullets;
             boost::scoped_ptr<CollisionInteractions> _collisionInteractions;
     };
 }

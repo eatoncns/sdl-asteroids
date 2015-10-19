@@ -10,12 +10,14 @@ namespace pjm
 {
     class Ship;
     class Asteroid;
+    class Bullet;
 
     class CollisionInteractions
     {
         public:
             CollisionInteractions(boost::shared_ptr<Ship> iShip,
-                                  std::list<boost::shared_ptr<Asteroid> >& iAsteroids);
+                                  std::list<boost::shared_ptr<Asteroid> >& iAsteroids,
+                                  std::list<boost::shared_ptr<Bullet> >& iBullets);
 
             virtual ~CollisionInteractions() {}
 
@@ -30,6 +32,7 @@ namespace pjm
 
             boost::shared_ptr<Ship> _ship;
             std::list<boost::shared_ptr<Asteroid> >& _asteroids;
+            std::list<boost::shared_ptr<Bullet> >& _bullets;
     };
 }
 
