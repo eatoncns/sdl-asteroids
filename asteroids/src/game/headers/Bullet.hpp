@@ -19,15 +19,12 @@ namespace pjm
 
             void update(unsigned int iTimeElapsed);
 
-            bool isExpired();
-
             static const float VELOCITY = 1.02;
 
         private:
             std::string imageFilePath();
             bool isOutsideOfScreen();
 
-            bool _expired;
             Vector _bounds;
 
     };

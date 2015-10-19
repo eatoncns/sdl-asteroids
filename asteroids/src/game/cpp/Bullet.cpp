@@ -8,8 +8,7 @@ using boost::make_shared;
 namespace pjm
 {
     Bullet::Bullet(const Vector& iBounds)
-        : _expired(false),
-          _bounds(iBounds)
+        : _bounds(iBounds)
     {}
 
 
@@ -37,12 +36,6 @@ namespace pjm
                 _location.y < 0 ||
                 _location.x > _bounds.x ||
                 _location.y > _bounds.y);
-    }
-
-
-    bool Bullet::isExpired()
-    {
-        return _expired;
     }
 
 
