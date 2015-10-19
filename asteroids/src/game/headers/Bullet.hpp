@@ -7,6 +7,7 @@ namespace pjm
 {
     struct Vector;
     struct ImageLoader;
+    class Asteroid;
 
     class Bullet : public CollidableObject
     {
@@ -18,6 +19,8 @@ namespace pjm
                             ImageLoader& iImageLoader);
 
             void update(unsigned int iTimeElapsed);
+
+            void collideWith(Asteroid* iAsteroid);
 
             static const float VELOCITY = 1.02;
 

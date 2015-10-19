@@ -39,6 +39,12 @@ namespace pjm
     }
 
 
+    void Bullet::collideWith(Asteroid* iAsteroid)
+    {
+        _expired = true;
+    }
+
+
     std::string Bullet::imageFilePath()
     {
         return "resources/Bullet.gif";

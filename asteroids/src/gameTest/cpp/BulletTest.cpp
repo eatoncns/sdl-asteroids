@@ -1,6 +1,7 @@
 #include <gmock/gmock.h>
 #include <Bullet.hpp>
 #include <MoveableObjectTest.hpp>
+#include <TestAsteroid.hpp>
 #include <Rectangle.hpp>
 #include <boost/math/special_functions/round.hpp>
 
@@ -52,7 +53,7 @@ TEST_F(BulletTest, InitialiseReturnsFalseWhenImageLoadFails)
 
 TEST_F(BulletTest, InitialiseReturnsTrueWhenImageLoadSucceeds)
 {
-    EXPECT_THAT(_bullet.initialise(_initialLocation, _shooterVelocity, _imageLoader), Eq(true)); 
+    EXPECT_THAT(_bullet.initialise(_initialLocation, _shooterVelocity, _imageLoader), Eq(true));
 }
 
 TEST_F(BulletTest, InitialisesWithFixedVelocityInSameDirectionAsShooter)
@@ -96,4 +97,11 @@ TEST_F(BulletTest, HasBoundingBoxBasedOnScaledImage)
     EXPECT_THAT(boundingBox.y, Eq(_initialLocation.y + ratioLength));
     EXPECT_THAT(boundingBox.w, Eq(iround(testLength - 2*ratioLength)));
     EXPECT_THAT(boundingBox.h, Eq(iround(testLength - 2*ratioLength)));
+}
+
+TEST_F(BulletTest, ExpiresOnCollisionWithAsteroid)
+{
+    TestAsteroid asteroid;
+    _bullet.collideWith(&asteroid);
+    EXPECT_THAT(_bullet.isExpired(), Eq(true));
 }
