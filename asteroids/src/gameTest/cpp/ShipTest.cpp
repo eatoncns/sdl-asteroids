@@ -2,6 +2,7 @@
 #include <Ship.hpp>
 #include <Rectangle.hpp>
 #include <MoveableObjectTest.hpp>
+#include <TestAsteroid.hpp>
 #include <boost/math/special_functions/round.hpp>
 #include <math.h>
 
@@ -199,4 +200,16 @@ TEST_F(ShipTest, HasBoundingBoxBasedOnImage)
     EXPECT_THAT(boundingBox.y, Eq(_initialLocation.y + ratioLength));
     EXPECT_THAT(boundingBox.w, Eq(iround(testLength - 2*ratioLength)));
     EXPECT_THAT(boundingBox.h, Eq(iround(testLength - 2*ratioLength)));
+}
+
+TEST_F(ShipTest, InitialisesUnexpired)
+{
+    EXPECT_THAT(_ship.isExpired(), Eq(false));
+}
+
+TEST_F(ShipTest, ExpiresOnCollisionWithAsteroid)
+{
+    TestAsteroid asteroid;
+    _ship.collideWith(&asteroid);
+    EXPECT_THAT(_ship.isExpired(), Eq(true));
 }

@@ -6,6 +6,7 @@
 
 namespace pjm
 {
+    class Asteroid;
 
     class Ship : public ScreenWrappingObject
     {
@@ -15,6 +16,8 @@ namespace pjm
             enum Action {NONE, ACCELERATE, TURN_LEFT, TURN_RIGHT, ACCELERATE_LEFT, ACCELERATE_RIGHT};
 
             virtual void update(const Action iAction, unsigned int iTimeElapsed);
+
+            void collideWith(Asteroid* iAsteroid);
 
             virtual std::string imageFilePath();
 

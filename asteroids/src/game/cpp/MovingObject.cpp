@@ -11,7 +11,8 @@ namespace pjm
     MovingObject::MovingObject()
         : _location(0, 0),
           _velocity(0, 0),
-          _angle(0.0)
+          _angle(0.0),
+          _expired(false)
     {}
 
 
@@ -38,6 +39,12 @@ namespace pjm
         float renderY = _location.y - heightOffset;
         Vector renderLocation(renderX, renderY);
         _image->render(renderLocation, _angle);
+    }
+
+
+    bool MovingObject::isExpired()
+    {
+        return _expired;
     }
 
 }

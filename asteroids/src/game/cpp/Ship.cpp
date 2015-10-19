@@ -83,4 +83,10 @@ namespace pjm
             _velocity *= velocityFactor;
         }
     }
+
+
+    void Ship::collideWith(Asteroid* iAsteroid)
+    {
+        _expired = true;
+    }
 }

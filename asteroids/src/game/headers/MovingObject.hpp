@@ -18,6 +18,8 @@ namespace pjm
 
             virtual void render();
 
+            virtual bool isExpired();
+
         protected:
             MovingObject();
 
@@ -30,6 +32,7 @@ namespace pjm
             Vector _location;
             Vector _velocity;
             double _angle;
+            bool _expired;
             boost::shared_ptr<Renderable> _image;
     };
 }
