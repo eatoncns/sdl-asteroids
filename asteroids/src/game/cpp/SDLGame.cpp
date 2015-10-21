@@ -27,7 +27,7 @@ namespace pjm
           _running(false)
     {}
 
-    
+
     SDLGame::~SDLGame()
     {
         if (_window != NULL)
@@ -43,7 +43,7 @@ namespace pjm
         SDL_Quit();
     }
 
-    
+
     bool SDLGame::initialise()
     {
         if (!(initSDL() &&
@@ -57,7 +57,7 @@ namespace pjm
         return true;
     }
 
-    
+
     bool SDLGame::initSDL()
     {
         if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -72,7 +72,7 @@ namespace pjm
         return true;
     }
 
-    
+
     bool SDLGame::initWindow()
     {
         _window = SDL_CreateWindow(_screenInfo.title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
@@ -103,7 +103,7 @@ namespace pjm
         return (initLifeCounter() && initGameElements());
     }
 
-    
+
     bool SDLGame::initLifeCounter()
     {
         ImageLoader& imageLoader = getImageLoader();
@@ -159,7 +159,7 @@ namespace pjm
         return asteroids;
     }
 
-    
+
     void SDLGame::startGame()
     {
         _running = true;
@@ -170,8 +170,8 @@ namespace pjm
     {
         return _running;
     }
-    
-    
+
+
     keyboard::KeyPress getKeyPress()
     {
         const Uint8 *state = SDL_GetKeyboardState(NULL);
