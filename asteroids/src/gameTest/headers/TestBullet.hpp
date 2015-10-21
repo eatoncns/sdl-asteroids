@@ -3,10 +3,12 @@
 
 #include <Bullet.hpp>
 #include <Vector.hpp>
+#include <gmock/gmock.h>
 
 namespace pjm
 {
     class Asteroid;
+    struct ImageLoader;
 }
 
 struct TestBullet : public pjm::Bullet
@@ -16,6 +18,10 @@ struct TestBullet : public pjm::Bullet
           boundingBox(0,0,0,0),
           expired(false)
     {}
+
+    MOCK_METHOD3(initialise, bool(const pjm::Vector& iInitialLocation,
+                                  const pjm::Vector& iShooterVelocity,
+                                  pjm::ImageLoader& iImageLoader));
 
     pjm::Rectangle getBoundingBox()
     {

@@ -14,11 +14,11 @@ namespace pjm
         public:
             Bullet(const Vector& iBounds);
 
-            bool initialise(const Vector& iInitialLocation,
+            virtual bool initialise(const Vector& iInitialLocation,
                             const Vector& iShooterVelocity,
                             ImageLoader& iImageLoader);
 
-            void update(unsigned int iTimeElapsed);
+            virtual void update(unsigned int iTimeElapsed);
 
             virtual void collideWith(Asteroid* iAsteroid);
 
