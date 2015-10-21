@@ -1,10 +1,9 @@
 #include <gmock/gmock.h>
 #include <GameLoop.hpp>
 #include <Game.hpp>
-#include <Timer.hpp>
+#include <TestTimer.hpp>
 #include <boost/assign/list_of.hpp>
 #include <list>
-#include <queue>
 #include <string>
 
 using namespace pjm;
@@ -45,19 +44,6 @@ struct TestGame : public Game
     unsigned int iterations;
     std::list<std::string> calls;
     std::list<unsigned int> updateTimes;
-};
-
-
-struct TestTimer : public Timer
-{
-    unsigned int getTime()
-    {
-        unsigned int time  = times.front();
-        times.pop();
-        return time;
-    }
-
-    std::queue<unsigned int> times;
 };
 
 
@@ -126,7 +112,7 @@ TEST_F(GameLoopTest, DoesNoUpdatesWhenInitialisationFails)
 TEST_F(GameLoopTest, IndicatesIntialisationFailure)
 {
     game.passInitialisation = false;
-    EXPECT_FALSE(runIterations(1)); 
+    EXPECT_FALSE(runIterations(1));
 }
 
 TEST_F(GameLoopTest, PassesElapsedTimeToUpdate)
