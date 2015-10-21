@@ -1,5 +1,6 @@
 #include <BulletLoader.hpp>
 #include <TestImageLoader.hpp>
+#include <TestTimer.hpp>
 #include <gmock/gmock.h>
 
 using namespace pjm;
@@ -9,10 +10,11 @@ class BulletLoaderTest : public ::testing::Test
 {
     protected:
         BulletLoaderTest()
-            : bulletLoader(imageLoader)
+            : bulletLoader(imageLoader, timer)
         {}
 
         TestImageLoader imageLoader;
+        TestTimer timer;
         BulletLoader bulletLoader;
 };
 

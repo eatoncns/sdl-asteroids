@@ -4,8 +4,8 @@ using boost::shared_ptr;
 
 namespace pjm
 {
-    BulletLoader::BulletLoader(ImageLoader& iImageLoader)
-        : _imageLoader(iImageLoader)
+    BulletLoader::BulletLoader(ImageLoader& iImageLoader, Timer& iTimer)
+        : _imageLoader(iImageLoader), _timer(iTimer)
     {}
 
     shared_ptr<Bullet> BulletLoader::loadBullet()

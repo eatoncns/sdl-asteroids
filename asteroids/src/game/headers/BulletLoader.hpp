@@ -6,17 +6,19 @@
 namespace pjm
 {
     struct ImageLoader;
+    struct Timer;
     class Bullet;
 
     class BulletLoader
     {
         public:
-            BulletLoader(ImageLoader& iImageLoader);
+            BulletLoader(ImageLoader& iImageLoader, Timer& iTimer);
 
             boost::shared_ptr<Bullet> loadBullet();
 
         private:
             ImageLoader& _imageLoader;
+            Timer& _timer;
     };
 }
 
