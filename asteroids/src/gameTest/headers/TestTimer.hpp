@@ -6,6 +6,14 @@
 
 struct TestTimer : public pjm::Timer
 {
+    TestTimer()
+    {}
+
+    TestTimer(unsigned int iInitialTime)
+    {
+        times.push(iInitialTime);
+    }
+
     unsigned int getTime()
     {
         unsigned int time  = times.front();

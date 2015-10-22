@@ -10,7 +10,8 @@ class BulletLoaderTest : public ::testing::Test
 {
     protected:
         BulletLoaderTest()
-            : bulletLoader(imageLoader, timer)
+            : timer(0),
+              bulletLoader(imageLoader, timer)
         {}
 
         TestImageLoader imageLoader;
@@ -18,7 +19,8 @@ class BulletLoaderTest : public ::testing::Test
         BulletLoader bulletLoader;
 };
 
-TEST_F(BulletLoaderTest, InterfaceCompiles)
+TEST_F(BulletLoaderTest, ReturnsInvalidWhenNotEnoughTimePassedSinceLastShot)
 {
+
     shared_ptr<Bullet> bullet = bulletLoader.loadBullet();
 }
