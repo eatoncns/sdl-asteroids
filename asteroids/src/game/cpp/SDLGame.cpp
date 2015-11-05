@@ -3,6 +3,7 @@
 #include <GameElements.hpp>
 #include <LifeCounter.hpp>
 #include <SDLImageLoader.hpp>
+#include <SDLKeyConvert.hpp>
 #include <KeyPress.hpp>
 #include <Vector.hpp>
 #include <ScreenWrapper.hpp>
@@ -171,35 +172,6 @@ namespace pjm
         return _running;
     }
 
-
-    keyboard::KeyPress getKeyPress()
-    {
-        const Uint8 *state = SDL_GetKeyboardState(NULL);
-        keyboard::KeyPress keyPress = keyboard::NONE;
-        if (state[SDL_SCANCODE_UP])
-        {
-            keyPress = keyboard::UP;
-            if (state[SDL_SCANCODE_LEFT] && !state[SDL_SCANCODE_RIGHT])
-            {
-                keyPress = keyboard::UP_LEFT;
-            }
-            else if (state[SDL_SCANCODE_RIGHT] && !state[SDL_SCANCODE_LEFT])
-            {
-                keyPress = keyboard::UP_RIGHT;
-            }
-        }
-        else if (state[SDL_SCANCODE_LEFT] && !state[SDL_SCANCODE_RIGHT])
-        {
-            keyPress = keyboard::LEFT;
-        }
-        else if (state[SDL_SCANCODE_RIGHT] && !state[SDL_SCANCODE_LEFT])
-        {
-            keyPress = keyboard::RIGHT;
-        }
-        return keyPress;
-    }
-
-
     void SDLGame::update(unsigned int iTimeElapsed)
     {
         SDL_Event e;
@@ -211,7 +183,7 @@ namespace pjm
                 return;
             }
         }
-        keyboard::KeyPress keyPress = getKeyPress();
+        keyboard::KeyPress keyPress = SDLKeyConvert(SDL_GetKeyboardState(NULL));
         bool shipCollision = _gameElements->update(keyPress, iTimeElapsed);
         if (shipCollision)
         {
