@@ -1,30 +1,36 @@
 #include <SDLKeyConvert.hpp>
+#include <map>
+#include <boost/assign/list_of.hpp>
+
+using boost::assign::map_list_of;
 
 namespace pjm
 {
+    typedef std::map<std::string, keyboard::KeyPress> key_map_t;
+                                        //ULR
+    const key_map_t keyMap = map_list_of("100", keyboard::UP)
+                                        ("111", keyboard::UP)
+                                        ("010", keyboard::LEFT)
+                                        ("001", keyboard::RIGHT)
+                                        ("110", keyboard::UP_LEFT)
+                                        ("101", keyboard::UP_RIGHT);
+
+    void encodeLookup(std::string& iLookup, const Uint8* iState, const Uint8 iCode)
+    {
+        iState[iCode] ? iLookup.append("1") : iLookup.append("0");
+    }
+
     keyboard::KeyPress SDLKeyConvert(const Uint8* iState)
     {
-        keyboard::KeyPress keyPress = keyboard::NONE;
-        if (iState[SDL_SCANCODE_UP])
+        std::string lookup;
+        encodeLookup(lookup, iState, SDL_SCANCODE_UP);
+        encodeLookup(lookup, iState, SDL_SCANCODE_LEFT);
+        encodeLookup(lookup, iState, SDL_SCANCODE_RIGHT);
+        key_map_t::const_iterator it = keyMap.find(lookup);
+        if (it != keyMap.end())
         {
-            keyPress = keyboard::UP;
-            if (iState[SDL_SCANCODE_LEFT] && !iState[SDL_SCANCODE_RIGHT])
-            {
-                keyPress = keyboard::UP_LEFT;
-            }
-            else if (iState[SDL_SCANCODE_RIGHT] && !iState[SDL_SCANCODE_LEFT])
-            {
-                keyPress = keyboard::UP_RIGHT;
-            }
+            return it->second;
         }
-        else if (iState[SDL_SCANCODE_LEFT] && !iState[SDL_SCANCODE_RIGHT])
-        {
-            keyPress = keyboard::LEFT;
-        }
-        else if (iState[SDL_SCANCODE_RIGHT] && !iState[SDL_SCANCODE_LEFT])
-        {
-            keyPress = keyboard::RIGHT;
-        }
-        return keyPress;
+        return keyboard::NONE;
     }
 }
