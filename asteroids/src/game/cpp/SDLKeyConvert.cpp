@@ -2,25 +2,25 @@
 
 namespace pjm
 {
-    KeyboardState SDLKeyConvert(const Uint8* iState)
+    ShipAction SDLKeyConvert(const Uint8* iState)
     {
-        KeyboardState keyState;
+        ShipAction action;
         if (iState[SDL_SCANCODE_UP])
         {
-            keyState.up = true;
+            action.accelerate = true;
         }
         if (iState[SDL_SCANCODE_LEFT] && !iState[SDL_SCANCODE_RIGHT])
         {
-            keyState.left = true;
+            action.turn_left = true;
         }
         if (iState[SDL_SCANCODE_RIGHT] && !iState[SDL_SCANCODE_LEFT])
         {
-            keyState.right = true;
+            action.turn_right = true;
         }
         if (iState[SDL_SCANCODE_SPACE])
         {
-            keyState.space = true;
+            action.shoot = true;
         }
-        return keyState;
+        return action;
     }
 }

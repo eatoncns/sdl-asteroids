@@ -183,7 +183,7 @@ namespace pjm
                 return;
             }
         }
-        KeyboardState keyState = SDLKeyConvert(SDL_GetKeyboardState(NULL));
+        ShipAction keyState = SDLKeyConvert(SDL_GetKeyboardState(NULL));
         //bool shipCollision = _gameElements->update(keyPress, iTimeElapsed);
         bool shipCollision = false;
         if (shipCollision)

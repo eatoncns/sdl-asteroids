@@ -4,24 +4,24 @@
 namespace pjm
 {
 
-    struct KeyboardState
+    struct ShipAction
     {
-        KeyboardState()
-            : up(false), left(false), right(false), space(false)
+        ShipAction()
+            : accelerate(false), turn_left(false), turn_right(false), shoot(false)
         {}
 
-        bool operator==(const KeyboardState& iOther) const
+        bool operator==(const ShipAction& iOther) const
         {
-            return (up == iOther.up &&
-                    left == iOther.left &&
-                    right == iOther.right &&
-                    space == iOther.space);
+            return (accelerate == iOther.accelerate &&
+                    turn_left == iOther.turn_left &&
+                    turn_right == iOther.turn_right &&
+                    shoot == iOther.shoot);
         }
 
-        bool up;
-        bool left;
-        bool right;
-        bool space;
+        bool accelerate;
+        bool turn_left;
+        bool turn_right;
+        bool shoot;
     };
 
     namespace keyboard

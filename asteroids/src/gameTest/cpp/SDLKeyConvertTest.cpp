@@ -14,27 +14,27 @@ class SDLKeyConvertTest : public ::testing::Test
         }
 
         Uint8 input[SDL_NUM_SCANCODES];
-        KeyboardState result;
+        ShipAction result;
 };
 
 TEST_F(SDLKeyConvertTest, ConvertsUpKeyPress)
 {
     input[SDL_SCANCODE_UP] = 1;
-    result.up = true;
+    result.accelerate = true;
     EXPECT_THAT(SDLKeyConvert(input), Eq(result));
 }
 
 TEST_F(SDLKeyConvertTest, ConvertsLeftKeyPress)
 {
     input[SDL_SCANCODE_LEFT] = 1;
-    result.left = true;
+    result.turn_left = true;
     EXPECT_THAT(SDLKeyConvert(input), Eq(result));
 }
 
 TEST_F(SDLKeyConvertTest, ConvertsRightKeyPress)
 {
     input[SDL_SCANCODE_RIGHT] = 1;
-    result.right = true;
+    result.turn_right = true;
     EXPECT_THAT(SDLKeyConvert(input), Eq(result));
 }
 
@@ -42,8 +42,8 @@ TEST_F(SDLKeyConvertTest, ConvertsUpLeftKeyPress)
 {
     input[SDL_SCANCODE_UP] = 1;
     input[SDL_SCANCODE_LEFT] = 1;
-    result.up = true;
-    result.left = true;
+    result.accelerate = true;
+    result.turn_left = true;
     EXPECT_THAT(SDLKeyConvert(input), Eq(result));
 }
 
@@ -51,9 +51,8 @@ TEST_F(SDLKeyConvertTest, ConvertsUpRightKeyPress)
 {
     input[SDL_SCANCODE_UP] = 1;
     input[SDL_SCANCODE_RIGHT] = 1;
-    KeyboardState result;
-    result.up = true;
-    result.right = true;
+    result.accelerate = true;
+    result.turn_right = true;
     EXPECT_THAT(SDLKeyConvert(input), Eq(result));
 }
 
@@ -69,7 +68,7 @@ TEST_F(SDLKeyConvertTest, LeftAndRightTogetherCancelOutLeavingOthers)
     input[SDL_SCANCODE_LEFT] = 1;
     input[SDL_SCANCODE_RIGHT] = 1;
     input[SDL_SCANCODE_UP] = 1;
-    result.up = true;
+    result.accelerate = true;
     EXPECT_THAT(SDLKeyConvert(input), Eq(result));
 }
 
@@ -82,6 +81,6 @@ TEST_F(SDLKeyConvertTest, UnknownKeysMapToNone)
 TEST_F(SDLKeyConvertTest, ConvertsSpaceKey)
 {
     input[SDL_SCANCODE_SPACE] = 1;
-    result.space = true;
+    result.shoot = true;
     EXPECT_THAT(SDLKeyConvert(input), Eq(result));
 }
