@@ -6,7 +6,7 @@
 
 namespace pjm
 {
-    keyboard::KeyPress SDLKeyConvert(const Uint8* iState);
+    KeyboardState SDLKeyConvert(const Uint8* iState);
 }
 
 #endif /* end of include guard: _PJM_SDLKEYCONVERT_HPP_ */
