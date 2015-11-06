@@ -1,7 +1,7 @@
 #ifndef _PJM_SDLKEYCONVERT_HPP_
 #define _PJM_SDLKEYCONVERT_HPP_
 
-#include <KeyPress.hpp>
+#include <ShipAction.hpp>
 #include <SDL2/SDL.h>
 
 namespace pjm

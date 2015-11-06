@@ -4,7 +4,7 @@
 #include <TestAsteroid.hpp>
 #include <TestBullet.hpp>
 #include <TestCollisionInteractions.hpp>
-#include <KeyPress.hpp>
+#include <ShipAction.hpp>
 #include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>
 

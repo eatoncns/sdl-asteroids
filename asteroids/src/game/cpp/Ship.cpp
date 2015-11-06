@@ -1,5 +1,5 @@
 #include <Ship.hpp>
-#include <KeyPress.hpp>
+#include <ShipAction.hpp>
 #include <math.h>
 
 using std::string;

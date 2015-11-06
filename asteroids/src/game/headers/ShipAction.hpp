@@ -1,9 +1,8 @@
-#ifndef _PJM_KEYPRESS_HPP_
-#define _PJM_KEYPRESS_HPP_
+#ifndef _PJM_SHIPACTION_HPP_
+#define _PJM_SHIPACTION_HPP_
 
 namespace pjm
 {
-
     struct ShipAction
     {
         ShipAction()
@@ -23,11 +22,6 @@ namespace pjm
         bool turn_right;
         bool shoot;
     };
-
-    namespace keyboard
-    {
-        enum KeyPress {NONE, UP, LEFT, RIGHT, UP_LEFT, UP_RIGHT};
-    }
 }
 
 #endif

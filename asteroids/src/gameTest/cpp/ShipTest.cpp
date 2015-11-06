@@ -1,6 +1,6 @@
 #include <gmock/gmock.h>
 #include <Ship.hpp>
-#include <KeyPress.hpp>
+#include <ShipAction.hpp>
 #include <Rectangle.hpp>
 #include <MoveableObjectTest.hpp>
 #include <TestAsteroid.hpp>

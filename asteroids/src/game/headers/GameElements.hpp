@@ -1,7 +1,7 @@
 #ifndef _PJM_GAMEELEMENTS_HPP_
 #define _PJM_GAMEELEMENTS_HPP_
 
-#include <KeyPress.hpp>
+#include <ShipAction.hpp>
 #include <CollisionInteractions.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>

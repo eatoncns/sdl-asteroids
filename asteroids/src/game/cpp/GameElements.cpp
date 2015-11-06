@@ -1,6 +1,6 @@
 #include <GameElements.hpp>
 #include <Ship.hpp>
-#include <KeyPress.hpp>
+#include <ShipAction.hpp>
 #include <Asteroid.hpp>
 #include <Bullet.hpp>
 #include <boost/foreach.hpp>

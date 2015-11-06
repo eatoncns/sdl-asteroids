@@ -2,7 +2,7 @@
 #define _PJM_TESTSHIP_HPP_
 
 #include <Ship.hpp>
-#include <KeyPress.hpp>
+#include <ShipAction.hpp>
 #include <ScreenWrapper.hpp>
 #include <TestImageLoader.hpp>
 #include <Rectangle.hpp>

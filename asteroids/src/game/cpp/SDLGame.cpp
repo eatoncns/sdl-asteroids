@@ -4,7 +4,7 @@
 #include <LifeCounter.hpp>
 #include <SDLImageLoader.hpp>
 #include <SDLKeyConvert.hpp>
-#include <KeyPress.hpp>
+#include <ShipAction.hpp>
 #include <Vector.hpp>
 #include <ScreenWrapper.hpp>
 #include <Ship.hpp>
