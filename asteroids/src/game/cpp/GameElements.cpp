@@ -1,14 +1,12 @@
 #include <GameElements.hpp>
 #include <Ship.hpp>
+#include <KeyPress.hpp>
 #include <Asteroid.hpp>
 #include <Bullet.hpp>
-#include <boost/assign/list_of.hpp>
 #include <boost/foreach.hpp>
-#include <map>
 
 using boost::shared_ptr;
 using std::list;
-using namespace boost::assign;
 
 namespace
 {
@@ -28,21 +26,9 @@ namespace pjm
     {}
 
 
-    typedef std::map<keyboard::KeyPress, Ship::Action> key_map_t;
-    static const key_map_t key_to_action = map_list_of(keyboard::UP,   Ship::ACCELERATE)
-                                                      (keyboard::LEFT, Ship::TURN_LEFT)
-                                                      (keyboard::RIGHT, Ship::TURN_RIGHT)
-                                                      (keyboard::UP_LEFT, Ship::ACCELERATE_LEFT)
-                                                      (keyboard::UP_RIGHT, Ship::ACCELERATE_RIGHT)
-                                                      (keyboard::NONE, Ship::NONE);
-
-    bool GameElements::update(keyboard::KeyPress iKeyPress, unsigned int iTimeElapsed)
+    bool GameElements::update(const ShipAction& iAction, unsigned int iTimeElapsed)
     {
-        key_map_t::const_iterator it = key_to_action.find(iKeyPress);
-        if (it != key_to_action.end())
-        {
-            _ship->update(it->second, iTimeElapsed);
-        }
+        _ship->update(iAction, iTimeElapsed);
         BOOST_FOREACH(shared_ptr<Asteroid> asteroid, _asteroids)
         {
             asteroid->update(iTimeElapsed);

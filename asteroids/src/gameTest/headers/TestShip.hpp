@@ -2,6 +2,7 @@
 #define _PJM_TESTSHIP_HPP_
 
 #include <Ship.hpp>
+#include <KeyPress.hpp>
 #include <ScreenWrapper.hpp>
 #include <TestImageLoader.hpp>
 #include <Rectangle.hpp>
@@ -14,7 +15,7 @@ struct TestShip : public pjm::Ship
     bool initialise(const pjm::Vector& iInitialLocation,
                     pjm::ImageLoader& iImageLoader);
 
-    void update(const Action iAction, unsigned int iTimeElapsed);
+    void update(const pjm::ShipAction& iAction, unsigned int iTimeElapsed);
 
     pjm::Rectangle getBoundingBox();
 
@@ -25,7 +26,6 @@ struct TestShip : public pjm::Ship
     bool isExpired();
 
     int renderCalls;
-    std::list<std::pair<Action, unsigned int> > updateCalls;
     std::list<pjm::Vector> initialiseCalls;
     std::list<pjm::Asteroid*> collideCalls;
     bool initialiseSuccess;

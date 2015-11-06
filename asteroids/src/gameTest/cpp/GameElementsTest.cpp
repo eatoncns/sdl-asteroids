@@ -89,46 +89,11 @@ TEST_F(GameElementsTest, CascadesRenderToAsteroids)
     }
 }
 
-TEST_F(GameElementsTest, ConvertsUpKeyToShipAccelerate)
-{
-    _gameElements.update(keyboard::UP, 5);
-    EXPECT_THAT(_ship->updateCalls, ElementsAre(std::make_pair(Ship::ACCELERATE, 5)));
-}
-
-TEST_F(GameElementsTest, ConvertsNoneKeyToShipNone)
-{
-    _gameElements.update(keyboard::NONE, 5);
-    EXPECT_THAT(_ship->updateCalls, ElementsAre(std::make_pair(Ship::NONE, 5)));
-}
-
-TEST_F(GameElementsTest, ConvertsLeftKeyToShipTurnLeft)
-{
-    _gameElements.update(keyboard::LEFT, 5);
-    EXPECT_THAT(_ship->updateCalls, ElementsAre(std::make_pair(Ship::TURN_LEFT, 5)));
-}
-
-TEST_F(GameElementsTest, ConvertsRightKeyToShipTurnRight)
-{
-    _gameElements.update(keyboard::RIGHT, 5);
-    EXPECT_THAT(_ship->updateCalls, ElementsAre(std::make_pair(Ship::TURN_RIGHT, 5)));
-}
-
-TEST_F(GameElementsTest, ConvertsUpLeftToAccelerateLeft)
-{
-    _gameElements.update(keyboard::UP_LEFT, 5);
-    EXPECT_THAT(_ship->updateCalls, ElementsAre(std::make_pair(Ship::ACCELERATE_LEFT, 5)));
-}
-
-TEST_F(GameElementsTest, ConvertsUpRightToAccelerateRight)
-{
-    _gameElements.update(keyboard::UP_RIGHT, 5);
-    EXPECT_THAT(_ship->updateCalls, ElementsAre(std::make_pair(Ship::ACCELERATE_RIGHT, 5)));
-}
-
 TEST_F(GameElementsTest, CascadesUpdateToAsteroids)
 {
-    _gameElements.update(keyboard::NONE, 3);
-    _gameElements.update(keyboard::UP, 2);
+    _gameElements.update(ShipAction(), 3);
+    ShipAction accelerateAction; accelerateAction.accelerate = true;
+    _gameElements.update(accelerateAction, 2);
     BOOST_FOREACH(shared_ptr<TestAsteroid> asteroid, _asteroids)
     {
         EXPECT_THAT(asteroid->updateCalls, ElementsAre(3, 2));
@@ -137,26 +102,26 @@ TEST_F(GameElementsTest, CascadesUpdateToAsteroids)
 
 TEST_F(GameElementsTest, CascadesUpdateToCollisionInteractions)
 {
-    _gameElements.update(keyboard::NONE, 3);
+    _gameElements.update(ShipAction(), 3);
     EXPECT_THAT(_collisionInteractions->updateCalls, Eq(1));
 }
 
 TEST_F(GameElementsTest, UpdateReturnsFalseOnShipExpiry)
 {
     _ship->expired = true;
-    EXPECT_THAT(_gameElements.update(keyboard::NONE, 2), Eq(true));
+    EXPECT_THAT(_gameElements.update(ShipAction(), 2), Eq(true));
 }
 
 TEST_F(GameElementsTest, RemovesExpiredAsteroidsOnUpdate)
 {
     _asteroids.front()->expired = true;
-    _gameElements.update(keyboard::NONE, 3);
+    _gameElements.update(ShipAction(), 3);
     EXPECT_THAT(_gameElements.getAsteroids().size(), Eq(4));
 }
 
 TEST_F(GameElementsTest, RemovesExpiredBulletsOnUpdate)
 {
     _bullet->expired = true;
-    _gameElements.update(keyboard::NONE, 3);
+    _gameElements.update(ShipAction(), 3);
     EXPECT_THAT(_gameElements.getBullets().empty(), Eq(true));
 }

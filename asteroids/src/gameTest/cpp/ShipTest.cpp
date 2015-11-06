@@ -1,5 +1,6 @@
 #include <gmock/gmock.h>
 #include <Ship.hpp>
+#include <KeyPress.hpp>
 #include <Rectangle.hpp>
 #include <MoveableObjectTest.hpp>
 #include <TestAsteroid.hpp>
@@ -50,39 +51,48 @@ class ShipTest : public MoveableObjectTest
             _ship.initialise(_initialLocation, _imageLoader);
         }
 
-        void update(Ship::Action iAction, unsigned int iTime)
+        void update(ShipAction iAction, unsigned int iTime)
         {
             _ship.update(iAction, iTime);
         }
 
         void accelerateFor(unsigned int iTime)
         {
-            update(Ship::ACCELERATE, iTime);
+            ShipAction action; action.accelerate = true;
+            update(action, iTime);
         }
 
         void turnLeftFor(unsigned int iTime)
         {
-            update(Ship::TURN_LEFT, iTime);
+            ShipAction action; action.turn_left = true;
+            update(action, iTime);
         }
 
         void turnRightFor(unsigned int iTime)
         {
-            update(Ship::TURN_RIGHT, iTime);
+            ShipAction action; action.turn_right = true;
+            update(action, iTime);
         }
 
         void accelerateLeftFor(unsigned int iTime)
         {
-            update(Ship::ACCELERATE_LEFT, iTime);
+            ShipAction action;
+            action.accelerate = true;
+            action.turn_left = true;
+            update(action, iTime);
         }
 
         void accelerateRightFor(unsigned int iTime)
         {
-            update(Ship::ACCELERATE_RIGHT, iTime);
+            ShipAction action;
+            action.accelerate = true;
+            action.turn_right = true;
+            update(action, iTime);
         }
 
         void doNothingFor(unsigned int iTime)
         {
-            update(Ship::NONE, iTime);
+            update(ShipAction(), iTime);
         }
 
         unsigned int timeToRotate(double iAngle)
@@ -92,7 +102,7 @@ class ShipTest : public MoveableObjectTest
 
         void turnTo(double iAngle)
         {
-            unsigned int time = timeToRotate(abs(iAngle));
+            unsigned int time = timeToRotate(fabs(iAngle));
             iAngle > 0 ? turnRightFor(time) : turnLeftFor(time);
         }
 

@@ -10,6 +10,7 @@
 namespace pjm
 {
     class Ship;
+    struct ShipAction;
     class Asteroid;
     class Bullet;
 
@@ -19,7 +20,7 @@ namespace pjm
             GameElements(boost::shared_ptr<Ship> iShip,
                          std::list<boost::shared_ptr<Asteroid> > iAsteroids);
 
-            bool update(keyboard::KeyPress iKeyPress, unsigned int iTimeElapsed);
+            bool update(const ShipAction& iAction, unsigned int iTimeElapsed);
 
             void render();
 

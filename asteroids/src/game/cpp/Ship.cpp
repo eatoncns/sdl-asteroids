@@ -1,11 +1,8 @@
 #include <Ship.hpp>
-#include <boost/assign.hpp>
+#include <KeyPress.hpp>
 #include <math.h>
 
-using namespace boost::assign;
 using std::string;
-using std::map;
-using std::set;
 using boost::shared_ptr;
 
 namespace pjm
@@ -22,7 +19,7 @@ namespace pjm
     }
 
 
-    void Ship::update(const Action iAction, unsigned int iTimeElapsed)
+    void Ship::update(const ShipAction& iAction, unsigned int iTimeElapsed)
     {
         updateAngle(iAction, iTimeElapsed);
         updateAcceleration(iAction);
@@ -32,29 +29,19 @@ namespace pjm
     }
 
 
-    void Ship::updateAngle(const Action iAction, unsigned int iTimeElapsed)
+    void Ship::updateAngle(const ShipAction& iAction, unsigned int iTimeElapsed)
     {
-        static const map<Action, double> rotationDirections =
-            map_list_of(TURN_LEFT, -1.0)
-                       (TURN_RIGHT, 1.0)
-                       (ACCELERATE_LEFT, -1.0)
-                       (ACCELERATE_RIGHT, 1.0);
-
-        map<Action, double>::const_iterator directionIt = rotationDirections.find(iAction);
-        if (directionIt == rotationDirections.end())
-        {
-            return;
-        }
-        double rotationUpdate = iTimeElapsed * ROTATION_FACTOR * directionIt->second;
+        double rotationDirection = iAction.turn_left  ? -1.0 :
+                                   iAction.turn_right ?  1.0 :
+                                                         0.0;
+        double rotationUpdate = iTimeElapsed * ROTATION_FACTOR * rotationDirection;
         _angle += rotationUpdate;
     }
 
 
-    void Ship::updateAcceleration(const Action iAction)
+    void Ship::updateAcceleration(const ShipAction& iAction)
     {
-        static const set<Action> accelerateActions =
-            list_of(ACCELERATE)(ACCELERATE_LEFT)(ACCELERATE_RIGHT);
-        if(accelerateActions.find(iAction) != accelerateActions.end())
+        if(iAction.accelerate)
         {
             double angleRadians = _angle*M_PI/180.0;
             double sinAngle = sin(angleRadians);

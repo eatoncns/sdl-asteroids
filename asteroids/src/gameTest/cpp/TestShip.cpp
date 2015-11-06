@@ -20,9 +20,8 @@ bool TestShip::initialise(const Vector& iInitialLocation,
 }
 
 
-void TestShip::update(const Action iAction, unsigned int iTimeElapsed)
+void TestShip::update(const ShipAction& iAction, unsigned int iTimeElapsed)
 {
-    updateCalls.push_back(std::make_pair(iAction, iTimeElapsed));
 }
 
 

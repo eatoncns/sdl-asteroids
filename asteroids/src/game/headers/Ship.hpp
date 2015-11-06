@@ -7,15 +7,14 @@
 namespace pjm
 {
     class Asteroid;
+    struct ShipAction;
 
     class Ship : public ScreenWrappingObject
     {
         public:
             Ship(boost::shared_ptr<ScreenWrapper> iScreenWrapper);
 
-            enum Action {NONE, ACCELERATE, TURN_LEFT, TURN_RIGHT, ACCELERATE_LEFT, ACCELERATE_RIGHT};
-
-            virtual void update(const Action iAction, unsigned int iTimeElapsed);
+            virtual void update(const ShipAction& iAction, unsigned int iTimeElapsed);
 
             virtual void collideWith(Asteroid* iAsteroid);
 
@@ -28,8 +27,8 @@ namespace pjm
             static const float MAX_VELOCITY = 0.1;
 
         protected:
-            void updateAngle(const Action iAction, unsigned int iTimeElapsed);
-            void updateAcceleration(const Action iAction);
+            void updateAngle(const ShipAction& iAction, unsigned int iTimeElapsed);
+            void updateAcceleration(const ShipAction& iAction);
             void updateVelocity(unsigned int iTimeElapsed);
 
             Vector _acceleration;
