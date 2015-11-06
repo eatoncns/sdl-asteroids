@@ -58,36 +58,27 @@ class ShipTest : public MoveableObjectTest
 
         void accelerateFor(unsigned int iTime)
         {
-            ShipAction action; action.accelerate = true;
-            update(action, iTime);
+            update(ShipAction().accelerating(), iTime);
         }
 
         void turnLeftFor(unsigned int iTime)
         {
-            ShipAction action; action.turn_left = true;
-            update(action, iTime);
+            update(ShipAction().turningLeft(), iTime);
         }
 
         void turnRightFor(unsigned int iTime)
         {
-            ShipAction action; action.turn_right = true;
-            update(action, iTime);
+            update(ShipAction().turningRight(), iTime);
         }
 
         void accelerateLeftFor(unsigned int iTime)
         {
-            ShipAction action;
-            action.accelerate = true;
-            action.turn_left = true;
-            update(action, iTime);
+            update(ShipAction().accelerating().turningLeft(), iTime);
         }
 
         void accelerateRightFor(unsigned int iTime)
         {
-            ShipAction action;
-            action.accelerate = true;
-            action.turn_right = true;
-            update(action, iTime);
+            update(ShipAction().accelerating().turningRight(), iTime);
         }
 
         void doNothingFor(unsigned int iTime)

@@ -92,8 +92,7 @@ TEST_F(GameElementsTest, CascadesRenderToAsteroids)
 TEST_F(GameElementsTest, CascadesUpdateToAsteroids)
 {
     _gameElements.update(ShipAction(), 3);
-    ShipAction accelerateAction; accelerateAction.accelerate = true;
-    _gameElements.update(accelerateAction, 2);
+    _gameElements.update(ShipAction().accelerating(), 2);
     BOOST_FOREACH(shared_ptr<TestAsteroid> asteroid, _asteroids)
     {
         EXPECT_THAT(asteroid->updateCalls, ElementsAre(3, 2));

@@ -17,6 +17,35 @@ namespace pjm
                     shoot == iOther.shoot);
         }
 
+        bool operator!=(const ShipAction& iOther) const
+        {
+            return !(*this == iOther);
+        }
+
+        ShipAction& accelerating()
+        {
+            accelerate = true;
+            return *this;
+        }
+
+        ShipAction& turningLeft()
+        {
+            turn_left = true;
+            return *this;
+        }
+
+        ShipAction& turningRight()
+        {
+            turn_right = true;
+            return *this;
+        }
+
+        ShipAction& shooting()
+        {
+            shoot = true;
+            return *this;
+        }
+
         bool accelerate;
         bool turn_left;
         bool turn_right;
