@@ -224,3 +224,9 @@ TEST_F(ShipTest, OnlyCallsBulletLoaderForShootAction)
     doNothingFor(5);
     EXPECT_THAT(_bulletLoader->loadCalls, Eq(0));
 }
+
+TEST_F(ShipTest, LoadsBulletForShootAction)
+{
+    _ship.update(ShipAction().shooting(), 3);
+    EXPECT_THAT(_bulletLoader->loadCalls, Eq(1));
+}

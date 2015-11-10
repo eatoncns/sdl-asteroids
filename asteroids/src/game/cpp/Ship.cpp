@@ -1,5 +1,6 @@
 #include <Ship.hpp>
 #include <ShipAction.hpp>
+#include <BulletLoader.hpp>
 #include <math.h>
 
 using std::string;
@@ -29,7 +30,7 @@ namespace pjm
         updateVelocity(iTimeElapsed);
         updateLocation(iTimeElapsed);
         handleScreenWrap(iTimeElapsed);
-        return shared_ptr<Bullet>();
+        return handleShooting(iAction);
     }
 
 
@@ -73,6 +74,13 @@ namespace pjm
             float velocityFactor = MAX_VELOCITY/sqrt(velocitySquared);
             _velocity *= velocityFactor;
         }
+    }
+
+
+    shared_ptr<Bullet> Ship::handleShooting(const ShipAction& iAction)
+    {
+        return iAction.shoot ? _bulletLoader->loadBullet()
+                             : shared_ptr<Bullet>();
     }
 
 

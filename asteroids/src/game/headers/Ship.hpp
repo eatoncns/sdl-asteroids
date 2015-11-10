@@ -34,6 +34,7 @@ namespace pjm
             void updateAngle(const ShipAction& iAction, unsigned int iTimeElapsed);
             void updateAcceleration(const ShipAction& iAction);
             void updateVelocity(unsigned int iTimeElapsed);
+            boost::shared_ptr<Bullet> handleShooting(const ShipAction& iAction);
 
             Vector _acceleration;
             boost::shared_ptr<BulletLoader> _bulletLoader;
