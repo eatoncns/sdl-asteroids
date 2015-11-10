@@ -4,6 +4,7 @@
 #include <Rectangle.hpp>
 #include <MoveableObjectTest.hpp>
 #include <TestAsteroid.hpp>
+#include <TestBullet.hpp>
 #include <TestBulletLoader.hpp>
 #include <boost/math/special_functions/round.hpp>
 #include <math.h>
@@ -14,6 +15,7 @@ using boost::shared_ptr;
 using ::testing::Eq;
 using ::testing::Le;
 using ::testing::ElementsAre;
+using ::testing::_;
 
 struct ShipSpy : public Ship
 {
@@ -105,6 +107,11 @@ class ShipTest : public MoveableObjectTest
             _ship.initialise(iLocation, _imageLoader);
             turnTo(iAngle);
             accelerateFor(iTime);
+        }
+
+        void shoot()
+        {
+            update(ShipAction().shooting(), 3);
         }
 
         shared_ptr<TestBulletLoader> _bulletLoader;
@@ -221,12 +228,13 @@ TEST_F(ShipTest, ExpiresOnCollisionWithAsteroid)
 
 TEST_F(ShipTest, OnlyCallsBulletLoaderForShootAction)
 {
+    EXPECT_CALL(*_bulletLoader, loadBullet(_, _))
+        .Times(0);
     doNothingFor(5);
-    EXPECT_THAT(_bulletLoader->loadCalls, Eq(0));
 }
 
-TEST_F(ShipTest, LoadsBulletForShootAction)
+TEST_F(ShipTest, CallsBulletLoaderWithShipInfo)
 {
-    _ship.update(ShipAction().shooting(), 3);
-    EXPECT_THAT(_bulletLoader->loadCalls, Eq(1));
+    EXPECT_CALL(*_bulletLoader, loadBullet(_initialLocation, Vector(0, 0)));
+    shoot();
 }

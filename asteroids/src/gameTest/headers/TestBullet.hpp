@@ -3,6 +3,8 @@
 
 #include <Bullet.hpp>
 #include <Vector.hpp>
+#include <Rectangle.hpp>
+#include <list>
 #include <gmock/gmock.h>
 
 namespace pjm

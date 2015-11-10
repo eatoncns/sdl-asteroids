@@ -17,9 +17,13 @@ namespace pjm
                          ImageLoader& iImageLoader,
                          Timer& iTimer);
 
-            virtual boost::shared_ptr<Bullet> loadBullet();
+            virtual boost::shared_ptr<Bullet> loadBullet(const Vector& iInitialLocation,
+                                                         const Vector& iShooterVelocity);
 
             const static unsigned int RELOAD_TIME;
+
+        protected:
+            virtual boost::shared_ptr<Bullet> makeBullet();
 
         private:
             Vector _bounds;

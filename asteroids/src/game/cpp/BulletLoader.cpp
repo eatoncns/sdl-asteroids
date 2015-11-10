@@ -18,14 +18,26 @@ namespace pjm
     {}
 
 
-    shared_ptr<Bullet> BulletLoader::loadBullet()
+    shared_ptr<Bullet> BulletLoader::loadBullet(const Vector& iInitialLocation,
+                                                const Vector& iShooterVelocity)
     {
         unsigned int time = _timer.getTime();
         if (time - _previousShotTime >= RELOAD_TIME)
         {
-            return make_shared<Bullet>(_bounds);
+            _previousShotTime = time;
+            shared_ptr<Bullet> bullet = makeBullet();
+            if (bullet->initialise(iInitialLocation, iShooterVelocity, _imageLoader))
+            {
+                return bullet;
+            }
         }
         return shared_ptr<Bullet>();
+    }
+
+
+    shared_ptr<Bullet> BulletLoader::makeBullet()
+    {
+        return shared_ptr<Bullet>(new Bullet(_bounds));
     }
 
 
