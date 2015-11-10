@@ -26,6 +26,8 @@ struct TestBullet : public pjm::Bullet
                                   const pjm::Vector& iShooterVelocity,
                                   pjm::ImageLoader& iImageLoader));
 
+    MOCK_METHOD1(update, void(unsigned int iTimeElapsed));
+
     pjm::Rectangle getBoundingBox()
     {
         return boundingBox;

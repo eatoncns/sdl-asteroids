@@ -30,6 +30,7 @@ namespace pjm
     {
         updateShip(iAction, iTimeElapsed);
         updateAsteroids(iTimeElapsed);
+        updateBullets(iTimeElapsed);
         handleCollisions();
         removeExpiredAsteroids();
         removeExpiredBullets();
@@ -52,6 +53,15 @@ namespace pjm
         BOOST_FOREACH(shared_ptr<Asteroid> asteroid, _asteroids)
         {
             asteroid->update(iTimeElapsed);
+        }
+    }
+
+
+    void GameElements::updateBullets(unsigned int iTimeElapsed)
+    {
+        BOOST_FOREACH(shared_ptr<Bullet> bullet, _bullets)
+        {
+            bullet->update(iTimeElapsed);
         }
     }
 

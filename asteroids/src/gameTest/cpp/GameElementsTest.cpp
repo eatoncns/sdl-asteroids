@@ -105,6 +105,12 @@ TEST_F(GameElementsTest, CascadesUpdateToAsteroids)
     }
 }
 
+TEST_F(GameElementsTest, CascadesUpdateToBullets)
+{
+    EXPECT_CALL(*_bullet, update(3));
+    _gameElements.update(ShipAction(), 3);
+}
+
 TEST_F(GameElementsTest, CascadesUpdateToCollisionInteractions)
 {
     _gameElements.update(ShipAction(), 3);

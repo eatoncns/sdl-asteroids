@@ -32,6 +32,7 @@ namespace pjm
 
             void updateShip(const ShipAction& iAction, unsigned int iTimeElapsed);
             void updateAsteroids(unsigned int iTimeElapsed);
+            void updateBullets(unsigned int iTimeElapsed);
             void handleCollisions();
             void removeExpiredBullets();
             void removeExpiredAsteroids();
