@@ -28,19 +28,37 @@ namespace pjm
 
     bool GameElements::update(const ShipAction& iAction, unsigned int iTimeElapsed)
     {
+        updateShip(iAction, iTimeElapsed);
+        updateAsteroids(iTimeElapsed);
+        handleCollisions();
+        removeExpiredAsteroids();
+        removeExpiredBullets();
+        return _ship->isExpired();
+    }
+
+
+    void GameElements::updateShip(const ShipAction& iAction, unsigned int iTimeElapsed)
+    {
         shared_ptr<Bullet> bullet = _ship->update(iAction, iTimeElapsed);
         if (bullet)
         {
             _bullets.push_back(bullet);
         }
+    }
+
+
+    void GameElements::updateAsteroids(unsigned int iTimeElapsed)
+    {
         BOOST_FOREACH(shared_ptr<Asteroid> asteroid, _asteroids)
         {
             asteroid->update(iTimeElapsed);
         }
+    }
+
+
+    void GameElements::handleCollisions()
+    {
         _collisionInteractions->update();
-        removeExpiredAsteroids();
-        removeExpiredBullets();
-        return _ship->isExpired();
     }
 
 

@@ -30,6 +30,9 @@ namespace pjm
             std::list<boost::shared_ptr<Bullet> > _bullets;
             boost::scoped_ptr<CollisionInteractions> _collisionInteractions;
 
+            void updateShip(const ShipAction& iAction, unsigned int iTimeElapsed);
+            void updateAsteroids(unsigned int iTimeElapsed);
+            void handleCollisions();
             void removeExpiredBullets();
             void removeExpiredAsteroids();
     };
