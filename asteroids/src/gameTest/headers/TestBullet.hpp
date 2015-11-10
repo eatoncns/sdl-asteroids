@@ -16,6 +16,7 @@ struct TestBullet : public pjm::Bullet
     TestBullet()
         : Bullet(pjm::Vector(1,1)),
           boundingBox(0,0,0,0),
+          renderCalls(0),
           expired(false)
     {}
 
@@ -38,7 +39,13 @@ struct TestBullet : public pjm::Bullet
         return expired;
     }
 
+    void render()
+    {
+        renderCalls++;
+    }
+
     pjm::Rectangle boundingBox;
+    int renderCalls;
     std::list<pjm::Asteroid*> collideCalls;
     bool expired;
 };

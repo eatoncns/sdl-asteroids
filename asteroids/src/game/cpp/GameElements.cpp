@@ -28,7 +28,11 @@ namespace pjm
 
     bool GameElements::update(const ShipAction& iAction, unsigned int iTimeElapsed)
     {
-        _ship->update(iAction, iTimeElapsed);
+        shared_ptr<Bullet> bullet = _ship->update(iAction, iTimeElapsed);
+        if (bullet)
+        {
+            _bullets.push_back(bullet);
+        }
         BOOST_FOREACH(shared_ptr<Asteroid> asteroid, _asteroids)
         {
             asteroid->update(iTimeElapsed);
@@ -60,6 +64,10 @@ namespace pjm
         BOOST_FOREACH(shared_ptr<Asteroid> asteroid, _asteroids)
         {
             asteroid->render();
+        }
+        BOOST_FOREACH(shared_ptr<Bullet> bullet, _bullets)
+        {
+            bullet->render();
         }
     }
 }

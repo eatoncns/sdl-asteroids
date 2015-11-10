@@ -89,6 +89,12 @@ TEST_F(GameElementsTest, CascadesRenderToAsteroids)
     }
 }
 
+TEST_F(GameElementsTest, CascadesRenderToBullets)
+{
+    _gameElements.render();
+    EXPECT_THAT(_bullet->renderCalls, Eq(1));
+}
+
 TEST_F(GameElementsTest, CascadesUpdateToAsteroids)
 {
     _gameElements.update(ShipAction(), 3);
@@ -123,4 +129,17 @@ TEST_F(GameElementsTest, RemovesExpiredBulletsOnUpdate)
     _bullet->expired = true;
     _gameElements.update(ShipAction(), 3);
     EXPECT_THAT(_gameElements.getBullets().empty(), Eq(true));
+}
+
+TEST_F(GameElementsTest, IgnoresUninitialisedBulletFromUpdate)
+{
+    _gameElements.update(ShipAction(), 3);
+    EXPECT_THAT(_gameElements.getBullets().size(), Eq(1));
+}
+
+TEST_F(GameElementsTest, AddsInitialisedBulletFromUpdate)
+{
+    _ship->bullet = _bullet;
+    _gameElements.update(ShipAction(), 3);
+    EXPECT_THAT(_gameElements.getBullets().size(), Eq(2));
 }
