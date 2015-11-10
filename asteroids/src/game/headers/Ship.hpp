@@ -7,6 +7,7 @@
 namespace pjm
 {
     class Asteroid;
+    class Bullet;
     struct ShipAction;
 
     class Ship : public ScreenWrappingObject
@@ -14,7 +15,8 @@ namespace pjm
         public:
             Ship(boost::shared_ptr<ScreenWrapper> iScreenWrapper);
 
-            virtual void update(const ShipAction& iAction, unsigned int iTimeElapsed);
+            virtual boost::shared_ptr<Bullet> update(const ShipAction& iAction,
+                                                     unsigned int iTimeElapsed);
 
             virtual void collideWith(Asteroid* iAsteroid);
 

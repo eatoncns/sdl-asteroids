@@ -20,8 +20,10 @@ bool TestShip::initialise(const Vector& iInitialLocation,
 }
 
 
-void TestShip::update(const ShipAction& iAction, unsigned int iTimeElapsed)
+shared_ptr<Bullet> TestShip::update(const ShipAction& iAction,
+                                    unsigned int iTimeElapsed)
 {
+    return bullet;
 }
 
 

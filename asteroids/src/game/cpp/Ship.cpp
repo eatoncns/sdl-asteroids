@@ -19,13 +19,15 @@ namespace pjm
     }
 
 
-    void Ship::update(const ShipAction& iAction, unsigned int iTimeElapsed)
+    shared_ptr<Bullet> Ship::update(const ShipAction& iAction,
+                                    unsigned int iTimeElapsed)
     {
         updateAngle(iAction, iTimeElapsed);
         updateAcceleration(iAction);
         updateVelocity(iTimeElapsed);
         updateLocation(iTimeElapsed);
         handleScreenWrap(iTimeElapsed);
+        return shared_ptr<Bullet>();
     }
 
 
