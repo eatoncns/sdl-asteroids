@@ -13,7 +13,9 @@ struct TestableShipCreator : public ShipCreator
         : testShip(new TestShip())
     {}
 
-    shared_ptr<Ship> makeShip(shared_ptr<ScreenWrapper>)
+    shared_ptr<Ship> makeShip(shared_ptr<ScreenWrapper>,
+                              ImageLoader& iImageLoader,
+                              const ScreenInfo& iScreenInfo)
     {
         return testShip;
     }

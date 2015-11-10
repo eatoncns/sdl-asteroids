@@ -17,7 +17,7 @@ namespace pjm
                          ImageLoader& iImageLoader,
                          Timer& iTimer);
 
-            boost::shared_ptr<Bullet> loadBullet();
+            virtual boost::shared_ptr<Bullet> loadBullet();
 
             const static unsigned int RELOAD_TIME;
 

@@ -4,6 +4,7 @@
 #include <Rectangle.hpp>
 #include <MoveableObjectTest.hpp>
 #include <TestAsteroid.hpp>
+#include <TestBulletLoader.hpp>
 #include <boost/math/special_functions/round.hpp>
 #include <math.h>
 
@@ -16,8 +17,9 @@ using ::testing::ElementsAre;
 
 struct ShipSpy : public Ship
 {
-    ShipSpy(shared_ptr<ScreenWrapper> iScreenWrapper)
-        : Ship(iScreenWrapper)
+    ShipSpy(shared_ptr<ScreenWrapper> iScreenWrapper,
+            shared_ptr<BulletLoader> iBulletLoader)
+        : Ship(iScreenWrapper, iBulletLoader)
     {}
 
     Vector getLocation() const
@@ -46,7 +48,8 @@ class ShipTest : public MoveableObjectTest
 {
     protected:
         ShipTest()
-            : _ship(_wrapper)
+            : _bulletLoader(new TestBulletLoader()),
+              _ship(_wrapper, _bulletLoader)
         {
             _ship.initialise(_initialLocation, _imageLoader);
         }
@@ -104,6 +107,7 @@ class ShipTest : public MoveableObjectTest
             accelerateFor(iTime);
         }
 
+        shared_ptr<TestBulletLoader> _bulletLoader;
         ShipSpy _ship;
 };
 
@@ -213,4 +217,10 @@ TEST_F(ShipTest, ExpiresOnCollisionWithAsteroid)
     TestAsteroid asteroid;
     _ship.collideWith(&asteroid);
     EXPECT_THAT(_ship.isExpired(), Eq(true));
+}
+
+TEST_F(ShipTest, OnlyCallsBulletLoaderForShootAction)
+{
+    doNothingFor(5);
+    EXPECT_THAT(_bulletLoader->loadCalls, Eq(0));
 }

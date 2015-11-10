@@ -18,7 +18,9 @@ namespace pjm
                                            const ScreenInfo& iScreenInfo);
 
         private:
-            virtual boost::shared_ptr<Ship> makeShip(boost::shared_ptr<ScreenWrapper> iScreenWrapper);
+            virtual boost::shared_ptr<Ship> makeShip(boost::shared_ptr<ScreenWrapper> iScreenWrapper,
+                                                     ImageLoader& iImageLoader,
+                                                     const ScreenInfo& iScreenInfo);
     };
 }
 

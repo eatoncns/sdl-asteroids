@@ -8,12 +8,14 @@ namespace pjm
 {
     class Asteroid;
     class Bullet;
+    class BulletLoader;
     struct ShipAction;
 
     class Ship : public ScreenWrappingObject
     {
         public:
-            Ship(boost::shared_ptr<ScreenWrapper> iScreenWrapper);
+            Ship(boost::shared_ptr<ScreenWrapper> iScreenWrapper,
+                 boost::shared_ptr<BulletLoader> iBulletLoader);
 
             virtual boost::shared_ptr<Bullet> update(const ShipAction& iAction,
                                                      unsigned int iTimeElapsed);
@@ -34,6 +36,7 @@ namespace pjm
             void updateVelocity(unsigned int iTimeElapsed);
 
             Vector _acceleration;
+            boost::shared_ptr<BulletLoader> _bulletLoader;
     };
 }
 

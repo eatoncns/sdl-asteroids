@@ -35,6 +35,7 @@ struct TestShip : public pjm::Ship
     boost::shared_ptr<pjm::Bullet> bullet;
     static TestImageLoader imageLoader;
     static boost::shared_ptr<pjm::ScreenWrapper> screenWrapper;
+    static boost::shared_ptr<pjm::BulletLoader> bulletLoader;
 };
 
 #endif

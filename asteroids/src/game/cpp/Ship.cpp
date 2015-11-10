@@ -7,9 +7,11 @@ using boost::shared_ptr;
 
 namespace pjm
 {
-    Ship::Ship(shared_ptr<ScreenWrapper> iScreenWrapper)
+    Ship::Ship(shared_ptr<ScreenWrapper> iScreenWrapper,
+               shared_ptr<BulletLoader> iBulletLoader)
       : ScreenWrappingObject(iScreenWrapper),
-        _acceleration(0, 0)
+        _acceleration(0, 0),
+        _bulletLoader(iBulletLoader)
     {}
 
 
