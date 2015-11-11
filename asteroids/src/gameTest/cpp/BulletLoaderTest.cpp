@@ -6,6 +6,7 @@
 
 using namespace pjm;
 using boost::shared_ptr;
+using ::testing::NiceMock;
 using ::testing::Return;
 using ::testing::_;
 
@@ -37,7 +38,7 @@ class BulletLoaderTest : public ::testing::Test
               timer(0),
               initialLocation(1, 1),
               angle(0.0),
-              bullet(new TestBullet()),
+              bullet(new NiceMock<TestBullet>()),
               bulletLoader(bounds, imageLoader, timer, bullet)
         {}
 
@@ -52,7 +53,7 @@ class BulletLoaderTest : public ::testing::Test
         TestTimer timer;
         Vector initialLocation;
         double angle;
-        shared_ptr<TestBullet> bullet;
+        shared_ptr<NiceMock<TestBullet> > bullet;
         TestableBulletLoader bulletLoader;
 };
 

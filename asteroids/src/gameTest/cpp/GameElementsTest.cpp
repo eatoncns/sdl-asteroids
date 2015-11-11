@@ -52,7 +52,7 @@ class GameElementsTest : public ::testing::Test
     protected:
         GameElementsTest()
             : _ship(new TestShip()),
-              _bullet(new TestBullet()),
+              _bullet(new NiceMock<TestBullet>()),
               _collisionInteractions(new TestCollisionInteractions()),
               _gameElements(_ship)
         {
@@ -68,7 +68,7 @@ class GameElementsTest : public ::testing::Test
 
         shared_ptr<TestShip> _ship;
         std::list<shared_ptr<TestAsteroid> > _asteroids;
-        shared_ptr<TestBullet> _bullet;
+        shared_ptr<NiceMock<TestBullet> > _bullet;
         TestCollisionInteractions* _collisionInteractions;
         TestableGameElements _gameElements;
 };
