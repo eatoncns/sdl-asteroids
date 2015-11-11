@@ -41,5 +41,5 @@ namespace pjm
     }
 
 
-    const unsigned int BulletLoader::RELOAD_TIME = 10;
+    const unsigned int BulletLoader::RELOAD_TIME = 1000;
 }
