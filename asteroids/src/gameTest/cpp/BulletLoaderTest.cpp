@@ -41,6 +41,12 @@ class BulletLoaderTest : public ::testing::Test
               bulletLoader(bounds, imageLoader, timer, bullet)
         {}
 
+        shared_ptr<Bullet> load(int iReloadTimeOffset)
+        {
+            timer.times.push(BulletLoader::RELOAD_TIME + iReloadTimeOffset);
+            return bulletLoader.loadBullet(initialLocation, angle);
+        }
+
         Vector bounds;
         TestImageLoader imageLoader;
         TestTimer timer;
@@ -52,40 +58,36 @@ class BulletLoaderTest : public ::testing::Test
 
 TEST_F(BulletLoaderTest, ReturnsInvalidWhenNotEnoughTimePassedSinceLastShot)
 {
-    timer.times.push(BulletLoader::RELOAD_TIME - 1);
-    shared_ptr<Bullet> bullet = bulletLoader.loadBullet(initialLocation, angle);
-    EXPECT_FALSE(bullet);
+    shared_ptr<Bullet> result = load(-1);
+    EXPECT_FALSE(result);
 }
 
 TEST_F(BulletLoaderTest, ReturnsNewBulletWhenEnoughTimePassedSinceLastShot)
 {
     ON_CALL(*bullet, initialise(_, _, _))
         .WillByDefault(Return(true));
-    timer.times.push(BulletLoader::RELOAD_TIME + 1);
-    shared_ptr<Bullet> bullet = bulletLoader.loadBullet(initialLocation, angle);
-    EXPECT_TRUE(bullet);
+    shared_ptr<Bullet> result = load(1);
+    EXPECT_TRUE(result);
 }
 
 TEST_F(BulletLoaderTest, ReturnsInvalidWhenBulletInitialisationFails)
 {
     ON_CALL(*bullet, initialise(_, _, _))
         .WillByDefault(Return(false));
-    timer.times.push(BulletLoader::RELOAD_TIME + 1);
-    shared_ptr<Bullet> bullet = bulletLoader.loadBullet(initialLocation, angle);
+    shared_ptr<Bullet> result = load(1);
+    EXPECT_FALSE(result);
 }
 
 TEST_F(BulletLoaderTest, InitialisesLoadedBulletLocation)
 {
     EXPECT_CALL(*bullet, initialise(initialLocation, _, _))
         .WillOnce(Return(true));
-    timer.times.push(BulletLoader::RELOAD_TIME + 1);
-    shared_ptr<Bullet> bullet = bulletLoader.loadBullet(initialLocation, angle);
+    load(1);
 }
 
 TEST_F(BulletLoaderTest, InitialisesLoadedBulletAngle)
 {
     EXPECT_CALL(*bullet, initialise(_, angle, _))
         .WillOnce(Return(true));
-    timer.times.push(BulletLoader::RELOAD_TIME + 1);
-    shared_ptr<Bullet> bullet = bulletLoader.loadBullet(initialLocation, angle);
+    load(1);
 }
