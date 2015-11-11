@@ -23,7 +23,7 @@ struct TestBullet : public pjm::Bullet
     {}
 
     MOCK_METHOD3(initialise, bool(const pjm::Vector& iInitialLocation,
-                                  const pjm::Vector& iInitialDirection,
+                                  const double iAngle,
                                   pjm::ImageLoader& iImageLoader));
 
     MOCK_METHOD1(update, void(unsigned int iTimeElapsed));

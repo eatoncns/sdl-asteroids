@@ -18,10 +18,9 @@ struct TestBulletLoader : public pjm::BulletLoader
     }
 
     MOCK_METHOD2(loadBullet, boost::shared_ptr<pjm::Bullet>(const pjm::Vector& iInitialLocation,
-                                                            const pjm::Vector& iInitialDirection));
+                                                            const double iAngle));
 
     static TestImageLoader imageLoader;
-    // static TestTimer timer;
 };
 
 #endif /* end of include guard: _PJM_TESTBULLETLOADER_HPP_ */

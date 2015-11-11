@@ -32,15 +32,15 @@ class BulletTest : public MoveableObjectTest
     protected:
         BulletTest()
             : _bounds(110, 110),
-              _shooterVelocity(0.5, 0),
+              _angle(90.0),
               _bullet(_bounds)
 
         {
-            _bullet.initialise(_initialLocation, _shooterVelocity, _imageLoader);
+            _bullet.initialise(_initialLocation, _angle, _imageLoader);
         }
 
         Vector _bounds;
-        Vector _shooterVelocity;
+        double _angle;
         BulletSpy _bullet;
 };
 
@@ -48,17 +48,24 @@ class BulletTest : public MoveableObjectTest
 TEST_F(BulletTest, InitialiseReturnsFalseWhenImageLoadFails)
 {
     _imageLoader.loadSuccess = false;
-    EXPECT_THAT(_bullet.initialise(_initialLocation, _shooterVelocity, _imageLoader), Eq(false));
+    EXPECT_THAT(_bullet.initialise(_initialLocation, _angle, _imageLoader), Eq(false));
 }
 
 TEST_F(BulletTest, InitialiseReturnsTrueWhenImageLoadSucceeds)
 {
-    EXPECT_THAT(_bullet.initialise(_initialLocation, _shooterVelocity, _imageLoader), Eq(true));
+    EXPECT_THAT(_bullet.initialise(_initialLocation, _angle, _imageLoader), Eq(true));
 }
 
-TEST_F(BulletTest, InitialisesWithFixedVelocityInSameDirectionAsShooter)
+TEST_F(BulletTest, InitialisesWithFixedVelocityAlongGivenAngle)
 {
     EXPECT_THAT(_bullet.getVelocity(), Eq(Vector(Bullet::VELOCITY, 0)));
+}
+
+TEST_F(BulletTest, InitialisesWithCorrectYAxisDirection)
+{
+    _angle = 180.0;
+    _bullet.initialise(_initialLocation, _angle, _imageLoader);
+    EXPECT_THAT(_bullet.getVelocity(), Eq(Vector(0, Bullet::VELOCITY)));
 }
 
 TEST_F(BulletTest, MovesWithConstantVelocity)

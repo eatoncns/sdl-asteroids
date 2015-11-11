@@ -15,7 +15,7 @@ namespace pjm
             Bullet(const Vector& iBounds);
 
             virtual bool initialise(const Vector& iInitialLocation,
-                            const Vector& iInitialDirection,
+                            const double iAngle,
                             ImageLoader& iImageLoader);
 
             virtual void update(unsigned int iTimeElapsed);
@@ -24,7 +24,7 @@ namespace pjm
 
             virtual ~Bullet() {}
 
-            static const float VELOCITY = 1.02;
+            static const float VELOCITY;
 
         private:
             std::string imageFilePath();

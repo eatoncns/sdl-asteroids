@@ -79,7 +79,7 @@ namespace pjm
 
     shared_ptr<Bullet> Ship::handleShooting(const ShipAction& iAction)
     {
-        return iAction.shoot ? _bulletLoader->loadBullet(_location, _velocity)
+        return iAction.shoot ? _bulletLoader->loadBullet(_location, _angle)
                              : shared_ptr<Bullet>();
     }
 

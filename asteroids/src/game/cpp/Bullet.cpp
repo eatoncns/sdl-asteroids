@@ -13,12 +13,14 @@ namespace pjm
 
 
     bool Bullet::initialise(const Vector& iInitialLocation,
-                            const Vector& iInitialDirection,
+                            const double iAngle,
                             ImageLoader& iImageLoader)
     {
-        _velocity = iInitialDirection;
-        float velocityFactor = VELOCITY/sqrt(_velocity.squareSum());
-        _velocity *= velocityFactor;
+        double angleRadians = iAngle*M_PI/180.0;
+        double sinAngle = sin(angleRadians);
+        double cosAngle = -cos(angleRadians);
+        _velocity = Vector(sinAngle, cosAngle);
+        _velocity *= VELOCITY;
         return MovingObject::initialise(iInitialLocation, iImageLoader);
     }
 
@@ -49,4 +51,7 @@ namespace pjm
     {
         return "resources/Bullet.gif";
     }
+
+
+    const float Bullet::VELOCITY(1.02);
 }

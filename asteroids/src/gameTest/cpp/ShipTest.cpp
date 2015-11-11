@@ -237,6 +237,7 @@ TEST_F(ShipTest, OnlyCallsBulletLoaderForShootAction)
 
 TEST_F(ShipTest, CallsBulletLoaderWithShipInfo)
 {
-    EXPECT_CALL(*_bulletLoader, loadBullet(_initialLocation, Vector(0, 0)));
+    turnTo(45.0);
+    EXPECT_CALL(*_bulletLoader, loadBullet(_initialLocation, 45.0));
     shoot();
 }
