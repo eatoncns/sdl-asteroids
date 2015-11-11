@@ -53,5 +53,5 @@ namespace pjm
     }
 
 
-    const float Bullet::VELOCITY(1.02);
+    const float Bullet::VELOCITY(0.5);
 }

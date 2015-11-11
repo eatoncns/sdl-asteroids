@@ -83,7 +83,7 @@ TEST_F(BulletTest, IsNotExpiredWhileStillOnScreen)
 
 TEST_F(BulletTest, ExpiresWhenMovesOffScreen)
 {
-    _bullet.update(10);
+    _bullet.update(100);
     EXPECT_THAT(_bullet.isExpired(), Eq(true));
 }
 
