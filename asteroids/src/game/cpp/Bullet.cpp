@@ -13,10 +13,10 @@ namespace pjm
 
 
     bool Bullet::initialise(const Vector& iInitialLocation,
-                            const Vector& iShooterVelocity,
+                            const Vector& iInitialDirection,
                             ImageLoader& iImageLoader)
     {
-        _velocity = iShooterVelocity;
+        _velocity = iInitialDirection;
         float velocityFactor = VELOCITY/sqrt(_velocity.squareSum());
         _velocity *= velocityFactor;
         return MovingObject::initialise(iInitialLocation, iImageLoader);

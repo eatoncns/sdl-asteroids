@@ -50,7 +50,8 @@ class ShipTest : public MoveableObjectTest
 {
     protected:
         ShipTest()
-            : _bulletLoader(new TestBulletLoader()),
+            : _timer(0),
+              _bulletLoader(new TestBulletLoader(_timer)),
               _ship(_wrapper, _bulletLoader)
         {
             _ship.initialise(_initialLocation, _imageLoader);
@@ -114,6 +115,7 @@ class ShipTest : public MoveableObjectTest
             update(ShipAction().shooting(), 3);
         }
 
+        TestTimer _timer;
         shared_ptr<TestBulletLoader> _bulletLoader;
         ShipSpy _ship;
 };

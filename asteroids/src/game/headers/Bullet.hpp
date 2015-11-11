@@ -15,7 +15,7 @@ namespace pjm
             Bullet(const Vector& iBounds);
 
             virtual bool initialise(const Vector& iInitialLocation,
-                            const Vector& iShooterVelocity,
+                            const Vector& iInitialDirection,
                             ImageLoader& iImageLoader);
 
             virtual void update(unsigned int iTimeElapsed);

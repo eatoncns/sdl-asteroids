@@ -18,7 +18,7 @@ namespace pjm
                          Timer& iTimer);
 
             virtual boost::shared_ptr<Bullet> loadBullet(const Vector& iInitialLocation,
-                                                         const Vector& iShooterVelocity);
+                                                         const Vector& iInitialDirection);
 
             const static unsigned int RELOAD_TIME;
 

@@ -8,20 +8,20 @@
 
 struct TestBulletLoader : public pjm::BulletLoader
 {
-    TestBulletLoader()
+    TestBulletLoader(pjm::Timer& iTimer)
       : BulletLoader(pjm::Vector(0,0),
                      imageLoader,
-                     timer)
+                     iTimer)
     {
         ON_CALL(*this, loadBullet(::testing::_, ::testing::_))
             .WillByDefault(::testing::Return(boost::shared_ptr<pjm::Bullet>()));
     }
 
     MOCK_METHOD2(loadBullet, boost::shared_ptr<pjm::Bullet>(const pjm::Vector& iInitialLocation,
-                                                            const pjm::Vector& iShooterVelocity));
+                                                            const pjm::Vector& iInitialDirection));
 
     static TestImageLoader imageLoader;
-    static TestTimer timer;
+    // static TestTimer timer;
 };
 
 #endif /* end of include guard: _PJM_TESTBULLETLOADER_HPP_ */
