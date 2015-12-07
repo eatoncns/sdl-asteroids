@@ -10,23 +10,6 @@ using boost::math::iround;
 using ::testing::Eq;
 using ::testing::ElementsAre;
 
-struct BulletSpy : public Bullet
-{
-    BulletSpy(const Vector& iBounds)
-        : Bullet(iBounds)
-    {}
-
-    Vector& getVelocity()
-    {
-        return _velocity;
-    }
-
-    Vector& getLocation()
-    {
-        return _location;
-    }
-};
-
 class BulletTest : public MoveableObjectTest
 {
     protected:
@@ -39,9 +22,24 @@ class BulletTest : public MoveableObjectTest
             _bullet.initialise(_initialLocation, _angle, _imageLoader);
         }
 
+        void expectBulletToRenderAt(const Vector& iLocation, const double iAngle)
+        {
+            expectObjectToRenderAt(_bullet, iLocation, iAngle);
+        }
+
+        void expectBulletToRenderAtAngle(const double iAngle)
+        {
+            expectObjectToRenderAtAngle(_bullet, iAngle);
+        }
+
+        void expectBulletToRenderAtLocation(const Vector& iLocation)
+        {
+            expectObjectToRenderAtLocation(_bullet, iLocation);
+        }
+
         Vector _bounds;
         double _angle;
-        BulletSpy _bullet;
+        Bullet _bullet;
 };
 
 
@@ -56,23 +54,29 @@ TEST_F(BulletTest, InitialiseReturnsTrueWhenImageLoadSucceeds)
     EXPECT_THAT(_bullet.initialise(_initialLocation, _angle, _imageLoader), Eq(true));
 }
 
-TEST_F(BulletTest, InitialisesWithFixedVelocityAlongGivenAngle)
+TEST_F(BulletTest, MovesWithFixedVelocityAlongGivenAngle)
 {
-    EXPECT_THAT(_bullet.getVelocity(), Eq(Vector(Bullet::VELOCITY, 0)));
+    unsigned int timeElapsed = 5;
+    _bullet.update(timeElapsed);
+    expectBulletToRenderAtLocation(Vector(_initialLocation.x + Bullet::VELOCITY*5,
+                                          _initialLocation.y));
+}
+
+TEST_F(BulletTest, DoesNotRotate)
+{
+    unsigned int timeElapsed = 5;
+    _bullet.update(timeElapsed);
+    expectBulletToRenderAtAngle(0.0);
 }
 
 TEST_F(BulletTest, InitialisesWithCorrectYAxisDirection)
 {
     _angle = 180.0;
     _bullet.initialise(_initialLocation, _angle, _imageLoader);
-    EXPECT_THAT(_bullet.getVelocity(), Eq(Vector(0, Bullet::VELOCITY)));
-}
-
-TEST_F(BulletTest, MovesWithConstantVelocity)
-{
-    _bullet.update(5);
-    EXPECT_THAT(_bullet.getLocation(), Eq(Vector(_initialLocation.x + Bullet::VELOCITY*5,
-                                                 _initialLocation.y)));
+    unsigned int timeElapsed = 5;
+    _bullet.update(timeElapsed);
+    expectBulletToRenderAtLocation(Vector(_initialLocation.x,
+                                          _initialLocation.y + Bullet::VELOCITY*5));
 }
 
 TEST_F(BulletTest, IsNotExpiredWhileStillOnScreen)
@@ -89,8 +93,7 @@ TEST_F(BulletTest, ExpiresWhenMovesOffScreen)
 
 TEST_F(BulletTest, RendersImageAtCurrentLocation)
 {
-    _bullet.render();
-    EXPECT_THAT(_testRenderable->renderCalls, ElementsAre(std::make_pair(_initialLocation, 0.0)));
+    expectBulletToRenderAt(_initialLocation, 0.0);
 }
 
 TEST_F(BulletTest, HasBoundingBoxBasedOnScaledImage)

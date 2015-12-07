@@ -12,7 +12,6 @@ using boost::math::iround;
 using ::testing::Eq;
 using ::testing::ElementsAre;
 using ::testing::NiceMock;
-using ::testing::Pair;
 using ::testing::_;
 using ::testing::Return;
 
@@ -49,23 +48,17 @@ class AsteroidTest : public MoveableObjectTest
 
         void expectAsteroidToRenderAt(const Vector& iLocation, const double iAngle)
         {
-            _asteroid.render();
-            ASSERT_FALSE(_testRenderable->renderCalls.empty());
-            EXPECT_THAT(_testRenderable->renderCalls.back(), Pair(iLocation, iAngle));
+            expectObjectToRenderAt(_asteroid, iLocation, iAngle);
         }
 
         void expectAsteroidToRenderAtAngle(const double iAngle)
         {
-            _asteroid.render();
-            ASSERT_FALSE(_testRenderable->renderCalls.empty());
-            EXPECT_THAT(_testRenderable->renderCalls.back(), Pair(_, iAngle));
+            expectObjectToRenderAtAngle(_asteroid, iAngle);
         }
 
         void expectAsteroidToRenderAtLocation(const Vector& iLocation)
         {
-            _asteroid.render();
-            ASSERT_FALSE(_testRenderable->renderCalls.empty());
-            EXPECT_THAT(_testRenderable->renderCalls.back(), Pair(iLocation, _));
+            expectObjectToRenderAtLocation(_asteroid, iLocation);
         }
 
         NiceMock<TestRandomGenerator> _random;

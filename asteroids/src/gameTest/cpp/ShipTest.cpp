@@ -14,7 +14,6 @@ using namespace boost::math;
 using boost::shared_ptr;
 using ::testing::Eq;
 using ::testing::Le;
-using ::testing::Pair;
 using ::testing::_;
 
 class ShipTest : public MoveableObjectTest
@@ -35,26 +34,17 @@ class ShipTest : public MoveableObjectTest
 
         void expectShipToRenderAt(const Vector& iLocation, const double iAngle)
         {
-            _ship.render();
-            ASSERT_FALSE(_testRenderable->renderCalls.empty());
-            EXPECT_THAT(_testRenderable->renderCalls.back(),
-                        Pair(iLocation, iAngle));
+            expectObjectToRenderAt(_ship, iLocation, iAngle);
         }
 
         void expectShipToRenderAtAngle(const double iAngle)
         {
-            _ship.render();
-            ASSERT_FALSE(_testRenderable->renderCalls.empty());
-            EXPECT_THAT(_testRenderable->renderCalls.back(),
-                        Pair(_, iAngle));
+            expectObjectToRenderAtAngle(_ship, iAngle);
         }
 
         void expectShipToRenderAtLocation(const Vector& iLocation)
         {
-            _ship.render();
-            ASSERT_FALSE(_testRenderable->renderCalls.empty());
-            EXPECT_THAT(_testRenderable->renderCalls.back(),
-                        Pair(iLocation, _));
+            expectObjectToRenderAtLocation(_ship, iLocation);
         }
 
         TestTimer _timer;
