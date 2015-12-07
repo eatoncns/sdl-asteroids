@@ -14,6 +14,7 @@ using namespace boost::math;
 using boost::shared_ptr;
 using ::testing::Eq;
 using ::testing::Le;
+using ::testing::Pair;
 using ::testing::_;
 
 class ShipTest : public MoveableObjectTest
@@ -37,17 +38,23 @@ class ShipTest : public MoveableObjectTest
             _ship.render();
             ASSERT_FALSE(_testRenderable->renderCalls.empty());
             EXPECT_THAT(_testRenderable->renderCalls.back(),
-                        Eq(std::make_pair(iLocation, iAngle)));
+                        Pair(iLocation, iAngle));
         }
 
         void expectShipToRenderAtAngle(const double iAngle)
         {
-            expectShipToRenderAt(_initialLocation, iAngle);
+            _ship.render();
+            ASSERT_FALSE(_testRenderable->renderCalls.empty());
+            EXPECT_THAT(_testRenderable->renderCalls.back(),
+                        Pair(_, iAngle));
         }
 
         void expectShipToRenderAtLocation(const Vector& iLocation)
         {
-            expectShipToRenderAt(iLocation, 0.0);
+            _ship.render();
+            ASSERT_FALSE(_testRenderable->renderCalls.empty());
+            EXPECT_THAT(_testRenderable->renderCalls.back(),
+                        Pair(iLocation, _));
         }
 
         TestTimer _timer;
@@ -88,6 +95,13 @@ TEST_F(ShipTest, DoesNotRotateWhenNoActionTaken)
     expectShipToRenderAtAngle(0.0);
 }
 
+TEST_F(ShipTest, RotationAloneDoesNotCauseLocationChange)
+{
+    unsigned int timeElapsed = 5;
+    _ship.update(ShipAction().turningRight(), timeElapsed);
+    expectShipToRenderAtLocation(_initialLocation);
+}
+
 TEST_F(ShipTest, DoesConstantEulerAcceleration)
 {
     unsigned int firstTimeElapsed = 5;
@@ -103,6 +117,13 @@ TEST_F(ShipTest, DoesConstantEulerAcceleration)
     yMovement = secondTimeElapsed*(firstTimeElapsed*Ship::ACC_FACTOR + secondTimeElapsed*Ship::ACC_FACTOR);
     yPos = yPos - yMovement;
     expectShipToRenderAtLocation(Vector(_initialLocation.x, yPos));
+}
+
+TEST_F(ShipTest, AccelerationAloneDoesNotCauseRotation)
+{
+    unsigned int timeElapsed = 5;
+    _ship.update(ShipAction().accelerating(), timeElapsed);
+    expectShipToRenderAtAngle(0.0);
 }
 
 /*
