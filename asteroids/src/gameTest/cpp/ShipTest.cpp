@@ -14,37 +14,7 @@ using namespace boost::math;
 using boost::shared_ptr;
 using ::testing::Eq;
 using ::testing::Le;
-using ::testing::ElementsAre;
 using ::testing::_;
-
-struct ShipSpy : public Ship
-{
-    ShipSpy(shared_ptr<ScreenWrapper> iScreenWrapper,
-            shared_ptr<BulletLoader> iBulletLoader)
-        : Ship(iScreenWrapper, iBulletLoader)
-    {}
-
-    Vector getLocation() const
-    {
-        return _location;
-    }
-
-    Vector getVelocity() const
-    {
-        return _velocity;
-    }
-
-    Vector getAcceleration() const
-    {
-        return _acceleration;
-    }
-
-    double getAngle() const
-    {
-        return _angle;
-    }
-};
-
 
 class ShipTest : public MoveableObjectTest
 {
@@ -57,67 +27,32 @@ class ShipTest : public MoveableObjectTest
             _ship.initialise(_initialLocation, _imageLoader);
         }
 
-        void update(ShipAction iAction, unsigned int iTime)
-        {
-            _ship.update(iAction, iTime);
-        }
-
-        void accelerateFor(unsigned int iTime)
-        {
-            update(ShipAction().accelerating(), iTime);
-        }
-
-        void turnLeftFor(unsigned int iTime)
-        {
-            update(ShipAction().turningLeft(), iTime);
-        }
-
-        void turnRightFor(unsigned int iTime)
-        {
-            update(ShipAction().turningRight(), iTime);
-        }
-
-        void accelerateLeftFor(unsigned int iTime)
-        {
-            update(ShipAction().accelerating().turningLeft(), iTime);
-        }
-
-        void accelerateRightFor(unsigned int iTime)
-        {
-            update(ShipAction().accelerating().turningRight(), iTime);
-        }
-
-        void doNothingFor(unsigned int iTime)
-        {
-            update(ShipAction(), iTime);
-        }
-
         unsigned int timeToRotate(double iAngle)
         {
             return iround(iAngle/Ship::ROTATION_FACTOR);
         }
 
-        void turnTo(double iAngle)
+        void expectShipToRenderAt(const Vector& iLocation, const double iAngle)
         {
-            unsigned int time = timeToRotate(fabs(iAngle));
-            iAngle > 0 ? turnRightFor(time) : turnLeftFor(time);
+            _ship.render();
+            ASSERT_FALSE(_testRenderable->renderCalls.empty());
+            EXPECT_THAT(_testRenderable->renderCalls.back(),
+                        Eq(std::make_pair(iLocation, iAngle)));
         }
 
-        void accelerateFrom(const Vector& iLocation, double iAngle, unsigned int iTime)
+        void expectShipToRenderAtAngle(const double iAngle)
         {
-            _ship.initialise(iLocation, _imageLoader);
-            turnTo(iAngle);
-            accelerateFor(iTime);
+            expectShipToRenderAt(_initialLocation, iAngle);
         }
 
-        void shoot()
+        void expectShipToRenderAtLocation(const Vector& iLocation)
         {
-            update(ShipAction().shooting(), 3);
+            expectShipToRenderAt(iLocation, 0.0);
         }
 
         TestTimer _timer;
         shared_ptr<TestBulletLoader> _bulletLoader;
-        ShipSpy _ship;
+        Ship _ship;
 };
 
 
@@ -127,40 +62,50 @@ TEST_F(ShipTest, InitReturnsFalseWhenImageLoadFails)
     EXPECT_FALSE(_ship.initialise(_initialLocation, _imageLoader));
 }
 
-TEST_F(ShipTest, RendersImageAtCurrentLocation)
+TEST_F(ShipTest, IntialisesAtGivenLocationWithZeroAngle)
 {
-    _ship.render();
-    EXPECT_THAT(_testRenderable->renderCalls, ElementsAre(std::make_pair(_initialLocation, 0.0)));
+    expectShipToRenderAt(_initialLocation, 0.0);
 }
 
 TEST_F(ShipTest, RotatesLeft)
 {
-    turnLeftFor(5);
-    EXPECT_THAT(_ship.getAngle(), Eq(-5*Ship::ROTATION_FACTOR));
+    unsigned int timeElapsed = 5;
+    _ship.update(ShipAction().turningLeft(), timeElapsed);
+    expectShipToRenderAtAngle(-(timeElapsed*Ship::ROTATION_FACTOR));
 }
 
 TEST_F(ShipTest, RotatesRight)
 {
-    turnRightFor(5);
-    EXPECT_THAT(_ship.getAngle(), Eq(5*Ship::ROTATION_FACTOR));
+    unsigned int timeElapsed = 5;
+    _ship.update(ShipAction().turningRight(), timeElapsed);
+    expectShipToRenderAtAngle(timeElapsed*Ship::ROTATION_FACTOR);
 }
 
 TEST_F(ShipTest, DoesNotRotateWhenNoActionTaken)
 {
-    doNothingFor(5);
-    EXPECT_THAT(_ship.getAngle(), Eq(0.0));
+    unsigned int timeElapsed = 5;
+    _ship.update(ShipAction(), timeElapsed);
+    expectShipToRenderAtAngle(0.0);
 }
 
 TEST_F(ShipTest, DoesConstantEulerAcceleration)
 {
-    accelerateFor(5);
-    float firstYPos = _initialLocation.y - 25*Ship::ACC_FACTOR;
-    EXPECT_THAT(_ship.getLocation(), Eq(Vector(_initialLocation.x, firstYPos)));
-    accelerateFor(6);
-    float secondYPos = firstYPos - 6*(5*Ship::ACC_FACTOR + 6*Ship::ACC_FACTOR);
-    EXPECT_THAT(_ship.getLocation(), Eq(Vector(_initialLocation.x, secondYPos)));
+    unsigned int firstTimeElapsed = 5;
+    _ship.update(ShipAction().accelerating(), firstTimeElapsed);
+    // l = v*t = a*t^2
+    float yMovement = firstTimeElapsed*firstTimeElapsed*Ship::ACC_FACTOR;
+    float yPos = _initialLocation.y - yMovement;
+    expectShipToRenderAtLocation(Vector(_initialLocation.x, yPos));
+
+    unsigned int secondTimeElapsed = 6;
+    _ship.update(ShipAction().accelerating(), secondTimeElapsed);
+    // l = t*v
+    yMovement = secondTimeElapsed*(firstTimeElapsed*Ship::ACC_FACTOR + secondTimeElapsed*Ship::ACC_FACTOR);
+    yPos = yPos - yMovement;
+    expectShipToRenderAtLocation(Vector(_initialLocation.x, yPos));
 }
 
+/*
 TEST_F(ShipTest, ResetsAccelerationWhenNoActionTaken)
 {
     accelerateFrom(_initialLocation, -45.0, 5);
@@ -168,39 +113,40 @@ TEST_F(ShipTest, ResetsAccelerationWhenNoActionTaken)
     EXPECT_THAT(_ship.getAcceleration().x, Eq(0));
     EXPECT_THAT(_ship.getAcceleration().y, Eq(0));
 }
+*/
 
 TEST_F(ShipTest, AcceleratesLeft)
 {
     unsigned int rotationTime = timeToRotate(45.0);
-    accelerateLeftFor(rotationTime);
+    _ship.update(ShipAction().accelerating().turningLeft(), rotationTime);
     float xPos = _initialLocation.x - 0.5*rotationTime*rotationTime*Ship::ACC_FACTOR;
     float yPos = _initialLocation.y - 0.5*rotationTime*rotationTime*Ship::ACC_FACTOR;
-    EXPECT_THAT(_ship.getLocation(), Eq(Vector(xPos, yPos)));
-    EXPECT_THAT(_ship.getAngle(), Eq(-45.0));
+    expectShipToRenderAt(Vector(xPos, yPos), -45.0);
 }
 
 TEST_F(ShipTest, AcceleratesRight)
 {
     unsigned int rotationTime = timeToRotate(45.0);
-    accelerateRightFor(rotationTime);
+    _ship.update(ShipAction().accelerating().turningRight(), rotationTime);
     float xPos = _initialLocation.x + 0.5*rotationTime*rotationTime*Ship::ACC_FACTOR;
     float yPos = _initialLocation.y - 0.5*rotationTime*rotationTime*Ship::ACC_FACTOR;
-    EXPECT_THAT(_ship.getLocation(), Eq(Vector(xPos, yPos)));
-    EXPECT_THAT(_ship.getAngle(), Eq(45.0));
+    expectShipToRenderAt(Vector(xPos, yPos), 45.0);
 }
 
 TEST_F(ShipTest, DoesNotExceedMaximumVelocity)
 {
-    turnTo(45.0);
-    accelerateFor(10000000);
-    EXPECT_THAT(_ship.getVelocity().squareSum(), Le(Ship::MAX_VELOCITY));
+    unsigned int timeForDoubleMaxVelocity = 2*(Ship::MAX_VELOCITY/Ship::ACC_FACTOR);
+    _ship.update(ShipAction().accelerating(), timeForDoubleMaxVelocity);
+    float maxVelocityYPos = _initialLocation.y - timeForDoubleMaxVelocity*Ship::MAX_VELOCITY;
+    expectShipToRenderAtLocation(Vector(_initialLocation.x, maxVelocityYPos));
 }
 
 TEST_F(ShipTest, CallsScreenWrapperOnUpdate)
 {
-    EXPECT_CALL(*_wrapper, wrap(_initialLocation, Vector(0, 0), 3))
+    unsigned int time = 3;
+    EXPECT_CALL(*_wrapper, wrap(_initialLocation, Vector(0, 0), time))
         .Times(1);
-    doNothingFor(3);
+    _ship.update(ShipAction(), time);
 }
 
 TEST_F(ShipTest, HasBoundingBoxBasedOnImage)
@@ -232,12 +178,13 @@ TEST_F(ShipTest, OnlyCallsBulletLoaderForShootAction)
 {
     EXPECT_CALL(*_bulletLoader, loadBullet(_, _))
         .Times(0);
-    doNothingFor(5);
+    _ship.update(ShipAction(), 3);
 }
 
 TEST_F(ShipTest, CallsBulletLoaderWithShipInfo)
 {
-    turnTo(45.0);
-    EXPECT_CALL(*_bulletLoader, loadBullet(_initialLocation, 45.0));
-    shoot();
+    double angle = 45.0;
+    unsigned int rotationTime = timeToRotate(angle);
+    EXPECT_CALL(*_bulletLoader, loadBullet(_initialLocation, angle));
+    _ship.update(ShipAction().turningRight().shooting(), rotationTime);
 }

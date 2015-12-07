@@ -2,9 +2,9 @@
 #define _PJM_VECTOR_HPP_
 
 #include <iostream>
-#include <cmath> 
+#include <cmath>
 
-static const float TOL = 10E-6;
+static const float TOL = 10E-5;
 
 namespace pjm
 {
@@ -41,7 +41,7 @@ namespace pjm
             y += iRhs.y;
             return *this;
         }
-        
+
         Vector& operator-=(const Vector& iRhs)
         {
             x -= iRhs.x;
@@ -55,7 +55,7 @@ namespace pjm
             y *= iScalar;
             return *this;
         }
-        
+
         Vector& operator*=(const float& iFloat)
         {
             x *= iFloat;
@@ -67,12 +67,12 @@ namespace pjm
         {
             return Vector(*this) += iOther;
         }
-        
+
         const Vector operator-(const Vector& iOther) const
         {
             return Vector(*this) -= iOther;
         }
-        
+
         const Vector operator*(const int& iScalar) const
         {
             return Vector(*this) *= iScalar;
@@ -82,8 +82,8 @@ namespace pjm
         {
             return (x*x) + (y*y);
         }
-        
-        friend std::ostream& operator<<(std::ostream& iOS, 
+
+        friend std::ostream& operator<<(std::ostream& iOS,
                                         const Vector& iVector)
         {
             return (iOS <<  "(" << iVector.x << "," << iVector.y << ")");
