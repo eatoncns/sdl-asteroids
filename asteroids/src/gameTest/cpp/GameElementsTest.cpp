@@ -17,14 +17,11 @@ using ::testing::NiceMock;
 
 struct TestableGameElements : public GameElements
 {
-    TestableGameElements(shared_ptr<Ship> iShip)
-        : GameElements(iShip, std::list<shared_ptr<Asteroid> >())
+    TestableGameElements(shared_ptr<Ship> iShip,
+                         std::list<shared_ptr<TestAsteroid> > iAsteroids)
+        : GameElements(iShip,
+                       std::list<shared_ptr<Asteroid> >(iAsteroids.begin(), iAsteroids.end()))
     {}
-
-    void addAsteroid(shared_ptr<Asteroid> iAsteroid)
-    {
-        _asteroids.push_back(iAsteroid);
-    }
 
     void addBullet(shared_ptr<Bullet> iBullet)
     {
@@ -47,21 +44,27 @@ struct TestableGameElements : public GameElements
     }
 };
 
+std::list<shared_ptr<TestAsteroid> > initAsteroids()
+{
+    std::list<shared_ptr<TestAsteroid> > asteroids;
+    for (int i = 0 ; i < 5; ++i)
+    {
+        shared_ptr<TestAsteroid> asteroid = make_shared<TestAsteroid>();
+        asteroids.push_back(asteroid);
+    }
+    return asteroids;
+}
+
 class GameElementsTest : public ::testing::Test
 {
     protected:
         GameElementsTest()
             : _ship(new TestShip()),
+              _asteroids(initAsteroids()),
               _bullet(new NiceMock<TestBullet>()),
               _collisionInteractions(new TestCollisionInteractions()),
-              _gameElements(_ship)
+              _gameElements(_ship, _asteroids)
         {
-            for (int i = 0 ; i < 5; ++i)
-            {
-                shared_ptr<TestAsteroid> asteroid = make_shared<TestAsteroid>();
-                _asteroids.push_back(asteroid);
-                _gameElements.addAsteroid(asteroid);
-            }
             _gameElements.addBullet(_bullet);
             _gameElements.resetCollisionInteractions(_collisionInteractions);
         }
