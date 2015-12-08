@@ -4,7 +4,6 @@
 #include <ShipAction.hpp>
 #include <CollisionInteractions.hpp>
 #include <boost/shared_ptr.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <list>
 
 namespace pjm
@@ -24,11 +23,14 @@ namespace pjm
 
             void render();
 
+            void overrideCollisionInteractions(
+                boost::shared_ptr<CollisionInteractions> iCollisionInteractions);
+
         protected:
             boost::shared_ptr<Ship> _ship;
             std::list<boost::shared_ptr<Asteroid> > _asteroids;
             std::list<boost::shared_ptr<Bullet> > _bullets;
-            boost::scoped_ptr<CollisionInteractions> _collisionInteractions;
+            boost::shared_ptr<CollisionInteractions> _collisionInteractions;
 
             void updateShip(const ShipAction& iAction, unsigned int iTimeElapsed);
             void updateAsteroids(unsigned int iTimeElapsed);

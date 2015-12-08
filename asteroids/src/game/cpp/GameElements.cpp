@@ -98,4 +98,10 @@ namespace pjm
             bullet->render();
         }
     }
+
+    void GameElements::overrideCollisionInteractions(
+        shared_ptr<CollisionInteractions> iCollisionInteractions)
+    {
+        _collisionInteractions = iCollisionInteractions;
+    }
 }

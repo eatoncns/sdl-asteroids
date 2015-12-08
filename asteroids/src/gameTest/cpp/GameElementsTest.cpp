@@ -23,11 +23,6 @@ struct TestableGameElements : public GameElements
                        std::list<shared_ptr<Asteroid> >(iAsteroids.begin(), iAsteroids.end()))
     {}
 
-    void resetCollisionInteractions(CollisionInteractions* iCollisionInteractions)
-    {
-        _collisionInteractions.reset(iCollisionInteractions);
-    }
-
     std::list<shared_ptr<Asteroid> >& getAsteroids()
     {
         return _asteroids;
@@ -60,7 +55,7 @@ class GameElementsTest : public ::testing::Test
               _collisionInteractions(new TestCollisionInteractions()),
               _gameElements(_ship, _asteroids)
         {
-            _gameElements.resetCollisionInteractions(_collisionInteractions);
+            _gameElements.overrideCollisionInteractions(_collisionInteractions);
         }
 
         void shootBullet()
@@ -73,7 +68,7 @@ class GameElementsTest : public ::testing::Test
         shared_ptr<TestShip> _ship;
         std::list<shared_ptr<TestAsteroid> > _asteroids;
         shared_ptr<NiceMock<TestBullet> > _bullet;
-        TestCollisionInteractions* _collisionInteractions;
+        shared_ptr<TestCollisionInteractions> _collisionInteractions;
         TestableGameElements _gameElements;
 };
 
