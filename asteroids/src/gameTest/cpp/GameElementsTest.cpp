@@ -65,7 +65,7 @@ class GameElementsTest : public ::testing::Test
 
         void shootBullet()
         {
-            _ship->bullet = _bullet;
+            _ship->willShootBullet(_bullet);
             unsigned int timeElapsed = 3;
             _gameElements.update(ShipAction().shooting(), timeElapsed);
         }
@@ -152,7 +152,6 @@ TEST_F(GameElementsTest, IgnoresUninitialisedBulletFromUpdate)
 
 TEST_F(GameElementsTest, AddsInitialisedBulletFromUpdate)
 {
-    _ship->bullet = _bullet;
-    _gameElements.update(ShipAction(), 3);
+    shootBullet();
     EXPECT_THAT(_gameElements.getBullets().size(), Eq(1));
 }

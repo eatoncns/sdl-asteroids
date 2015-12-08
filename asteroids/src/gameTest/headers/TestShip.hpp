@@ -8,34 +8,39 @@
 #include <Rectangle.hpp>
 #include <list>
 
-struct TestShip : public pjm::Ship
+class TestShip : public pjm::Ship
 {
-    TestShip();
+    public:
+        TestShip();
 
-    bool initialise(const pjm::Vector& iInitialLocation,
-                    pjm::ImageLoader& iImageLoader);
+        void willShootBullet(boost::shared_ptr<pjm::Bullet> iBullet);
 
-    boost::shared_ptr<pjm::Bullet> update(const pjm::ShipAction& iAction,
-                                          unsigned int iTimeElapsed);
+        bool initialise(const pjm::Vector& iInitialLocation,
+                        pjm::ImageLoader& iImageLoader);
 
-    pjm::Rectangle getBoundingBox();
+        boost::shared_ptr<pjm::Bullet> update(const pjm::ShipAction& iAction,
+                                              unsigned int iTimeElapsed);
 
-    void render();
+        pjm::Rectangle getBoundingBox();
 
-    void collideWith(pjm::Asteroid* iAsteroid);
+        void render();
 
-    bool isExpired();
+        void collideWith(pjm::Asteroid* iAsteroid);
 
-    int renderCalls;
-    std::list<pjm::Vector> initialiseCalls;
-    std::list<pjm::Asteroid*> collideCalls;
-    bool initialiseSuccess;
-    bool expired;
-    pjm::Rectangle boundingBox;
-    boost::shared_ptr<pjm::Bullet> bullet;
-    static TestImageLoader imageLoader;
-    static boost::shared_ptr<pjm::ScreenWrapper> screenWrapper;
-    static boost::shared_ptr<pjm::BulletLoader> bulletLoader;
+        bool isExpired();
+
+        int renderCalls;
+        std::list<pjm::Vector> initialiseCalls;
+        std::list<pjm::Asteroid*> collideCalls;
+        bool initialiseSuccess;
+        bool expired;
+        pjm::Rectangle boundingBox;
+        static TestImageLoader imageLoader;
+        static boost::shared_ptr<pjm::ScreenWrapper> screenWrapper;
+        static boost::shared_ptr<pjm::BulletLoader> bulletLoader;
+
+    private:
+        boost::shared_ptr<pjm::Bullet> _bullet;
 };
 
 #endif

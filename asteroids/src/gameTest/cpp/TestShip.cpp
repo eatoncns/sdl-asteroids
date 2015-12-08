@@ -12,6 +12,12 @@ TestShip::TestShip()
 {}
 
 
+void TestShip::willShootBullet(shared_ptr<Bullet> iBullet)
+{
+    _bullet = iBullet;
+}
+
+
 bool TestShip::initialise(const Vector& iInitialLocation,
                           ImageLoader& iImageLoader)
 {
@@ -23,7 +29,7 @@ bool TestShip::initialise(const Vector& iInitialLocation,
 shared_ptr<Bullet> TestShip::update(const ShipAction& iAction,
                                     unsigned int iTimeElapsed)
 {
-    return bullet;
+    return _bullet;
 }
 
 
