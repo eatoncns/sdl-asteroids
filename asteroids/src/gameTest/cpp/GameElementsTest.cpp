@@ -9,34 +9,16 @@
 #include <boost/make_shared.hpp>
 
 using namespace pjm;
+using std::list;
 using boost::shared_ptr;
 using boost::make_shared;
 using ::testing::ElementsAre;
 using ::testing::Eq;
 using ::testing::NiceMock;
 
-struct TestableGameElements : public GameElements
+list<shared_ptr<TestAsteroid> > initTestAsteroids()
 {
-    TestableGameElements(shared_ptr<Ship> iShip,
-                         std::list<shared_ptr<TestAsteroid> > iAsteroids)
-        : GameElements(iShip,
-                       std::list<shared_ptr<Asteroid> >(iAsteroids.begin(), iAsteroids.end()))
-    {}
-
-    std::list<shared_ptr<Asteroid> >& getAsteroids()
-    {
-        return _asteroids;
-    }
-
-    std::list<shared_ptr<Bullet> >& getBullets()
-    {
-        return _bullets;
-    }
-};
-
-std::list<shared_ptr<TestAsteroid> > initAsteroids()
-{
-    std::list<shared_ptr<TestAsteroid> > asteroids;
+    list<shared_ptr<TestAsteroid> > asteroids;
     for (int i = 0 ; i < 5; ++i)
     {
         shared_ptr<TestAsteroid> asteroid = make_shared<TestAsteroid>();
@@ -50,10 +32,12 @@ class GameElementsTest : public ::testing::Test
     protected:
         GameElementsTest()
             : _ship(new TestShip()),
-              _asteroids(initAsteroids()),
+              _asteroids(initTestAsteroids()),
               _bullet(new NiceMock<TestBullet>()),
               _collisionInteractions(new TestCollisionInteractions()),
-              _gameElements(_ship, _asteroids)
+              _gameElements(_ship,
+                            list<shared_ptr<Asteroid> >(_asteroids.begin(),
+                                                        _asteroids.end()))
         {
             _gameElements.overrideCollisionInteractions(_collisionInteractions);
         }
@@ -66,10 +50,10 @@ class GameElementsTest : public ::testing::Test
         }
 
         shared_ptr<TestShip> _ship;
-        std::list<shared_ptr<TestAsteroid> > _asteroids;
+        list<shared_ptr<TestAsteroid> > _asteroids;
         shared_ptr<NiceMock<TestBullet> > _bullet;
         shared_ptr<TestCollisionInteractions> _collisionInteractions;
-        TestableGameElements _gameElements;
+        GameElements _gameElements;
 };
 
 
@@ -124,29 +108,19 @@ TEST_F(GameElementsTest, UpdateReturnsFalseOnShipExpiry)
     EXPECT_THAT(_gameElements.update(ShipAction(), 2), Eq(true));
 }
 
-TEST_F(GameElementsTest, RemovesExpiredAsteroidsOnUpdate)
+TEST_F(GameElementsTest, RemovesExpiredAsteroidsAfterUpdate)
 {
     _asteroids.front()->expired = true;
     _gameElements.update(ShipAction(), 3);
-    EXPECT_THAT(_gameElements.getAsteroids().size(), Eq(4));
+    _gameElements.update(ShipAction(), 2);
+    EXPECT_THAT(_asteroids.front()->updateCalls, ElementsAre(3));
 }
 
 TEST_F(GameElementsTest, RemovesExpiredBulletsOnUpdate)
 {
+    EXPECT_CALL(*_bullet, update(3)).Times(1);
     shootBullet();
     _bullet->expired = true;
     _gameElements.update(ShipAction(), 3);
-    EXPECT_THAT(_gameElements.getBullets().empty(), Eq(true));
-}
-
-TEST_F(GameElementsTest, IgnoresUninitialisedBulletFromUpdate)
-{
     _gameElements.update(ShipAction(), 3);
-    EXPECT_THAT(_gameElements.getBullets().size(), Eq(0));
-}
-
-TEST_F(GameElementsTest, AddsInitialisedBulletFromUpdate)
-{
-    shootBullet();
-    EXPECT_THAT(_gameElements.getBullets().size(), Eq(1));
 }
