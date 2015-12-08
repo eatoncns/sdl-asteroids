@@ -7,7 +7,6 @@
 #include <TestBullet.hpp>
 #include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>
-#include <boost/pointer_cast.hpp>
 #include <algorithm>
 
 using namespace pjm;
@@ -35,46 +34,61 @@ struct FakeCollisionDetector : public CollisionDetector
     mutable pair_list calls;
 };
 
-struct TestableCollisionInteractions : public CollisionInteractions
+namespace
 {
-    TestableCollisionInteractions(shared_ptr<Ship> iShip,
-                                 list<shared_ptr<Asteroid> >& iAsteroids,
-                                 list<shared_ptr<Bullet> >& iBullets)
-        : CollisionInteractions(iShip, iAsteroids, iBullets)
-    {}
-
-    void resetCollisionDetector(CollisionDetector* iCollisionDetector)
+    shared_ptr<TestShip> initTestShip()
     {
-        _collisionDetector.reset(iCollisionDetector);
+        shared_ptr<TestShip> ship = make_shared<TestShip>();
+        ship->boundingBox = Rectangle(0,1,1,1);
+        return ship;
     }
-};
+
+    list<shared_ptr<TestAsteroid> > initTestAsteroids()
+    {
+        list<shared_ptr<TestAsteroid> > asteroids;
+        for (int i = 0; i < 3; ++i)
+        {
+            shared_ptr<TestAsteroid> asteroid = make_shared<TestAsteroid>();
+            asteroid->boundingBox = Rectangle(i+1,1,1,1);
+            asteroids.push_back(asteroid);
+        }
+        return asteroids;
+    }
+
+    list<shared_ptr<TestBullet> > initTestBullets()
+    {
+        list<shared_ptr<TestBullet> > bullets;
+        shared_ptr<TestBullet> bullet = make_shared<TestBullet>();
+        bullet->boundingBox = Rectangle(4,1,1,1);
+        bullets.push_back(bullet);
+        return bullets;
+    }
+}
 
 class CollisionInteractionsTest : public ::testing::Test
 {
     protected:
         CollisionInteractionsTest()
-            : _ship(new TestShip()),
-              _collisionDetector(new FakeCollisionDetector()), // deleted by _collisionInteractions
+            : _ship(initTestShip()),
+              _testAsteroids(initTestAsteroids()),
+              _testBullets(initTestBullets()),
+              _asteroids(_testAsteroids.begin(), _testAsteroids.end()),
+              _bullets(_testBullets.begin(), _testBullets.end()),
+              _collisionDetector(new FakeCollisionDetector()),
               _collisionInteractions(_ship, _asteroids, _bullets)
         {
-            _ship->boundingBox = Rectangle(0,1,1,1);
-            for (int i = 0; i < 3; ++i)
-            {
-                shared_ptr<TestAsteroid> asteroid = make_shared<TestAsteroid>();
-                asteroid->boundingBox = Rectangle(i+1,1,1,1);
-                _asteroids.push_back(asteroid);
-            }
-            shared_ptr<TestBullet> bullet = make_shared<TestBullet>();
-            bullet->boundingBox = Rectangle(4,1,1,1);
-            _bullets.push_back(bullet);
-            _collisionInteractions.resetCollisionDetector(_collisionDetector);
+            _collisionInteractions.overrideCollisionDetector(_collisionDetector);
         }
 
         shared_ptr<TestShip> _ship;
+        list<shared_ptr<TestAsteroid> > _testAsteroids;
+        list<shared_ptr<TestBullet> > _testBullets;
+        // As target class takes references to lists owned by GameElements
+        // here we take copies of the test type lists to pass in
         list<shared_ptr<Asteroid> > _asteroids;
         list<shared_ptr<Bullet> > _bullets;
-        FakeCollisionDetector* _collisionDetector;
-        TestableCollisionInteractions _collisionInteractions;
+        shared_ptr<FakeCollisionDetector> _collisionDetector;
+        CollisionInteractions _collisionInteractions;
 };
 
 TEST_F(CollisionInteractionsTest, ChecksShipCollisionWithAllAsteroids)
@@ -89,8 +103,7 @@ TEST_F(CollisionInteractionsTest, DelegatesCollisionUpdateToShipWhereDetected)
 {
     _collisionDetector->colliding.push_back(pair<float, float>(0,1));
     _collisionInteractions.update();
-    list<shared_ptr<Asteroid> >::iterator firstIt = _asteroids.begin();
-    shared_ptr<TestAsteroid> firstAsteroid = dynamic_pointer_cast<TestAsteroid>(*firstIt);
+    shared_ptr<TestAsteroid> firstAsteroid = _testAsteroids.front();
     EXPECT_THAT(_ship->collideCalls, ElementsAre(firstAsteroid.get()));
 }
 
@@ -107,11 +120,11 @@ TEST_F(CollisionInteractionsTest, DelegatesCollisionUpdateToAsteroidsWhereDetect
     _collisionDetector->colliding.push_back(pair<float, float>(1,2));
     _collisionInteractions.update();
 
-    list<shared_ptr<Asteroid> >::iterator firstIt = _asteroids.begin();
-    shared_ptr<TestAsteroid> firstAsteroid = dynamic_pointer_cast<TestAsteroid>(*firstIt);
+    list<shared_ptr<TestAsteroid> >::iterator firstIt = _testAsteroids.begin();
+    shared_ptr<TestAsteroid> firstAsteroid = *firstIt;
     list<Asteroid*> firstCollideCalls = firstAsteroid->collideCalls;
 
-    list<shared_ptr<Asteroid> >::iterator secondIt = firstIt;
+    list<shared_ptr<TestAsteroid> >::iterator secondIt = firstIt;
     secondIt++;
     Asteroid* secondAsteroid = secondIt->get();
 
@@ -131,12 +144,9 @@ TEST_F(CollisionInteractionsTest, DelegatesAsteroidBulletCollisionToBothParties)
     _collisionDetector->colliding.push_back(pair<float, float>(4,1));
     _collisionInteractions.update();
 
-    shared_ptr<Asteroid> asteroid = _asteroids.front();
-    shared_ptr<TestAsteroid> testAsteroid = dynamic_pointer_cast<TestAsteroid>(asteroid);
+    shared_ptr<TestAsteroid> asteroid = _testAsteroids.front();
+    shared_ptr<TestBullet> bullet = _testBullets.front();
 
-    shared_ptr<Bullet> bullet = _bullets.front();
-    shared_ptr<TestBullet> testBullet = dynamic_pointer_cast<TestBullet>(bullet);
-
-    EXPECT_THAT(testAsteroid->bulletCollideCalls, ElementsAre(bullet.get()));
-    EXPECT_THAT(testBullet->collideCalls, ElementsAre(asteroid.get()));
+    EXPECT_THAT(asteroid->bulletCollideCalls, ElementsAre(bullet.get()));
+    EXPECT_THAT(bullet->collideCalls, ElementsAre(asteroid.get()));
 }

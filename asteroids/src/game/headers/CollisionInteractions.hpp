@@ -3,7 +3,6 @@
 
 #include <CollisionDetector.hpp>
 #include <boost/shared_ptr.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <list>
 
 namespace pjm
@@ -19,12 +18,11 @@ namespace pjm
                                   std::list<boost::shared_ptr<Asteroid> >& iAsteroids,
                                   std::list<boost::shared_ptr<Bullet> >& iBullets);
 
-            virtual ~CollisionInteractions() {}
-
             virtual void update();
 
-        protected:
-            boost::scoped_ptr<CollisionDetector> _collisionDetector;
+            virtual ~CollisionInteractions() {}
+
+            void overrideCollisionDetector(boost::shared_ptr<CollisionDetector> iCollisionDetector);
 
         private:
             void handleShipCollision();
@@ -34,6 +32,7 @@ namespace pjm
             boost::shared_ptr<Ship> _ship;
             std::list<boost::shared_ptr<Asteroid> >& _asteroids;
             std::list<boost::shared_ptr<Bullet> >& _bullets;
+            boost::shared_ptr<CollisionDetector> _collisionDetector;
     };
 }
 

@@ -16,17 +16,20 @@ using ::testing::ElementsAre;
 using ::testing::Eq;
 using ::testing::NiceMock;
 
-const unsigned int irrelevantTime = 3;
-
-list<shared_ptr<TestAsteroid> > initTestAsteroids()
+namespace
 {
-    list<shared_ptr<TestAsteroid> > asteroids;
-    for (int i = 0 ; i < 5; ++i)
+    const unsigned int irrelevantTime = 3;
+
+    list<shared_ptr<TestAsteroid> > initTestAsteroids()
     {
-        shared_ptr<TestAsteroid> asteroid = make_shared<TestAsteroid>();
-        asteroids.push_back(asteroid);
+        list<shared_ptr<TestAsteroid> > asteroids;
+        for (int i = 0 ; i < 5; ++i)
+        {
+            shared_ptr<TestAsteroid> asteroid = make_shared<TestAsteroid>();
+            asteroids.push_back(asteroid);
+        }
+        return asteroids;
     }
-    return asteroids;
 }
 
 class GameElementsTest : public ::testing::Test

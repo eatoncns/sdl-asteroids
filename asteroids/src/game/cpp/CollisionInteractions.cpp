@@ -85,4 +85,10 @@ namespace pjm
             }
         }
     }
+
+
+    void CollisionInteractions::overrideCollisionDetector(shared_ptr<CollisionDetector> iCollisionDetector)
+    {
+        _collisionDetector = iCollisionDetector;
+    }
 }
