@@ -16,6 +16,8 @@ using ::testing::ElementsAre;
 using ::testing::Eq;
 using ::testing::NiceMock;
 
+const unsigned int irrelevantTime = 3;
+
 list<shared_ptr<TestAsteroid> > initTestAsteroids()
 {
     list<shared_ptr<TestAsteroid> > asteroids;
@@ -45,8 +47,7 @@ class GameElementsTest : public ::testing::Test
         void shootBullet()
         {
             _ship->willShootBullet(_bullet);
-            unsigned int timeElapsed = 3;
-            _gameElements.update(ShipAction().shooting(), timeElapsed);
+            _gameElements.update(ShipAction().shooting(), irrelevantTime);
         }
 
         shared_ptr<TestShip> _ship;
@@ -98,14 +99,14 @@ TEST_F(GameElementsTest, CascadesUpdateToBullets)
 
 TEST_F(GameElementsTest, CascadesUpdateToCollisionInteractions)
 {
-    _gameElements.update(ShipAction(), 3);
+    _gameElements.update(ShipAction(), irrelevantTime);
     EXPECT_THAT(_collisionInteractions->updateCalls, Eq(1));
 }
 
 TEST_F(GameElementsTest, UpdateReturnsFalseOnShipExpiry)
 {
     _ship->expired = true;
-    EXPECT_THAT(_gameElements.update(ShipAction(), 2), Eq(true));
+    EXPECT_THAT(_gameElements.update(ShipAction(), irrelevantTime), Eq(true));
 }
 
 TEST_F(GameElementsTest, RemovesExpiredAsteroidsAfterUpdate)
