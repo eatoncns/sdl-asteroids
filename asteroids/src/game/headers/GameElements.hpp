@@ -26,7 +26,7 @@ namespace pjm
             void overrideCollisionInteractions(
                 boost::shared_ptr<CollisionInteractions> iCollisionInteractions);
 
-        protected:
+        private:
             boost::shared_ptr<Ship> _ship;
             std::list<boost::shared_ptr<Asteroid> > _asteroids;
             std::list<boost::shared_ptr<Bullet> > _bullets;
