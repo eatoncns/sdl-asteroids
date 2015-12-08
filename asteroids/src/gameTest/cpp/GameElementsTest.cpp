@@ -23,11 +23,6 @@ struct TestableGameElements : public GameElements
                        std::list<shared_ptr<Asteroid> >(iAsteroids.begin(), iAsteroids.end()))
     {}
 
-    void addBullet(shared_ptr<Bullet> iBullet)
-    {
-        _bullets.push_back(iBullet);
-    }
-
     void resetCollisionInteractions(CollisionInteractions* iCollisionInteractions)
     {
         _collisionInteractions.reset(iCollisionInteractions);
@@ -65,8 +60,14 @@ class GameElementsTest : public ::testing::Test
               _collisionInteractions(new TestCollisionInteractions()),
               _gameElements(_ship, _asteroids)
         {
-            _gameElements.addBullet(_bullet);
             _gameElements.resetCollisionInteractions(_collisionInteractions);
+        }
+
+        void shootBullet()
+        {
+            _ship->bullet = _bullet;
+            unsigned int timeElapsed = 3;
+            _gameElements.update(ShipAction().shooting(), timeElapsed);
         }
 
         shared_ptr<TestShip> _ship;
@@ -94,6 +95,7 @@ TEST_F(GameElementsTest, CascadesRenderToAsteroids)
 
 TEST_F(GameElementsTest, CascadesRenderToBullets)
 {
+    shootBullet();
     _gameElements.render();
     EXPECT_THAT(_bullet->renderCalls, Eq(1));
 }
@@ -110,6 +112,7 @@ TEST_F(GameElementsTest, CascadesUpdateToAsteroids)
 
 TEST_F(GameElementsTest, CascadesUpdateToBullets)
 {
+    shootBullet();
     EXPECT_CALL(*_bullet, update(3));
     _gameElements.update(ShipAction(), 3);
 }
@@ -135,6 +138,7 @@ TEST_F(GameElementsTest, RemovesExpiredAsteroidsOnUpdate)
 
 TEST_F(GameElementsTest, RemovesExpiredBulletsOnUpdate)
 {
+    shootBullet();
     _bullet->expired = true;
     _gameElements.update(ShipAction(), 3);
     EXPECT_THAT(_gameElements.getBullets().empty(), Eq(true));
@@ -143,12 +147,12 @@ TEST_F(GameElementsTest, RemovesExpiredBulletsOnUpdate)
 TEST_F(GameElementsTest, IgnoresUninitialisedBulletFromUpdate)
 {
     _gameElements.update(ShipAction(), 3);
-    EXPECT_THAT(_gameElements.getBullets().size(), Eq(1));
+    EXPECT_THAT(_gameElements.getBullets().size(), Eq(0));
 }
 
 TEST_F(GameElementsTest, AddsInitialisedBulletFromUpdate)
 {
     _ship->bullet = _bullet;
     _gameElements.update(ShipAction(), 3);
-    EXPECT_THAT(_gameElements.getBullets().size(), Eq(2));
+    EXPECT_THAT(_gameElements.getBullets().size(), Eq(1));
 }

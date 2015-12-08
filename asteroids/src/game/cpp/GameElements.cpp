@@ -28,9 +28,9 @@ namespace pjm
 
     bool GameElements::update(const ShipAction& iAction, unsigned int iTimeElapsed)
     {
-        updateShip(iAction, iTimeElapsed);
         updateAsteroids(iTimeElapsed);
         updateBullets(iTimeElapsed);
+        updateShip(iAction, iTimeElapsed);
         handleCollisions();
         removeExpiredAsteroids();
         removeExpiredBullets();
