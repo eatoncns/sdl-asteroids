@@ -1,6 +1,9 @@
+#include <BulletLoader.hpp>
+#include <Rectangle.hpp>
+#include <ScreenWrapper.hpp>
 #include <Ship.hpp>
 #include <ShipAction.hpp>
-#include <BulletLoader.hpp>
+
 #include <math.h>
 
 using std::string;
@@ -10,15 +13,22 @@ namespace pjm
 {
     Ship::Ship(shared_ptr<ScreenWrapper> iScreenWrapper,
                shared_ptr<BulletLoader> iBulletLoader)
-      : ScreenWrappingObject(iScreenWrapper),
+      : _angle(0.0),
         _acceleration(0, 0),
+        _expired(false),
+        _screenWrapper(iScreenWrapper),
         _bulletLoader(iBulletLoader)
     {}
 
 
-    string Ship::imageFilePath()
+    const string Ship::imageFilePath = "resources/Ship.gif";
+
+
+    bool Ship::initialise(const Vector& iInitialLocation,
+                          ImageLoader& iImageLoader)
     {
-        return "resources/Ship.gif";
+        _physicsData.location = iInitialLocation;
+        return _renderer.initialise(iImageLoader, imageFilePath);
     }
 
 
@@ -65,27 +75,60 @@ namespace pjm
 
     void Ship::updateVelocity(unsigned int iTimeElapsed)
     {
-        _velocity = _velocity + _acceleration*iTimeElapsed;
+        _physicsData.velocity = _physicsData.velocity + _acceleration*iTimeElapsed;
         float maxSquared = MAX_VELOCITY*MAX_VELOCITY;
-        float velocitySquared = _velocity.squareSum();
+        float velocitySquared = _physicsData.velocity.squareSum();
         bool maxVelocityExceeded = velocitySquared > maxSquared;
         if (maxVelocityExceeded)
         {
             float velocityFactor = MAX_VELOCITY/sqrt(velocitySquared);
-            _velocity *= velocityFactor;
+            _physicsData.velocity *= velocityFactor;
         }
+    }
+
+
+    void Ship::updateLocation(unsigned int iTimeElapsed)
+    {
+        _physicsData.updateLocation(iTimeElapsed);
+    }
+
+
+    void Ship::handleScreenWrap(unsigned int iTimeElapsed)
+    {
+        _screenWrapper->wrap(_physicsData.location,
+                             _physicsData.velocity,
+                             iTimeElapsed);
     }
 
 
     shared_ptr<Bullet> Ship::handleShooting(const ShipAction& iAction)
     {
-        return iAction.shoot ? _bulletLoader->loadBullet(_location, _angle)
-                             : shared_ptr<Bullet>();
+        return iAction.shoot
+                 ? _bulletLoader->loadBullet(_physicsData.location, _angle)
+                 : shared_ptr<Bullet>();
+    }
+
+
+    void Ship::render()
+    {
+        _renderer.renderAt(_physicsData.location, _angle);
+    }
+
+
+    Rectangle Ship::getBoundingBox()
+    {
+        return _renderer.getBoundingBox(_physicsData.location);
     }
 
 
     void Ship::collideWith(Asteroid* iAsteroid)
     {
         _expired = true;
+    }
+
+
+    bool Ship::isExpired()
+    {
+        return _expired;
     }
 }
