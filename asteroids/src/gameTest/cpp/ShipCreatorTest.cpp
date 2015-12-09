@@ -1,7 +1,9 @@
 #include <gmock/gmock.h>
 #include <ShipCreator.hpp>
+#include <TestImageLoader.hpp>
 #include <TestShip.hpp>
 #include <ScreenInfo.hpp>
+#include <Vector.hpp>
 
 using namespace pjm;
 using boost::shared_ptr;

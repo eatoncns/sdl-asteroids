@@ -4,8 +4,7 @@ using namespace pjm;
 using boost::shared_ptr;
 
 TestShip::TestShip()
-    : Ship(screenWrapper, bulletLoader),
-      renderCalls(0),
+    : renderCalls(0),
       initialiseSuccess(true),
       expired(false),
       boundingBox(0,0,0,0)
@@ -55,8 +54,3 @@ bool TestShip::isExpired()
 {
     return expired;
 }
-
-
-shared_ptr<ScreenWrapper> TestShip::screenWrapper;
-shared_ptr<BulletLoader> TestShip::bulletLoader;
-TestImageLoader TestShip::imageLoader;

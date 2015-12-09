@@ -1,5 +1,5 @@
 #include <ShipCreator.hpp>
-#include <Ship.hpp>
+#include <EulerShip.hpp>
 #include <SDLTimer.hpp>
 #include <ImageLoader.hpp>
 #include <ScreenWrapper.hpp>
@@ -34,6 +34,6 @@ namespace pjm
         shared_ptr<BulletLoader> bulletLoader(new BulletLoader(bounds,
                                                                iImageLoader,
                                                                timer));
-        return make_shared<Ship>(iScreenWrapper, bulletLoader);
+        return make_shared<EulerShip>(iScreenWrapper, bulletLoader);
     }
 }

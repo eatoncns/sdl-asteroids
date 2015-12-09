@@ -20,7 +20,12 @@ namespace pjm
     void ObjectRenderer::renderAt(const Vector& iLocation,
                                   const double iAngle)
     {
-        _image->render(iLocation, iAngle);
+        int widthOffset = _image->width() / 2;
+        int heightOffset = _image->height() / 2;
+        float renderX = iLocation.x - widthOffset;
+        float renderY = iLocation.y - heightOffset;
+        Vector renderLocation(renderX, renderY);
+        _image->render(renderLocation, iAngle);
     }
 
 

@@ -3,9 +3,8 @@
 
 #include <Ship.hpp>
 #include <ShipAction.hpp>
-#include <ScreenWrapper.hpp>
-#include <TestImageLoader.hpp>
 #include <Rectangle.hpp>
+#include <Vector.hpp>
 #include <list>
 
 class TestShip : public pjm::Ship
@@ -21,9 +20,10 @@ class TestShip : public pjm::Ship
         boost::shared_ptr<pjm::Bullet> update(const pjm::ShipAction& iAction,
                                               unsigned int iTimeElapsed);
 
+        void render();
+
         pjm::Rectangle getBoundingBox();
 
-        void render();
 
         void collideWith(pjm::Asteroid* iAsteroid);
 
@@ -35,9 +35,6 @@ class TestShip : public pjm::Ship
         bool initialiseSuccess;
         bool expired;
         pjm::Rectangle boundingBox;
-        static TestImageLoader imageLoader;
-        static boost::shared_ptr<pjm::ScreenWrapper> screenWrapper;
-        static boost::shared_ptr<pjm::BulletLoader> bulletLoader;
 
     private:
         boost::shared_ptr<pjm::Bullet> _bullet;

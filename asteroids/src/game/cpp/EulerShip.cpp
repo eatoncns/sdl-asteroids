@@ -1,7 +1,7 @@
 #include <BulletLoader.hpp>
 #include <Rectangle.hpp>
 #include <ScreenWrapper.hpp>
-#include <Ship.hpp>
+#include <EulerShip.hpp>
 #include <ShipAction.hpp>
 
 #include <math.h>
@@ -11,7 +11,7 @@ using boost::shared_ptr;
 
 namespace pjm
 {
-    Ship::Ship(shared_ptr<ScreenWrapper> iScreenWrapper,
+    EulerShip::EulerShip(shared_ptr<ScreenWrapper> iScreenWrapper,
                shared_ptr<BulletLoader> iBulletLoader)
       : _angle(0.0),
         _acceleration(0, 0),
@@ -21,10 +21,10 @@ namespace pjm
     {}
 
 
-    const string Ship::imageFilePath = "resources/Ship.gif";
+    const string EulerShip::imageFilePath = "resources/Ship.gif";
 
 
-    bool Ship::initialise(const Vector& iInitialLocation,
+    bool EulerShip::initialise(const Vector& iInitialLocation,
                           ImageLoader& iImageLoader)
     {
         _physicsData.location = iInitialLocation;
@@ -32,7 +32,7 @@ namespace pjm
     }
 
 
-    shared_ptr<Bullet> Ship::update(const ShipAction& iAction,
+    shared_ptr<Bullet> EulerShip::update(const ShipAction& iAction,
                                     unsigned int iTimeElapsed)
     {
         updateAngle(iAction, iTimeElapsed);
@@ -44,7 +44,7 @@ namespace pjm
     }
 
 
-    void Ship::updateAngle(const ShipAction& iAction, unsigned int iTimeElapsed)
+    void EulerShip::updateAngle(const ShipAction& iAction, unsigned int iTimeElapsed)
     {
         double rotationDirection = iAction.turn_left  ? -1.0 :
                                    iAction.turn_right ?  1.0 :
@@ -54,7 +54,7 @@ namespace pjm
     }
 
 
-    void Ship::updateAcceleration(const ShipAction& iAction)
+    void EulerShip::updateAcceleration(const ShipAction& iAction)
     {
         if(iAction.accelerate)
         {
@@ -73,7 +73,7 @@ namespace pjm
     }
 
 
-    void Ship::updateVelocity(unsigned int iTimeElapsed)
+    void EulerShip::updateVelocity(unsigned int iTimeElapsed)
     {
         _physicsData.velocity = _physicsData.velocity + _acceleration*iTimeElapsed;
         float maxSquared = MAX_VELOCITY*MAX_VELOCITY;
@@ -87,13 +87,13 @@ namespace pjm
     }
 
 
-    void Ship::updateLocation(unsigned int iTimeElapsed)
+    void EulerShip::updateLocation(unsigned int iTimeElapsed)
     {
         _physicsData.updateLocation(iTimeElapsed);
     }
 
 
-    void Ship::handleScreenWrap(unsigned int iTimeElapsed)
+    void EulerShip::handleScreenWrap(unsigned int iTimeElapsed)
     {
         _screenWrapper->wrap(_physicsData.location,
                              _physicsData.velocity,
@@ -101,7 +101,7 @@ namespace pjm
     }
 
 
-    shared_ptr<Bullet> Ship::handleShooting(const ShipAction& iAction)
+    shared_ptr<Bullet> EulerShip::handleShooting(const ShipAction& iAction)
     {
         return iAction.shoot
                  ? _bulletLoader->loadBullet(_physicsData.location, _angle)
@@ -109,25 +109,25 @@ namespace pjm
     }
 
 
-    void Ship::render()
+    void EulerShip::render()
     {
         _renderer.renderAt(_physicsData.location, _angle);
     }
 
 
-    Rectangle Ship::getBoundingBox()
+    Rectangle EulerShip::getBoundingBox()
     {
         return _renderer.getBoundingBox(_physicsData.location);
     }
 
 
-    void Ship::collideWith(Asteroid* iAsteroid)
+    void EulerShip::collideWith(Asteroid* iAsteroid)
     {
         _expired = true;
     }
 
 
-    bool Ship::isExpired()
+    bool EulerShip::isExpired()
     {
         return _expired;
     }

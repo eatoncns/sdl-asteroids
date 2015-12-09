@@ -37,12 +37,22 @@ TEST_F(ObjectRendererTest, InitialiseReturnsTrueWhenImageLoadSucceeds)
     EXPECT_THAT(renderer.initialise(imageLoader, "filePath"), Eq(true));
 }
 
-TEST_F(ObjectRendererTest, RendersImageAtGivenLocation)
+TEST_F(ObjectRendererTest, RendersCentreOfImageAtGivenLocation)
+{
+    renderable->w = 2;
+    renderable->h = 2;
+    renderer.initialise(imageLoader, "filePath");
+    renderer.renderAt(Vector(4,4), 25.0);
+    ASSERT_THAT(renderable->renderCalls.empty(), Eq(false));
+    EXPECT_THAT(renderable->renderCalls.front(), Pair(Vector(3,3), _));
+}
+
+TEST_F(ObjectRendererTest, RendersImageAtGivenAngle)
 {
     renderer.initialise(imageLoader, "filePath");
     renderer.renderAt(Vector(4,4), 25.0);
     ASSERT_THAT(renderable->renderCalls.empty(), Eq(false));
-    EXPECT_THAT(renderable->renderCalls.front(), Pair(Vector(4,4),_));
+    EXPECT_THAT(renderable->renderCalls.front(), Pair(_, 25.0));
 }
 
 TEST_F(ObjectRendererTest, ReturnsScaledRectangleBoundingBoxForImage)
