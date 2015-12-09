@@ -26,7 +26,6 @@ namespace pjm
 
             static float VELOCITY;
 
-        protected:
             virtual std::string imageFilePath();
     };
 }
