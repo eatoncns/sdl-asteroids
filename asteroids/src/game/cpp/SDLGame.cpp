@@ -12,7 +12,7 @@
 #include <ShipCreator.hpp>
 #include <AsteroidCreator.hpp>
 #include <LocationGenerator.hpp>
-#include <RandomGeneratorImpl.hpp>
+#include <BoostRandomGenerator.hpp>
 #include <boost/make_shared.hpp>
 
 using boost::shared_ptr;
@@ -150,7 +150,7 @@ namespace pjm
     list<shared_ptr<Asteroid> > SDLGame::createAsteroids(shared_ptr<ScreenWrapper> iScreenWrapper,
                                                          ImageLoader& iImageLoader)
     {
-        RandomGeneratorImpl random;
+        BoostRandomGenerator random;
         LocationGenerator locationGenerator(_screenInfo, random);
         AsteroidCreator asteroidCreator;
         list<shared_ptr<Asteroid> > asteroids = asteroidCreator.create(iScreenWrapper,

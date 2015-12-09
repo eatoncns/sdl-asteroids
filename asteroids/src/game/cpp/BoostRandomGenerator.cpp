@@ -1,4 +1,4 @@
-#include <RandomGeneratorImpl.hpp>
+#include <BoostRandomGenerator.hpp>
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_real_distribution.hpp>
 #include <ctime>
@@ -9,7 +9,7 @@ namespace pjm
 {
     static mt19937 gen(std::time(0));
 
-    float RandomGeneratorImpl::uniformInRange(float iMin, float iMax)
+    float BoostRandomGenerator::uniformInRange(float iMin, float iMax)
     {
         uniform_real_distribution<float> dist(iMin, iMax);
         return dist(gen);
