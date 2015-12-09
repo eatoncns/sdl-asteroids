@@ -22,9 +22,13 @@ class LocationGeneratorTest : public ::testing::Test
 
 TEST_F(LocationGeneratorTest, GeneratesRandomLocationWithinBoundsFromCentre)
 {
+    float angleRatio = 0.25; // 0.25*360 = 90 degrees
+    float distance = 30;
+    Vector centre(_screenInfo.width/2, _screenInfo.height/2);
     EXPECT_CALL(_random, uniformInRange(0,1))
-        .WillOnce(Return(0.25));
+        .WillOnce(Return(angleRatio));
     EXPECT_CALL(_random, uniformInRange(20,50))
-        .WillOnce(Return(30));
-    EXPECT_THAT(_locationGenerator.generateLocation(20,50), Eq(Vector(130,100)));
+        .WillOnce(Return(distance));
+    EXPECT_THAT(_locationGenerator.generateLocation(20,50),
+                Eq(centre + Vector(distance, 0)));
 }
