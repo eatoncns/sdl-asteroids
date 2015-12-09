@@ -30,7 +30,7 @@ namespace pjm
             static const double ROTATION_FACTOR = 0.1;
             static const float MAX_VELOCITY = 0.1;
 
-        protected:
+        private:
             void updateAngle(const ShipAction& iAction, unsigned int iTimeElapsed);
             void updateAcceleration(const ShipAction& iAction);
             void updateVelocity(unsigned int iTimeElapsed);
