@@ -19,7 +19,7 @@ struct TestAsteroid : public pjm::Asteroid
     void update(unsigned int iTimeElapsed);
 
     void collideWith(pjm::Asteroid* iOther);
-    void collideWith(pjm::FixedSpeedBullet* iBullet);
+    void collideWith(pjm::Bullet* iBullet);
 
     bool isExpired();
 
@@ -29,7 +29,7 @@ struct TestAsteroid : public pjm::Asteroid
 
     int renderCalls;
     std::list<pjm::Asteroid*> collideCalls;
-    std::list<pjm::FixedSpeedBullet*> bulletCollideCalls;
+    std::list<pjm::Bullet*> bulletCollideCalls;
     std::list<unsigned int> updateCalls;
     std::list<pjm::Vector> initialiseCalls;
     bool initialiseSuccess;

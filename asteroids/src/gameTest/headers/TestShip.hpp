@@ -12,12 +12,12 @@ class TestShip : public pjm::Ship
     public:
         TestShip();
 
-        void willShootBullet(boost::shared_ptr<pjm::FixedSpeedBullet> iBullet);
+        void willShootBullet(boost::shared_ptr<pjm::Bullet> iBullet);
 
         bool initialise(const pjm::Vector& iInitialLocation,
                         pjm::ImageLoader& iImageLoader);
 
-        boost::shared_ptr<pjm::FixedSpeedBullet> update(const pjm::ShipAction& iAction,
+        boost::shared_ptr<pjm::Bullet> update(const pjm::ShipAction& iAction,
                                               unsigned int iTimeElapsed);
 
         void render();
@@ -37,7 +37,7 @@ class TestShip : public pjm::Ship
         pjm::Rectangle boundingBox;
 
     private:
-        boost::shared_ptr<pjm::FixedSpeedBullet> _bullet;
+        boost::shared_ptr<pjm::Bullet> _bullet;
 };
 
 #endif

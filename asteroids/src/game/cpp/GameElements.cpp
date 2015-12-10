@@ -2,19 +2,14 @@
 #include <Ship.hpp>
 #include <ShipAction.hpp>
 #include <Asteroid.hpp>
-#include <FixedSpeedBullet.hpp>
+#include <Bullet.hpp>
 #include <boost/foreach.hpp>
+#include <boost/bind.hpp>
 
 using boost::shared_ptr;
+using boost::bind;
 using std::list;
-
-namespace
-{
-    bool isExpired(shared_ptr<pjm::MovingObject> iMovingObject)
-    {
-        return iMovingObject->isExpired();
-    }
-}
+using std::remove_if;
 
 namespace pjm
 {
@@ -40,7 +35,7 @@ namespace pjm
 
     void GameElements::updateShip(const ShipAction& iAction, unsigned int iTimeElapsed)
     {
-        shared_ptr<FixedSpeedBullet> bullet = _ship->update(iAction, iTimeElapsed);
+        shared_ptr<Bullet> bullet = _ship->update(iAction, iTimeElapsed);
         if (bullet)
         {
             _bullets.push_back(bullet);
@@ -59,7 +54,7 @@ namespace pjm
 
     void GameElements::updateBullets(unsigned int iTimeElapsed)
     {
-        BOOST_FOREACH(shared_ptr<FixedSpeedBullet> bullet, _bullets)
+        BOOST_FOREACH(shared_ptr<Bullet> bullet, _bullets)
         {
             bullet->update(iTimeElapsed);
         }
@@ -74,15 +69,17 @@ namespace pjm
 
     void GameElements::removeExpiredBullets()
     {
-        _bullets.erase(std::remove_if(_bullets.begin(), _bullets.end(), isExpired),
-                       _bullets.end());
+        _bullets.erase(
+            remove_if(_bullets.begin(), _bullets.end(), bind(&Bullet::isExpired, _1)),
+            _bullets.end());
     }
 
 
     void GameElements::removeExpiredAsteroids()
     {
-        _asteroids.erase(std::remove_if(_asteroids.begin(), _asteroids.end(), isExpired),
-                         _asteroids.end());
+        _asteroids.erase(
+            remove_if(_asteroids.begin(), _asteroids.end(), bind(&Asteroid::isExpired, _1)),
+            _asteroids.end());
     }
 
 
@@ -93,7 +90,7 @@ namespace pjm
         {
             asteroid->render();
         }
-        BOOST_FOREACH(shared_ptr<FixedSpeedBullet> bullet, _bullets)
+        BOOST_FOREACH(shared_ptr<Bullet> bullet, _bullets)
         {
             bullet->render();
         }

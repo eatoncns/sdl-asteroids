@@ -1,5 +1,6 @@
 #include <FixedSpeedBullet.hpp>
-#include <ScreenWrapper.hpp>
+#include <ImageLoader.hpp>
+#include <Rectangle.hpp>
 #include <boost/make_shared.hpp>
 #include <math.h>
 
@@ -8,7 +9,8 @@ using boost::make_shared;
 namespace pjm
 {
     FixedSpeedBullet::FixedSpeedBullet(const Vector& iBounds)
-        : _bounds(iBounds)
+        : _bounds(iBounds),
+          _expired(false)
     {}
 
 
@@ -16,28 +18,43 @@ namespace pjm
                             const double iAngle,
                             ImageLoader& iImageLoader)
     {
+        _physicsData.location = iInitialLocation;
         double angleRadians = iAngle*M_PI/180.0;
         double sinAngle = sin(angleRadians);
         double cosAngle = -cos(angleRadians);
-        _velocity = Vector(sinAngle, cosAngle);
-        _velocity *= VELOCITY;
-        return MovingObject::initialise(iInitialLocation, iImageLoader);
+        _physicsData.velocity = Vector(sinAngle, cosAngle);
+        _physicsData.velocity *= VELOCITY;
+        return _renderer.initialise(iImageLoader, imageFilePath);
     }
 
 
     void FixedSpeedBullet::update(unsigned int iTimeElapsed)
     {
-        MovingObject::updateLocation(iTimeElapsed);
+        _physicsData.updateLocation(iTimeElapsed);
         _expired = isOutsideOfScreen();
     }
 
 
     bool FixedSpeedBullet::isOutsideOfScreen()
     {
-        return (_location.x < 0 ||
-                _location.y < 0 ||
-                _location.x > _bounds.x ||
-                _location.y > _bounds.y);
+        const Vector& location = _physicsData.location;
+        return (location.x < 0 ||
+                location.y < 0 ||
+                location.x > _bounds.x ||
+                location.y > _bounds.y);
+    }
+
+
+    void FixedSpeedBullet::render()
+    {
+        static const double fixedAngle = 0.0;
+        _renderer.renderAt(_physicsData.location, fixedAngle);
+    }
+
+
+    Rectangle FixedSpeedBullet::getBoundingBox()
+    {
+        return _renderer.getBoundingBox(_physicsData.location);
     }
 
 
@@ -47,10 +64,13 @@ namespace pjm
     }
 
 
-    std::string FixedSpeedBullet::imageFilePath()
+    bool FixedSpeedBullet::isExpired()
     {
-        return "resources/Bullet.gif";
+        return _expired;
     }
+
+
+    const std::string FixedSpeedBullet::imageFilePath = "resources/Bullet.gif";
 
 
     const float FixedSpeedBullet::VELOCITY(0.5);

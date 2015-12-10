@@ -1,8 +1,13 @@
 #ifndef _PJM_BULLET_HPP_
 #define _PJM_BULLET_HPP_
 
-namspace pjm
+namespace pjm
 {
+    class Asteroid;
+    class ImageLoader;
+    class Rectangle;
+    class Vector;
+
     struct Bullet
     {
         virtual bool initialise(const Vector& iInitialLocation,

@@ -1,7 +1,7 @@
 #ifndef _PJM_TESTBULLET_HPP_
 #define _PJM_TESTBULLET_HPP_
 
-#include <FixedSpeedBullet.hpp>
+#include <Bullet.hpp>
 #include <Vector.hpp>
 #include <Rectangle.hpp>
 #include <list>
@@ -13,11 +13,10 @@ namespace pjm
     struct ImageLoader;
 }
 
-struct TestBullet : public pjm::FixedSpeedBullet
+struct TestBullet : public pjm::Bullet
 {
     TestBullet()
-        : FixedSpeedBullet(pjm::Vector(1,1)),
-          boundingBox(0,0,0,0),
+        : boundingBox(0,0,0,0),
           renderCalls(0),
           expired(false)
     {}

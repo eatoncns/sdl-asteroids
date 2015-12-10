@@ -6,7 +6,7 @@
 namespace pjm
 {
     struct RandomGenerator;
-    class FixedSpeedBullet;
+    class Bullet;
 
     class Asteroid : public ScreenWrappingObject
     {
@@ -20,7 +20,7 @@ namespace pjm
             virtual void update(unsigned int iTimeElapsed);
 
             virtual void collideWith(Asteroid* iOther);
-            virtual void collideWith(FixedSpeedBullet* iBullet);
+            virtual void collideWith(Bullet* iBullet);
 
             virtual ~Asteroid() {}
 

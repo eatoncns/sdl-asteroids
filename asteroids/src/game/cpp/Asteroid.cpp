@@ -39,7 +39,7 @@ namespace pjm
     }
 
 
-    void Asteroid::collideWith(FixedSpeedBullet* iBullet)
+    void Asteroid::collideWith(Bullet* iBullet)
     {
         _expired = true;
     }

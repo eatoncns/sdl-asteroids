@@ -11,7 +11,7 @@ namespace pjm
     class Ship;
     struct ShipAction;
     class Asteroid;
-    class FixedSpeedBullet;
+    class Bullet;
 
     class GameElements
     {
@@ -29,7 +29,7 @@ namespace pjm
         private:
             boost::shared_ptr<Ship> _ship;
             std::list<boost::shared_ptr<Asteroid> > _asteroids;
-            std::list<boost::shared_ptr<FixedSpeedBullet> > _bullets;
+            std::list<boost::shared_ptr<Bullet> > _bullets;
             boost::shared_ptr<CollisionInteractions> _collisionInteractions;
 
             void updateShip(const ShipAction& iAction, unsigned int iTimeElapsed);

@@ -1,36 +1,42 @@
 #ifndef _PJM_FIXEDSPEEDBULLET_HPP_
 #define _PJM_FIXEDSPEEDBULLET_HPP_
 
-#include <CollidableObject.hpp>
+#include <Bullet.hpp>
+#include <ObjectRenderer.hpp>
+#include <PhysicsData.hpp>
+#include <Vector.hpp>
 
 namespace pjm
 {
-    struct Vector;
-    struct ImageLoader;
-    class Asteroid;
-
-    class FixedSpeedBullet : public CollidableObject
+    class FixedSpeedBullet : public Bullet
     {
         public:
             FixedSpeedBullet(const Vector& iBounds);
 
-            virtual bool initialise(const Vector& iInitialLocation,
+            bool initialise(const Vector& iInitialLocation,
                             const double iAngle,
                             ImageLoader& iImageLoader);
 
-            virtual void update(unsigned int iTimeElapsed);
+            void update(unsigned int iTimeElapsed);
 
-            virtual void collideWith(Asteroid* iAsteroid);
+            void render();
 
-            virtual ~FixedSpeedBullet() {}
+            Rectangle getBoundingBox();
+
+            void collideWith(Asteroid* iAsteroid);
+
+            bool isExpired();
 
             static const float VELOCITY;
 
         private:
-            std::string imageFilePath();
+            static const std::string imageFilePath;
             bool isOutsideOfScreen();
 
+            ObjectRenderer _renderer;
+            PhysicsData _physicsData;
             Vector _bounds;
+            bool _expired;
 
     };
 }
