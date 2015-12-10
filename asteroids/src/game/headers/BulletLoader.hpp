@@ -8,7 +8,7 @@ namespace pjm
 {
     struct ImageLoader;
     struct Timer;
-    class Bullet;
+    class FixedSpeedBullet;
 
     class BulletLoader
     {
@@ -17,13 +17,13 @@ namespace pjm
                          ImageLoader& iImageLoader,
                          Timer& iTimer);
 
-            virtual boost::shared_ptr<Bullet> loadBullet(const Vector& iInitialLocation,
+            virtual boost::shared_ptr<FixedSpeedBullet> loadBullet(const Vector& iInitialLocation,
                                                          const double iAngle);
 
             const static unsigned int RELOAD_TIME;
 
         protected:
-            virtual boost::shared_ptr<Bullet> makeBullet();
+            virtual boost::shared_ptr<FixedSpeedBullet> makeBullet();
 
         private:
             Vector _bounds;

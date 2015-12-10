@@ -14,10 +14,10 @@ struct TestBulletLoader : public pjm::BulletLoader
                      iTimer)
     {
         ON_CALL(*this, loadBullet(::testing::_, ::testing::_))
-            .WillByDefault(::testing::Return(boost::shared_ptr<pjm::Bullet>()));
+            .WillByDefault(::testing::Return(boost::shared_ptr<pjm::FixedSpeedBullet>()));
     }
 
-    MOCK_METHOD2(loadBullet, boost::shared_ptr<pjm::Bullet>(const pjm::Vector& iInitialLocation,
+    MOCK_METHOD2(loadBullet, boost::shared_ptr<pjm::FixedSpeedBullet>(const pjm::Vector& iInitialLocation,
                                                             const double iAngle));
 
     static TestImageLoader imageLoader;

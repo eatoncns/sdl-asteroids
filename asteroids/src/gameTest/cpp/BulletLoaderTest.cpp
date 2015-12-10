@@ -16,18 +16,18 @@ class TestableBulletLoader : public BulletLoader
         TestableBulletLoader(const Vector& iBounds,
                              ImageLoader& iImageLoader,
                              Timer& iTimer,
-                             shared_ptr<Bullet> iBullet)
+                             shared_ptr<FixedSpeedBullet> iBullet)
           : BulletLoader(iBounds, iImageLoader, iTimer),
             bullet(iBullet)
         {}
 
     private:
-        boost::shared_ptr<Bullet> makeBullet()
+        boost::shared_ptr<FixedSpeedBullet> makeBullet()
         {
             return bullet;
         }
 
-    shared_ptr<Bullet> bullet;
+    shared_ptr<FixedSpeedBullet> bullet;
 };
 
 class BulletLoaderTest : public ::testing::Test
@@ -42,7 +42,7 @@ class BulletLoaderTest : public ::testing::Test
               bulletLoader(bounds, imageLoader, timer, bullet)
         {}
 
-        shared_ptr<Bullet> load(int iReloadTimeOffset)
+        shared_ptr<FixedSpeedBullet> load(int iReloadTimeOffset)
         {
             timer.times.push(BulletLoader::RELOAD_TIME + iReloadTimeOffset);
             return bulletLoader.loadBullet(initialLocation, angle);
@@ -59,7 +59,7 @@ class BulletLoaderTest : public ::testing::Test
 
 TEST_F(BulletLoaderTest, ReturnsInvalidWhenNotEnoughTimePassedSinceLastShot)
 {
-    shared_ptr<Bullet> result = load(-1);
+    shared_ptr<FixedSpeedBullet> result = load(-1);
     EXPECT_FALSE(result);
 }
 
@@ -67,7 +67,7 @@ TEST_F(BulletLoaderTest, ReturnsNewBulletWhenEnoughTimePassedSinceLastShot)
 {
     ON_CALL(*bullet, initialise(_, _, _))
         .WillByDefault(Return(true));
-    shared_ptr<Bullet> result = load(1);
+    shared_ptr<FixedSpeedBullet> result = load(1);
     EXPECT_TRUE(result);
 }
 
@@ -75,7 +75,7 @@ TEST_F(BulletLoaderTest, ReturnsInvalidWhenBulletInitialisationFails)
 {
     ON_CALL(*bullet, initialise(_, _, _))
         .WillByDefault(Return(false));
-    shared_ptr<Bullet> result = load(1);
+    shared_ptr<FixedSpeedBullet> result = load(1);
     EXPECT_FALSE(result);
 }
 

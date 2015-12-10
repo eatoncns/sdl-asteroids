@@ -2,7 +2,7 @@
 #include <Ship.hpp>
 #include <ShipAction.hpp>
 #include <Asteroid.hpp>
-#include <Bullet.hpp>
+#include <FixedSpeedBullet.hpp>
 #include <boost/foreach.hpp>
 
 using boost::shared_ptr;
@@ -40,7 +40,7 @@ namespace pjm
 
     void GameElements::updateShip(const ShipAction& iAction, unsigned int iTimeElapsed)
     {
-        shared_ptr<Bullet> bullet = _ship->update(iAction, iTimeElapsed);
+        shared_ptr<FixedSpeedBullet> bullet = _ship->update(iAction, iTimeElapsed);
         if (bullet)
         {
             _bullets.push_back(bullet);
@@ -59,7 +59,7 @@ namespace pjm
 
     void GameElements::updateBullets(unsigned int iTimeElapsed)
     {
-        BOOST_FOREACH(shared_ptr<Bullet> bullet, _bullets)
+        BOOST_FOREACH(shared_ptr<FixedSpeedBullet> bullet, _bullets)
         {
             bullet->update(iTimeElapsed);
         }
@@ -93,7 +93,7 @@ namespace pjm
         {
             asteroid->render();
         }
-        BOOST_FOREACH(shared_ptr<Bullet> bullet, _bullets)
+        BOOST_FOREACH(shared_ptr<FixedSpeedBullet> bullet, _bullets)
         {
             bullet->render();
         }

@@ -10,7 +10,7 @@
 namespace pjm
 {
     class Asteroid;
-    class Bullet;
+    class FixedSpeedBullet;
     class BulletLoader;
     class ScreenWrapper;
     struct ShipAction;
@@ -24,7 +24,7 @@ namespace pjm
             bool initialise(const Vector& iInitialLocation,
                             ImageLoader& iImageLoader);
 
-            boost::shared_ptr<Bullet> update(const ShipAction& iAction,
+            boost::shared_ptr<FixedSpeedBullet> update(const ShipAction& iAction,
                                                      unsigned int iTimeElapsed);
 
             void render();
@@ -47,7 +47,7 @@ namespace pjm
             void updateVelocity(unsigned int iTimeElapsed);
             void updateLocation(unsigned int iTimeElapsed);
             void handleScreenWrap(unsigned int iTimeElapsed);
-            boost::shared_ptr<Bullet> handleShooting(const ShipAction& iAction);
+            boost::shared_ptr<FixedSpeedBullet> handleShooting(const ShipAction& iAction);
 
             ObjectRenderer _renderer;
             PhysicsData _physicsData;

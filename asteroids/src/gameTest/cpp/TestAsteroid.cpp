@@ -33,7 +33,7 @@ void TestAsteroid::collideWith(Asteroid* iOther)
 }
 
 
-void TestAsteroid::collideWith(Bullet* iBullet)
+void TestAsteroid::collideWith(FixedSpeedBullet* iBullet)
 {
     bulletCollideCalls.push_back(iBullet);
 }

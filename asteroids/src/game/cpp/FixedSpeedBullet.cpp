@@ -1,4 +1,4 @@
-#include <Bullet.hpp>
+#include <FixedSpeedBullet.hpp>
 #include <ScreenWrapper.hpp>
 #include <boost/make_shared.hpp>
 #include <math.h>
@@ -7,12 +7,12 @@ using boost::make_shared;
 
 namespace pjm
 {
-    Bullet::Bullet(const Vector& iBounds)
+    FixedSpeedBullet::FixedSpeedBullet(const Vector& iBounds)
         : _bounds(iBounds)
     {}
 
 
-    bool Bullet::initialise(const Vector& iInitialLocation,
+    bool FixedSpeedBullet::initialise(const Vector& iInitialLocation,
                             const double iAngle,
                             ImageLoader& iImageLoader)
     {
@@ -25,14 +25,14 @@ namespace pjm
     }
 
 
-    void Bullet::update(unsigned int iTimeElapsed)
+    void FixedSpeedBullet::update(unsigned int iTimeElapsed)
     {
         MovingObject::updateLocation(iTimeElapsed);
         _expired = isOutsideOfScreen();
     }
 
 
-    bool Bullet::isOutsideOfScreen()
+    bool FixedSpeedBullet::isOutsideOfScreen()
     {
         return (_location.x < 0 ||
                 _location.y < 0 ||
@@ -41,17 +41,17 @@ namespace pjm
     }
 
 
-    void Bullet::collideWith(Asteroid* iAsteroid)
+    void FixedSpeedBullet::collideWith(Asteroid* iAsteroid)
     {
         _expired = true;
     }
 
 
-    std::string Bullet::imageFilePath()
+    std::string FixedSpeedBullet::imageFilePath()
     {
         return "resources/Bullet.gif";
     }
 
 
-    const float Bullet::VELOCITY(0.5);
+    const float FixedSpeedBullet::VELOCITY(0.5);
 }

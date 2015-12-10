@@ -1,5 +1,5 @@
 #include <gmock/gmock.h>
-#include <Bullet.hpp>
+#include <FixedSpeedBullet.hpp>
 #include <MoveableObjectTest.hpp>
 #include <TestAsteroid.hpp>
 #include <Rectangle.hpp>
@@ -10,10 +10,10 @@ using boost::math::iround;
 using ::testing::Eq;
 using ::testing::ElementsAre;
 
-class BulletTest : public MoveableObjectTest
+class FixedSpeedBulletTest : public MoveableObjectTest
 {
     protected:
-        BulletTest()
+        FixedSpeedBulletTest()
             : _bounds(110, 110),
               _angle(90.0),
               _bullet(_bounds)
@@ -39,64 +39,64 @@ class BulletTest : public MoveableObjectTest
 
         Vector _bounds;
         double _angle;
-        Bullet _bullet;
+        FixedSpeedBullet _bullet;
 };
 
 
-TEST_F(BulletTest, InitialiseReturnsFalseWhenImageLoadFails)
+TEST_F(FixedSpeedBulletTest, InitialiseReturnsFalseWhenImageLoadFails)
 {
     _imageLoader.loadSuccess = false;
     EXPECT_THAT(_bullet.initialise(_initialLocation, _angle, _imageLoader), Eq(false));
 }
 
-TEST_F(BulletTest, InitialiseReturnsTrueWhenImageLoadSucceeds)
+TEST_F(FixedSpeedBulletTest, InitialiseReturnsTrueWhenImageLoadSucceeds)
 {
     EXPECT_THAT(_bullet.initialise(_initialLocation, _angle, _imageLoader), Eq(true));
 }
 
-TEST_F(BulletTest, MovesWithFixedVelocityAlongGivenAngle)
+TEST_F(FixedSpeedBulletTest, MovesWithFixedVelocityAlongGivenAngle)
 {
     unsigned int timeElapsed = 5;
     _bullet.update(timeElapsed);
-    expectBulletToRenderAtLocation(Vector(_initialLocation.x + Bullet::VELOCITY*5,
+    expectBulletToRenderAtLocation(Vector(_initialLocation.x + FixedSpeedBullet::VELOCITY*5,
                                           _initialLocation.y));
 }
 
-TEST_F(BulletTest, DoesNotRotate)
+TEST_F(FixedSpeedBulletTest, DoesNotRotate)
 {
     unsigned int timeElapsed = 5;
     _bullet.update(timeElapsed);
     expectBulletToRenderAtAngle(0.0);
 }
 
-TEST_F(BulletTest, InitialisesWithCorrectYAxisDirection)
+TEST_F(FixedSpeedBulletTest, InitialisesWithCorrectYAxisDirection)
 {
     _angle = 180.0;
     _bullet.initialise(_initialLocation, _angle, _imageLoader);
     unsigned int timeElapsed = 5;
     _bullet.update(timeElapsed);
     expectBulletToRenderAtLocation(Vector(_initialLocation.x,
-                                          _initialLocation.y + Bullet::VELOCITY*5));
+                                          _initialLocation.y + FixedSpeedBullet::VELOCITY*5));
 }
 
-TEST_F(BulletTest, IsNotExpiredWhileStillOnScreen)
+TEST_F(FixedSpeedBulletTest, IsNotExpiredWhileStillOnScreen)
 {
     _bullet.update(5);
     EXPECT_THAT(_bullet.isExpired(), Eq(false));
 }
 
-TEST_F(BulletTest, ExpiresWhenMovesOffScreen)
+TEST_F(FixedSpeedBulletTest, ExpiresWhenMovesOffScreen)
 {
     _bullet.update(100);
     EXPECT_THAT(_bullet.isExpired(), Eq(true));
 }
 
-TEST_F(BulletTest, RendersImageAtCurrentLocation)
+TEST_F(FixedSpeedBulletTest, RendersImageAtCurrentLocation)
 {
     expectBulletToRenderAt(_initialLocation, 0.0);
 }
 
-TEST_F(BulletTest, HasBoundingBoxBasedOnScaledImage)
+TEST_F(FixedSpeedBulletTest, HasBoundingBoxBasedOnScaledImage)
 {
     int testLength = 53;
     _testRenderable->w = testLength;
@@ -109,7 +109,7 @@ TEST_F(BulletTest, HasBoundingBoxBasedOnScaledImage)
     EXPECT_THAT(boundingBox.h, Eq(iround(testLength - 2*ratioLength)));
 }
 
-TEST_F(BulletTest, ExpiresOnCollisionWithAsteroid)
+TEST_F(FixedSpeedBulletTest, ExpiresOnCollisionWithAsteroid)
 {
     TestAsteroid asteroid;
     _bullet.collideWith(&asteroid);

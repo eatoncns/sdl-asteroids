@@ -6,7 +6,7 @@
 namespace pjm
 {
     class Asteroid;
-    class Bullet;
+    class FixedSpeedBullet;
     class ImageLoader;
     class Rectangle;
     class ShipAction;
@@ -17,7 +17,7 @@ namespace pjm
         virtual bool initialise(const Vector& iInitialLocation,
                                 ImageLoader& iImageLoader) = 0;
 
-        virtual boost::shared_ptr<Bullet> update(const ShipAction& iAction,
+        virtual boost::shared_ptr<FixedSpeedBullet> update(const ShipAction& iAction,
                                                  unsigned int iTimeElapsed) = 0;
 
         virtual void render() = 0;

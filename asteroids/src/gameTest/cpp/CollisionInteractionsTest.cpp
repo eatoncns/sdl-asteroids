@@ -86,7 +86,7 @@ class CollisionInteractionsTest : public ::testing::Test
         // As target class takes references to lists owned by GameElements
         // here we take copies of the test type lists to pass in
         list<shared_ptr<Asteroid> > _asteroids;
-        list<shared_ptr<Bullet> > _bullets;
+        list<shared_ptr<FixedSpeedBullet> > _bullets;
         shared_ptr<FakeCollisionDetector> _collisionDetector;
         CollisionInteractions _collisionInteractions;
 };

@@ -32,7 +32,7 @@ namespace pjm
     }
 
 
-    shared_ptr<Bullet> EulerShip::update(const ShipAction& iAction,
+    shared_ptr<FixedSpeedBullet> EulerShip::update(const ShipAction& iAction,
                                     unsigned int iTimeElapsed)
     {
         updateAngle(iAction, iTimeElapsed);
@@ -101,11 +101,11 @@ namespace pjm
     }
 
 
-    shared_ptr<Bullet> EulerShip::handleShooting(const ShipAction& iAction)
+    shared_ptr<FixedSpeedBullet> EulerShip::handleShooting(const ShipAction& iAction)
     {
         return iAction.shoot
                  ? _bulletLoader->loadBullet(_physicsData.location, _angle)
-                 : shared_ptr<Bullet>();
+                 : shared_ptr<FixedSpeedBullet>();
     }
 
 

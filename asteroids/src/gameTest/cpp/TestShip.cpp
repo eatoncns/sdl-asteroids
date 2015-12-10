@@ -11,7 +11,7 @@ TestShip::TestShip()
 {}
 
 
-void TestShip::willShootBullet(shared_ptr<Bullet> iBullet)
+void TestShip::willShootBullet(shared_ptr<FixedSpeedBullet> iBullet)
 {
     _bullet = iBullet;
 }
@@ -25,7 +25,7 @@ bool TestShip::initialise(const Vector& iInitialLocation,
 }
 
 
-shared_ptr<Bullet> TestShip::update(const ShipAction& iAction,
+shared_ptr<FixedSpeedBullet> TestShip::update(const ShipAction& iAction,
                                     unsigned int iTimeElapsed)
 {
     return _bullet;

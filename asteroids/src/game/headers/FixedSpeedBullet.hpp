@@ -9,10 +9,10 @@ namespace pjm
     struct ImageLoader;
     class Asteroid;
 
-    class Bullet : public CollidableObject
+    class FixedSpeedBullet : public CollidableObject
     {
         public:
-            Bullet(const Vector& iBounds);
+            FixedSpeedBullet(const Vector& iBounds);
 
             virtual bool initialise(const Vector& iInitialLocation,
                             const double iAngle,
@@ -22,7 +22,7 @@ namespace pjm
 
             virtual void collideWith(Asteroid* iAsteroid);
 
-            virtual ~Bullet() {}
+            virtual ~FixedSpeedBullet() {}
 
             static const float VELOCITY;
 

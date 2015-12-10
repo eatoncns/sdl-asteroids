@@ -1,7 +1,7 @@
 #include <CollisionInteractions.hpp>
 #include <Ship.hpp>
 #include <Asteroid.hpp>
-#include <Bullet.hpp>
+#include <FixedSpeedBullet.hpp>
 #include <Rectangle.hpp>
 #include <boost/foreach.hpp>
 
@@ -12,7 +12,7 @@ namespace pjm
 {
     CollisionInteractions::CollisionInteractions(shared_ptr<Ship> iShip,
                                                  list<shared_ptr<Asteroid> >& iAsteroids,
-                                                 list<shared_ptr<Bullet> >& iBullets)
+                                                 list<shared_ptr<FixedSpeedBullet> >& iBullets)
         : _collisionDetector(new CollisionDetector()),
           _ship(iShip),
           _asteroids(iAsteroids),
@@ -72,7 +72,7 @@ namespace pjm
 
     void CollisionInteractions::handleBulletCollisions()
     {
-        BOOST_FOREACH(shared_ptr<Bullet> bullet, _bullets)
+        BOOST_FOREACH(shared_ptr<FixedSpeedBullet> bullet, _bullets)
         {
             BOOST_FOREACH(shared_ptr<Asteroid> asteroid, _asteroids)
             {
