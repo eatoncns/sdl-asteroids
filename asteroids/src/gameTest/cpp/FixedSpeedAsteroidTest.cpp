@@ -1,7 +1,8 @@
 #include <gmock/gmock.h>
-#include <Asteroid.hpp>
+#include <FixedSpeedAsteroid.hpp>
 #include <Rectangle.hpp>
 #include <MoveableObjectTest.hpp>
+#include <TestAsteroid.hpp>
 #include <TestBullet.hpp>
 #include <TestRandomGenerator.hpp>
 #include <boost/math/special_functions/round.hpp>
@@ -15,31 +16,14 @@ using ::testing::NiceMock;
 using ::testing::_;
 using ::testing::Return;
 
-
-struct AsteroidSpy : public Asteroid
-{
-    AsteroidSpy(shared_ptr<ScreenWrapper> iScreenWrapper)
-        : Asteroid(iScreenWrapper)
-    {}
-
-    Vector getVelocity()
-    {
-        return _velocity;
-    }
-
-    void setVelocity(const Vector& iVelocity)
-    {
-        _velocity = iVelocity;
-    }
-};
-
-
-class AsteroidTest : public MoveableObjectTest
+class FixedSpeedAsteroidTest : public MoveableObjectTest
 {
     protected:
-        AsteroidTest()
+        FixedSpeedAsteroidTest()
             : _asteroid(_wrapper),
-              _velocityComponent(sin(45*M_PI/180.0)*Asteroid::VELOCITY)
+              // velocity component to give 45 degree angle
+              // i.e. same amount in each axis
+              _velocityComponent(sin(45*M_PI/180.0)*FixedSpeedAsteroid::VELOCITY)
         {
             ON_CALL(_random, uniformInRange(_,_))
                 .WillByDefault(Return(0.375));
@@ -62,23 +46,23 @@ class AsteroidTest : public MoveableObjectTest
         }
 
         NiceMock<TestRandomGenerator> _random;
-        AsteroidSpy _asteroid;
+        FixedSpeedAsteroid _asteroid;
         float _velocityComponent;
 };
 
 
-TEST_F(AsteroidTest, InitReturnsFalseWhenImageLoadFails)
+TEST_F(FixedSpeedAsteroidTest, InitReturnsFalseWhenImageLoadFails)
 {
     _imageLoader.loadSuccess = false;
     EXPECT_FALSE(_asteroid.initialise(_initialLocation, _imageLoader, _random));
 }
 
-TEST_F(AsteroidTest, IntialisesAtGivenLocationWithZeroAngle)
+TEST_F(FixedSpeedAsteroidTest, IntialisesAtGivenLocationWithZeroAngle)
 {
     expectAsteroidToRenderAt(_initialLocation, 0.0);
 }
 
-TEST_F(AsteroidTest, MovesWithConstantVelocity)
+TEST_F(FixedSpeedAsteroidTest, MovesWithConstantVelocity)
 {
     unsigned int timeElapsed = 5;
     _asteroid.update(timeElapsed);
@@ -87,14 +71,14 @@ TEST_F(AsteroidTest, MovesWithConstantVelocity)
     expectAsteroidToRenderAtLocation(_initialLocation + offset);
 }
 
-TEST_F(AsteroidTest, DoesNotRotate)
+TEST_F(FixedSpeedAsteroidTest, DoesNotRotate)
 {
     unsigned int timeElapsed = 5;
     _asteroid.update(timeElapsed);
     expectAsteroidToRenderAtAngle(0.0);
 }
 
-TEST_F(AsteroidTest, CallsScreenWrapperOnUpdate)
+TEST_F(FixedSpeedAsteroidTest, CallsScreenWrapperOnUpdate)
 {
     float distanceComponent = _velocityComponent*5;
     Vector location(_initialLocation.x + distanceComponent, _initialLocation.y + distanceComponent);
@@ -103,37 +87,40 @@ TEST_F(AsteroidTest, CallsScreenWrapperOnUpdate)
     _asteroid.update(5);
 }
 
-TEST_F(AsteroidTest, HasBoundingBoxBasedOnScaledImage)
+TEST_F(FixedSpeedAsteroidTest, HasBoundingBoxBasedOnScaledImage)
 {
     int testLength = 53;
     _testRenderable->w = testLength;
     _testRenderable->h = testLength;
     Rectangle boundingBox = _asteroid.getBoundingBox();
-    float ratioLength = testLength*CollidableObject::BOUNDING_BOX_RATIO;
+    float ratioLength = testLength*ObjectRenderer::BOUNDING_BOX_RATIO;
     EXPECT_THAT(boundingBox.x, Eq(_initialLocation.x + ratioLength));
     EXPECT_THAT(boundingBox.y, Eq(_initialLocation.y + ratioLength));
     EXPECT_THAT(boundingBox.w, Eq(iround(testLength - 2*ratioLength)));
     EXPECT_THAT(boundingBox.h, Eq(iround(testLength - 2*ratioLength)));
 }
 
-TEST_F(AsteroidTest, SwapsVelocityWithOtherAsteroidOnCollision)
+TEST_F(FixedSpeedAsteroidTest, SwapsDirectionWithOtherAsteroidOnCollision)
 {
-    AsteroidSpy otherAsteroid(_wrapper);
-    Vector otherVelocity(1, 1);
-    otherAsteroid.setVelocity(otherVelocity);
+    TestAsteroid otherAsteroid;
+    otherAsteroid.normalisedDirection = Vector(1, 0);
     _asteroid.collideWith(&otherAsteroid);
-    EXPECT_THAT(_asteroid.getVelocity(),
-                Eq(otherVelocity));
-    EXPECT_THAT(otherAsteroid.getVelocity(),
-                Eq(Vector(_velocityComponent, _velocityComponent)));
+    float asteroidNorm = sqrt(2.0)/2; // as _asteroid is at 45 degrees
+    ASSERT_THAT(otherAsteroid.setNormalisedDirectionCalls.empty(), Eq(false));
+    EXPECT_THAT(otherAsteroid.setNormalisedDirectionCalls,
+                ElementsAre(Vector(asteroidNorm,asteroidNorm)));
+    unsigned int timeElapsed = 1;
+    _asteroid.update(timeElapsed);
+    expectAsteroidToRenderAtLocation(_initialLocation +
+                                     Vector(FixedSpeedAsteroid::VELOCITY,0));
 }
 
-TEST_F(AsteroidTest, IsNotExpiredOnInit)
+TEST_F(FixedSpeedAsteroidTest, IsNotExpiredOnInit)
 {
     EXPECT_THAT(_asteroid.isExpired(), Eq(false));
 }
 
-TEST_F(AsteroidTest, ExpiresOnCollisionWithBullet)
+TEST_F(FixedSpeedAsteroidTest, ExpiresOnCollisionWithBullet)
 {
     TestBullet bullet;
     _asteroid.collideWith(&bullet);

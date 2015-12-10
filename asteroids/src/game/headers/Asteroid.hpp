@@ -1,33 +1,35 @@
 #ifndef _PJM_ASTEROID_HPP_
 #define _PJM_ASTEROID_HPP_
 
-#include <ScreenWrappingObject.hpp>
-
 namespace pjm
 {
-    struct RandomGenerator;
     class Bullet;
+    class ImageLoader;
+    class RandomGenerator;
+    class Rectangle;
+    class Vector;
 
-    class Asteroid : public ScreenWrappingObject
+    struct Asteroid
     {
-        public:
-            Asteroid(boost::shared_ptr<ScreenWrapper> iScreenWrapper);
+        virtual bool initialise(const Vector& iInitialLocation,
+                        ImageLoader& iImageLoader,
+                        RandomGenerator& iRandomGenerator) = 0;
 
-            virtual bool initialise(const Vector& iInitialLocation,
-                                    ImageLoader& iImageLoader,
-                                    RandomGenerator& iRandomGenerator);
+        virtual void update(unsigned int iTimeElapsed) = 0;
 
-            virtual void update(unsigned int iTimeElapsed);
+        virtual void render() = 0;
 
-            virtual void collideWith(Asteroid* iOther);
-            virtual void collideWith(Bullet* iBullet);
+        virtual Rectangle getBoundingBox() = 0;
 
-            virtual ~Asteroid() {}
+        virtual void collideWith(Asteroid* iOther) = 0;
 
-            static float VELOCITY;
+        virtual void collideWith(Bullet* iBullet) = 0;
 
-            virtual std::string imageFilePath();
+        virtual bool isExpired() = 0;
+
+        virtual Vector getNormalisedDirection() = 0;
+        virtual void setNormalisedDirection(const Vector& iNormalisedDirection) = 0;
     };
 }
 
-#endif
+#endif /* end of include guard: _PJM_ASTEROID_HPP_ */

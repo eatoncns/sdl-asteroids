@@ -4,11 +4,11 @@ using namespace pjm;
 using boost::shared_ptr;
 
 TestAsteroid::TestAsteroid()
-    : Asteroid(screenWrapper),
-      renderCalls(0),
+    : renderCalls(0),
       initialiseSuccess(true),
       expired(false),
-      boundingBox(0,0,0,0)
+      boundingBox(0,0,0,0),
+      normalisedDirection(0,0)
 {}
 
 
@@ -56,5 +56,14 @@ void TestAsteroid::render()
     ++renderCalls;
 }
 
-TestImageLoader TestAsteroid::imageLoader;
-shared_ptr<ScreenWrapper> TestAsteroid::screenWrapper;
+
+Vector TestAsteroid::getNormalisedDirection()
+{
+    return normalisedDirection;
+}
+
+
+void TestAsteroid::setNormalisedDirection(const Vector& iNormalisedDirection)
+{
+    setNormalisedDirectionCalls.push_back(iNormalisedDirection);
+}

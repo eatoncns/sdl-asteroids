@@ -6,6 +6,7 @@
 #include <TestRandomGenerator.hpp>
 #include <ScreenWrapper.hpp>
 #include <Rectangle.hpp>
+#include <Vector.hpp>
 #include <list>
 
 struct TestAsteroid : public pjm::Asteroid
@@ -27,6 +28,9 @@ struct TestAsteroid : public pjm::Asteroid
 
     void render();
 
+    pjm::Vector getNormalisedDirection();
+    void setNormalisedDirection(const pjm::Vector& iNormalisedDirection);
+
     int renderCalls;
     std::list<pjm::Asteroid*> collideCalls;
     std::list<pjm::Bullet*> bulletCollideCalls;
@@ -35,8 +39,8 @@ struct TestAsteroid : public pjm::Asteroid
     bool initialiseSuccess;
     bool expired;
     pjm::Rectangle boundingBox;
-    static TestImageLoader imageLoader;
-    static boost::shared_ptr<pjm::ScreenWrapper> screenWrapper;
+    pjm::Vector normalisedDirection;
+    std::list<pjm::Vector> setNormalisedDirectionCalls;
 };
 
 #endif

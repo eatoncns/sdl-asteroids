@@ -1,5 +1,5 @@
 #include <AsteroidCreator.hpp>
-#include <Asteroid.hpp>
+#include <FixedSpeedAsteroid.hpp>
 #include <ScreenWrapper.hpp>
 #include <LocationGenerator.hpp>
 #include <RandomGenerator.hpp>
@@ -25,16 +25,16 @@ namespace pjm
             if (!asteroid->initialise(initialLocation, iImageLoader, iRandomGenerator))
             {
                 return list<shared_ptr<Asteroid> >();
-            } 
+            }
             asteroids.push_back(asteroid);
         }
         return asteroids;
     }
-            
-    
+
+
     shared_ptr<Asteroid> AsteroidCreator::makeAsteroid(shared_ptr<ScreenWrapper> iScreenWrapper)
     {
-        shared_ptr<Asteroid> asteroid(new Asteroid(iScreenWrapper));
+        shared_ptr<FixedSpeedAsteroid> asteroid(new FixedSpeedAsteroid(iScreenWrapper));
         return asteroid;
     }
 }
