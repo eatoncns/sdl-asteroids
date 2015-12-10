@@ -2,7 +2,6 @@
 #define _PJM_ASTEROIDCREATOR_HPP_
 
 #include <boost/shared_ptr.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <list>
 
 namespace pjm
@@ -20,7 +19,7 @@ namespace pjm
                                                            ImageLoader& iImageLoader,
                                                            LocationGenerator& iLocationGenerator,
                                                            RandomGenerator& iRandomGenerator);
-            
+
             const static int NUM_ASTEROIDS = 5;
 
         protected:
