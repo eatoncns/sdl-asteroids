@@ -1,5 +1,5 @@
-#ifndef _PJM_BULLET_HPP_
-#define _PJM_BULLET_HPP_
+#ifndef _PJM_FIXEDSPEEDBULLET_HPP_
+#define _PJM_FIXEDSPEEDBULLET_HPP_
 
 #include <CollidableObject.hpp>
 
