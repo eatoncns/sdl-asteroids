@@ -100,15 +100,22 @@ TEST_F(FixedSpeedAsteroidTest, HasBoundingBoxBasedOnScaledImage)
     EXPECT_THAT(boundingBox.h, Eq(iround(testLength - 2*ratioLength)));
 }
 
-TEST_F(FixedSpeedAsteroidTest, SwapsDirectionWithOtherAsteroidOnCollision)
+TEST_F(FixedSpeedAsteroidTest, TransfersOwnDirectionToOtherAsteroidInCollision)
 {
     TestAsteroid otherAsteroid;
-    otherAsteroid.normalisedDirection = Vector(1, 0);
     _asteroid.collideWith(&otherAsteroid);
     float asteroidNorm = sqrt(2.0)/2; // as _asteroid is at 45 degrees
     ASSERT_THAT(otherAsteroid.setNormalisedDirectionCalls.empty(), Eq(false));
     EXPECT_THAT(otherAsteroid.setNormalisedDirectionCalls,
                 ElementsAre(Vector(asteroidNorm,asteroidNorm)));
+
+}
+
+TEST_F(FixedSpeedAsteroidTest, UpdatesOwnDirectionFromOtherAsteroidInCollision)
+{
+    TestAsteroid otherAsteroid;
+    otherAsteroid.normalisedDirection = Vector(1, 0);
+    _asteroid.collideWith(&otherAsteroid);
     unsigned int timeElapsed = 1;
     _asteroid.update(timeElapsed);
     expectAsteroidToRenderAtLocation(_initialLocation +
