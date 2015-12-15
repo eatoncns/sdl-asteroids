@@ -20,6 +20,8 @@ namespace pjm
             boost::shared_ptr<Bullet> loadBullet(const Vector& iInitialLocation,
                                                  const double iAngle);
 
+            virtual ~TimeLimitedBulletLoader() {}
+
             const static unsigned int RELOAD_TIME;
 
         protected:

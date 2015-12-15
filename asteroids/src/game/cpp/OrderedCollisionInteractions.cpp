@@ -1,4 +1,4 @@
-#include <CollisionInteractions.hpp>
+#include <OrderedCollisionInteractions.hpp>
 #include <Ship.hpp>
 #include <Asteroid.hpp>
 #include <Bullet.hpp>
@@ -10,7 +10,7 @@ using std::list;
 
 namespace pjm
 {
-    CollisionInteractions::CollisionInteractions(shared_ptr<Ship> iShip,
+    OrderedCollisionInteractions::OrderedCollisionInteractions(shared_ptr<Ship> iShip,
                                                  list<shared_ptr<Asteroid> >& iAsteroids,
                                                  list<shared_ptr<Bullet> >& iBullets)
         : _collisionDetector(new CollisionDetector()),
@@ -20,7 +20,7 @@ namespace pjm
     {}
 
 
-    void CollisionInteractions::update()
+    void OrderedCollisionInteractions::update()
     {
         handleShipCollision();
         if (_ship->isExpired())
@@ -32,7 +32,7 @@ namespace pjm
     }
 
 
-    void CollisionInteractions::handleShipCollision()
+    void OrderedCollisionInteractions::handleShipCollision()
     {
         BOOST_FOREACH(shared_ptr<Asteroid> asteroid, _asteroids)
         {
@@ -45,7 +45,7 @@ namespace pjm
     }
 
 
-    void CollisionInteractions::handleAsteroidCollisions()
+    void OrderedCollisionInteractions::handleAsteroidCollisions()
     {
         if (_asteroids.size() < 2)
         {
@@ -70,7 +70,7 @@ namespace pjm
     }
 
 
-    void CollisionInteractions::handleBulletCollisions()
+    void OrderedCollisionInteractions::handleBulletCollisions()
     {
         BOOST_FOREACH(shared_ptr<Bullet> bullet, _bullets)
         {
@@ -87,7 +87,7 @@ namespace pjm
     }
 
 
-    void CollisionInteractions::overrideCollisionDetector(shared_ptr<CollisionDetector> iCollisionDetector)
+    void OrderedCollisionInteractions::overrideCollisionDetector(shared_ptr<CollisionDetector> iCollisionDetector)
     {
         _collisionDetector = iCollisionDetector;
     }

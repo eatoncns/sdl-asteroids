@@ -3,6 +3,7 @@
 #include <ShipAction.hpp>
 #include <Asteroid.hpp>
 #include <Bullet.hpp>
+#include <OrderedCollisionInteractions.hpp>
 #include <boost/foreach.hpp>
 #include <boost/bind.hpp>
 
@@ -17,7 +18,7 @@ namespace pjm
                                list<shared_ptr<Asteroid> > iAsteroids)
         : _ship(iShip),
           _asteroids(iAsteroids),
-          _collisionInteractions(new CollisionInteractions(_ship, _asteroids, _bullets))
+          _collisionInteractions(new OrderedCollisionInteractions(_ship, _asteroids, _bullets))
     {}
 
 

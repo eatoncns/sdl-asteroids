@@ -1,5 +1,5 @@
 #include <gmock/gmock.h>
-#include <CollisionInteractions.hpp>
+#include <OrderedCollisionInteractions.hpp>
 #include <CollisionDetector.hpp>
 #include <Rectangle.hpp>
 #include <TestShip.hpp>
@@ -88,7 +88,7 @@ class CollisionInteractionsTest : public ::testing::Test
         list<shared_ptr<Asteroid> > _asteroids;
         list<shared_ptr<Bullet> > _bullets;
         shared_ptr<FakeCollisionDetector> _collisionDetector;
-        CollisionInteractions _collisionInteractions;
+        OrderedCollisionInteractions _collisionInteractions;
 };
 
 TEST_F(CollisionInteractionsTest, ChecksShipCollisionWithAllAsteroids)
