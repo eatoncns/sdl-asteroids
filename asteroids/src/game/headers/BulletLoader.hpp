@@ -13,6 +13,8 @@ namespace pjm
 
         virtual boost::shared_ptr<Bullet> loadBullet(const Vector& iInitialLocation,
                                                      const double iAngle) = 0;
+
+        virtual ~BulletLoader() {};
     };
 }
 
