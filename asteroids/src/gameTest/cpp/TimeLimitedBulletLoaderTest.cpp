@@ -1,4 +1,4 @@
-#include <BulletLoader.hpp>
+#include <TimeLimitedBulletLoader.hpp>
 #include <TestImageLoader.hpp>
 #include <TestTimer.hpp>
 #include <TestBullet.hpp>
@@ -10,14 +10,14 @@ using ::testing::NiceMock;
 using ::testing::Return;
 using ::testing::_;
 
-class TestableBulletLoader : public BulletLoader
+class TestableBulletLoader : public TimeLimitedBulletLoader
 {
     public:
         TestableBulletLoader(const Vector& iBounds,
                              ImageLoader& iImageLoader,
                              Timer& iTimer,
                              shared_ptr<Bullet> iBullet)
-          : BulletLoader(iBounds, iImageLoader, iTimer),
+          : TimeLimitedBulletLoader(iBounds, iImageLoader, iTimer),
             bullet(iBullet)
         {}
 
@@ -44,7 +44,7 @@ class BulletLoaderTest : public ::testing::Test
 
         shared_ptr<Bullet> load(int iReloadTimeOffset)
         {
-            timer.times.push(BulletLoader::RELOAD_TIME + iReloadTimeOffset);
+            timer.times.push(TimeLimitedBulletLoader::RELOAD_TIME + iReloadTimeOffset);
             return bulletLoader.loadBullet(initialLocation, angle);
         }
 

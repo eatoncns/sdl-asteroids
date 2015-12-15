@@ -4,7 +4,7 @@
 #include <ImageLoader.hpp>
 #include <ScreenWrapper.hpp>
 #include <ScreenInfo.hpp>
-#include <BulletLoader.hpp>
+#include <TimeLimitedBulletLoader.hpp>
 #include <boost/make_shared.hpp>
 
 using boost::shared_ptr;
@@ -31,9 +31,9 @@ namespace pjm
     {
         Vector bounds(iScreenInfo.width, iScreenInfo.height);
         static SDLTimer timer;
-        shared_ptr<BulletLoader> bulletLoader(new BulletLoader(bounds,
-                                                               iImageLoader,
-                                                               timer));
+        shared_ptr<BulletLoader> bulletLoader(new TimeLimitedBulletLoader(bounds,
+                                                                          iImageLoader,
+                                                                          timer));
         return make_shared<EulerShip>(iScreenWrapper, bulletLoader);
     }
 }

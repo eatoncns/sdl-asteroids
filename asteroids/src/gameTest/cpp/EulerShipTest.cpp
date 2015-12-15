@@ -20,8 +20,7 @@ class EulerShipTest : public MoveableObjectTest
 {
     protected:
         EulerShipTest()
-            : _timer(0),
-              _bulletLoader(new TestBulletLoader(_timer)),
+            : _bulletLoader(new TestBulletLoader()),
               _ship(_wrapper, _bulletLoader)
         {
             _ship.initialise(_initialLocation, _imageLoader);
@@ -47,7 +46,6 @@ class EulerShipTest : public MoveableObjectTest
             expectObjectToRenderAtLocation(_ship, iLocation);
         }
 
-        TestTimer _timer;
         shared_ptr<TestBulletLoader> _bulletLoader;
         EulerShip _ship;
 };
