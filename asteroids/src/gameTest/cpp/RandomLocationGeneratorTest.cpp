@@ -1,5 +1,6 @@
 #include <gmock/gmock.h>
-#include <LocationGenerator.hpp>
+#include <RandomLocationGenerator.hpp>
+#include <ScreenInfo.hpp>
 #include <TestRandomGenerator.hpp>
 #include <Vector.hpp>
 
@@ -17,7 +18,7 @@ class LocationGeneratorTest : public ::testing::Test
 
         ScreenInfo _screenInfo;
         TestRandomGenerator _random;
-        LocationGenerator _locationGenerator;
+        RandomLocationGenerator _locationGenerator;
 };
 
 TEST_F(LocationGeneratorTest, GeneratesRandomLocationWithinBoundsFromCentre)

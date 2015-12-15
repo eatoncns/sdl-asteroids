@@ -11,7 +11,7 @@
 #include <Asteroid.hpp>
 #include <ShipCreator.hpp>
 #include <AsteroidCreator.hpp>
-#include <LocationGenerator.hpp>
+#include <RandomLocationGenerator.hpp>
 #include <BoostRandomGenerator.hpp>
 #include <boost/make_shared.hpp>
 
@@ -151,7 +151,7 @@ namespace pjm
                                                          ImageLoader& iImageLoader)
     {
         BoostRandomGenerator random;
-        LocationGenerator locationGenerator(_screenInfo, random);
+        RandomLocationGenerator locationGenerator(_screenInfo, random);
         AsteroidCreator asteroidCreator;
         list<shared_ptr<Asteroid> > asteroids = asteroidCreator.create(iScreenWrapper,
                                                                        iImageLoader,

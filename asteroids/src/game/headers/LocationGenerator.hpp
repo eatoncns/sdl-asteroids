@@ -1,27 +1,17 @@
 #ifndef _PJM_LOCATIONGENERATOR_HPP_
 #define _PJM_LOCATIONGENERATOR_HPP_
 
-#include <ScreenInfo.hpp>
-
 namespace pjm
 {
-    struct RandomGenerator;
     class Vector;
 
-    class LocationGenerator
+    struct LocationGenerator
     {
-        public:
-            LocationGenerator(const ScreenInfo& iScreenInfo, RandomGenerator& iRandom);
+        virtual Vector generateLocation(float iMinDistanceFromCentre,
+                                        float iMaxDistanceFromCentre) = 0;
 
-            virtual ~LocationGenerator() {}
-
-            virtual Vector generateLocation(float iMinDistanceFromCentre,
-                                            float iMaxDistanceFromCentre);
-
-        private:
-            ScreenInfo _screenInfo;
-            RandomGenerator& _random;
+        virtual ~LocationGenerator() {}
     };
 }
 
-#endif
+#endif /* end of include guard: _PJM_LOCATIONGENERATOR_HPP_ */
