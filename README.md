@@ -10,9 +10,9 @@ Build requirements (linux/macosx):
 
 Build and run unit tests with
 
-.gradlew build
+./gradlew build
 
 
 Run the game with
 
-.gradlew run
+./gradlew run
