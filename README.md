@@ -1,18 +1,18 @@
 # sdl-asteroids
 Repo for SDL asteroids game
 
-Build requirements (linux):
+Build requirements (linux/macosx):
 
-- Gradle (n.b. build.gradle written using features incubating in Gradle 2.5)
+- SDL2
 - $BOOST_INCLUDE environment variable set to directory containing boost headers
 - $GMOCK_INCLUDE environment variable set to directory containing gmock headers
 - $GMOCK_LIB environment variable set to directory containing libgmock.a
 
 Build and run unit tests with
 
-gradle build
+.gradlew build
 
 
 Run the game with
 
-gradle run
+.gradlew run
