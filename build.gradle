@@ -17,14 +17,14 @@ allprojects {
                 }
             }
         }
+        binaries {
+            all {
+                cppCompiler.args '-g'
+                lib library: "boost", linkage: "api"
+                linker.args '-lSDL2', '-lSDL2_image'
+            }
+        }
     }
-
-    binaries.all {
-        cppCompiler.args '-g'
-        lib library: "boost", linkage: "api"
-        linker.args '-lSDL2', '-lSDL2_image'
-    }
-
 }
 
 project(":asteroids") {
@@ -48,14 +48,15 @@ project(":asteroids") {
             game(NativeLibrarySpec) {
             }
         }
-    }
+        binaries {
+            withType(GoogleTestTestSuiteBinarySpec) {
+                lib library: "googleMock", linkage: "static"
 
-    binaries.withType(GoogleTestTestSuiteBinarySpec) {
-        lib library: "googleMock", linkage: "static"
-
-        if (targetPlatform.operatingSystem.linux) {
-            cppCompiler.args '-pthread'
-            linker.args '-pthread'
+                if (targetPlatform.operatingSystem.linux) {
+                    cppCompiler.args '-pthread'
+                    linker.args '-pthread'
+                }
+            }
         }
     }
 
@@ -80,14 +81,16 @@ project(":main") {
     }
 }
 
+def executableDirectory = 'main/build/exe/main'
+
 task copyResources(type:Copy) {
     description 'Copies resources into release install directory'
     from 'resources'
-    into 'main/build/binaries/mainExecutable/resources'
+    into executableDirectory + '/resources'
 }
 
 task run(type:Exec, dependsOn: copyResources) {
     description 'Runs game binary'
-    workingDir 'main/build/binaries/mainExecutable'
+    workingDir executableDirectory
     commandLine './main'
 }
